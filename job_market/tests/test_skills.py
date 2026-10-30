@@ -252,7 +252,7 @@ def test_c_is_not_a_vietnamese_combining_letter_certificate_or_finance_acronym()
 
 
 def test_skills_page_filters_postings_and_keeps_evidence_in_the_csv():
-    page = Path(__file__).parents[1] / "pages/4_Ky_nang.py"
+    page = Path(__file__).parents[1] / "pages/tools/skills.py"
     app = AppTest.from_file(str(page), default_timeout=20).run()
     assert not app.exception
     assert "Ngôn ngữ lập trình" in app.title[0].value

@@ -121,9 +121,9 @@ def test_training_report_page_loads_saved_run_without_fit():
 
     from streamlit.testing.v1 import AppTest
 
-    page = AppTest.from_file(Path(__file__).resolve().parents[1] / "pages/12_Huan_luyen.py").run(
+    page = AppTest.from_file(Path(__file__).resolve().parents[1] / "pages/models.py").run(
         timeout=30
     )
     assert not page.exception
     assert any(metric.value == "Ridge" for metric in page.metric)
-    assert page.warning
+    assert any("14 tin" in caption.value for caption in page.caption)

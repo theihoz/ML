@@ -223,7 +223,7 @@ def test_salary_page_smoke_shows_real_totals_review_and_four_csv_downloads():
 
     from streamlit.testing.v1 import AppTest
 
-    page = Path(__file__).parents[1] / "pages/5_Luong.py"
+    page = Path(__file__).parents[1] / "pages/tools/salary.py"
     app = AppTest.from_file(str(page), default_timeout=20).run()
     assert not app.exception
     assert [metric.value for metric in app.metric] == ["3606", "0"]

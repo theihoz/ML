@@ -38,8 +38,8 @@ def prepared_report(service):
 
 def render_dashboard():
     st.set_page_config(page_title="Thị trường việc làm CNTT", layout="wide")
-    st.title("Thị trường việc làm CNTT Việt Nam")
-    st.write("Khám phá kỹ năng được nhắc trong tin tuyển dụng, theo nghề và địa điểm.")
+    st.title("Thị trường việc làm")
+    st.caption("Khám phá kỹ năng được nhắc trong tin tuyển dụng CNTT Việt Nam.")
     raw_dir = os.environ.get("CAREER_MARKET_RAW_DIR")
     service = MarketService(raw_dir=Path(raw_dir) if raw_dir else None)
     try:
@@ -52,7 +52,9 @@ def render_dashboard():
         "Nguồn dữ liệu",
         list(sources),
         default=["jobs-2026"],
-        format_func=lambda key: f"{sources[key].platform} · {key} · v{sources[key].revision}",
+        format_func=lambda key: (
+            "TopCV · 2025–2026" if key == "jobs-2026" else "CareerBuilder · 2023"
+        ),
     )
     left, middle, right = st.columns(3)
     roles = sorted({r["role"] for r in report["eda"]})
@@ -68,26 +70,13 @@ def render_dashboard():
         report["eda"], role=role, locations=locations, work_mode=mode, source_ids=chosen
     )
     a, b, c = st.columns(3)
-    a.metric("Tin duy nhất sau lọc", result["posting_count"])
-    b.metric("Tin có bằng chứng kỹ năng", result["with_skill_count"])
-    targets = [
-        r
-        for r in report["targets"]
-        if r["source_id"] in chosen and (role is None or r["role"] == role)
-    ]
-    c.metric("Nhãn lương đủ điều kiện", len(service.select_locations(targets, locations, mode)))
-    st.caption(result["scope"])
-    st.info(
-        "Đây là nhu cầu quan sát trong dataset, không đại diện tổng thị trường. Một tin nhiều địa điểm vẫn tính một lần. Tỷ lệ kỹ năng dùng mẫu số là toàn bộ tin sau lọc, gồm cả tin chưa trích được kỹ năng."
-    )
+    a.metric("Tin tuyển dụng", result["posting_count"])
+    b.metric("Tin có kỹ năng", result["with_skill_count"])
+    c.metric("Kỹ năng hiển thị", len(result["table"]))
     if "jobs-2026" in chosen:
-        st.warning(
-            "TopCV thiếu JD: kỹ năng chỉ trích từ tiêu đề, có thể bỏ sót yêu cầu. Dữ liệu gồm tin đăng 12/2025–01/2026."
-        )
+        st.caption("TopCV: kỹ năng lấy từ tiêu đề · Tin đăng 12/2025–01/2026.")
     if len(chosen) > 1:
-        st.warning(
-            "Hai nguồn khác nền tảng/phạm vi thu thập; tổng hợp này không phải xu hướng nhiều năm."
-        )
+        st.caption("Các nguồn khác phạm vi thu thập; chưa dùng để kết luận xu hướng nhiều năm.")
     st.subheader("Top kỹ năng được nhắc trong tin")
     st.image(result["png"])
     st.dataframe(result["table"], hide_index=True)
@@ -95,10 +84,9 @@ def render_dashboard():
     st.download_button(
         "Tải biểu đồ PNG theo bộ lọc", result["png"], "skill-demand.png", "image/png"
     )
-    st.info(
-        "ML bị chặn: nhãn đã duyệt vẫn cần đủ công ty/nhóm cho train/validation/test và policy hỗ trợ đã khóa. Chưa có model, metric hoặc dự đoán mới."
-    )
     with st.expander("Quy mô và xuất xứ"):
+        st.write("Một tin chỉ tính một lần; số liệu mô tả dataset, không đại diện toàn thị trường.")
+        st.caption(result["scope"])
         st.json(report["summary"])
         st.json(report["reviewed_labels"])
         for key in chosen:

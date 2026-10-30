@@ -126,7 +126,7 @@ def test_location_report_filters_real_source_aliases_and_exports_raw_clean_csv()
 
 
 def test_location_page_shows_raw_aliases_filters_and_csv_download():
-    page = Path(__file__).parents[1] / "pages/3_Dia_diem.py"
+    page = Path(__file__).parents[1] / "pages/tools/locations.py"
     app = AppTest.from_file(str(page), default_timeout=15).run()
     assert not app.exception
     assert app.metric[0].value == "2056"

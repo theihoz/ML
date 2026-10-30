@@ -61,7 +61,7 @@ def test_real_snapshot_is_reproducible_with_reviewed_targets_and_blocked_trainin
 
 
 def test_quality_page_shows_real_reconciliation_and_blocked_ml():
-    page = Path(__file__).parents[1] / "pages/7_Chat_luong.py"
+    page = Path(__file__).parents[1] / "pages/tools/quality.py"
     app = AppTest.from_file(str(page), default_timeout=30).run()
     assert not app.exception
     assert [m.value for m in app.metric] == ["3606", "320", "0", "2"]

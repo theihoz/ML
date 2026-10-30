@@ -43,8 +43,8 @@ def main() -> int:
     download.add_argument(
         "--check-only", action="store_true", help="Chỉ kiểm tra, không tải hoặc ghi"
     )
-    predict = commands.add_parser("predict", help="Kiểm tra hồ sơ và trạng thái model")
-    for field in ("role", "experience", "skills", "location", "work-mode"):
+    predict = commands.add_parser("predict", help="Dự đoán lương theo nghề và thành phố")
+    for field in ("role", "location"):
         predict.add_argument(f"--{field}", default="")
     args = parser.parse_args()
     try:
@@ -75,12 +75,7 @@ def main() -> int:
                 "manifest"
             ]
         elif args.command == "predict":
-            result = service.predict_profile(
-                {
-                    field: getattr(args, field)
-                    for field in ("role", "experience", "skills", "location", "work_mode")
-                }
-            )
+            result = service.estimate_salary(args.role, args.location)
         elif args.command == "skills":
             result = service.extract_skills(args.title, args.description, args.requirements)
         elif args.command == "download":

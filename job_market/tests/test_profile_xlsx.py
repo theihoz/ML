@@ -195,7 +195,7 @@ def test_xlsx_page_exposes_limits_and_no_model_requirement():
 
     from streamlit.testing.v1 import AppTest
 
-    page = Path(__file__).parents[1] / "pages/10_Preview_XLSX.py"
+    page = Path(__file__).parents[1] / "pages/tools/preview_xlsx.py"
     app = AppTest.from_file(str(page), default_timeout=20).run()
     assert not app.exception
     assert len(app.get("file_uploader")) == 1

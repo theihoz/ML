@@ -5,7 +5,7 @@ from pathlib import Path
 
 from streamlit.testing.v1 import AppTest
 
-APP = Path(__file__).parents[1] / "pages/1_Tai_nguon.py"
+APP = Path(__file__).parents[1] / "pages/tools/download.py"
 ARCHIVE = Path(__file__).parent / "fixtures/download/jobs-2026-v1.zip"
 
 

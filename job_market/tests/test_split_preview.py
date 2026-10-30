@@ -110,7 +110,7 @@ def test_real_cli_and_page_show_current_blocker_without_model(tmp_path):
     assert result["eligible_entities"] == 2
     assert result["eligible_groups"] == 1
     assert result["membership"] == []
-    page = AppTest.from_file(Path(__file__).resolve().parents[1] / "pages/11_Chia_tap.py").run(
+    page = AppTest.from_file(Path(__file__).resolve().parents[1] / "pages/tools/split.py").run(
         timeout=30
     )
     assert not page.exception

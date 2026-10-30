@@ -35,7 +35,7 @@ def test_invalid_or_oversized_uploads_are_rejected_without_silent_truncation(con
 
 
 def test_csv_page_has_explicit_limits_and_keeps_prediction_blocked():
-    page = Path(__file__).parents[1] / "pages/9_Preview_CSV.py"
+    page = Path(__file__).parents[1] / "pages/tools/preview_csv.py"
     app = AppTest.from_file(str(page), default_timeout=20).run()
     assert not app.exception
     assert len(app.get("file_uploader")) == 1

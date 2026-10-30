@@ -224,7 +224,7 @@ def test_experience_page_shows_raw_clean_filters_and_download():
 
     from streamlit.testing.v1 import AppTest
 
-    page = Path(__file__).parents[1] / "pages/6_Kinh_nghiem.py"
+    page = Path(__file__).parents[1] / "pages/tools/experience.py"
     app = AppTest.from_file(str(page), default_timeout=15).run()
     assert not app.exception
     assert app.metric[0].value == "2056"

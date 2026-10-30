@@ -155,7 +155,7 @@ def test_requirements_sections_in_plain_and_html_jd_do_not_supply_roles(descript
 
 def test_role_page_shows_raw_evidence_filters_and_csv_download():
     # UI smoke uses only the newly approved T01 sources, never legacy data.
-    page = Path(__file__).parents[1] / "pages/2_Vai_tro.py"
+    page = Path(__file__).parents[1] / "pages/tools/roles.py"
     app = AppTest.from_file(str(page), default_timeout=30).run()
     assert not app.exception
     table = app.dataframe[0].value

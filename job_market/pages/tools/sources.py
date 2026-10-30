@@ -34,7 +34,9 @@ with st.expander("Xuất xứ và đối chiếu raw"):
 
 if not source.has_job_description:
     st.warning("Thiếu JD: nguồn 2026 chỉ có tiêu đề, không tự điền mô tả hoặc kỹ năng.")
-st.info("ML bị chặn: kỳ lương chưa được xác nhận; chưa có nhãn lương đủ chứng cứ.")
+st.info(
+    "Hai nguồn EDA này chưa tạo thành tập lương đủ huấn luyện. Mô hình demo dùng nguồn lương riêng."
+)
 st.write(
     "Đây là số dòng thô, chưa lọc vai trò hoặc khử trùng. Hai nguồn có phạm vi khác nhau, "
     "chưa đủ căn cứ để kết luận xu hướng toàn thị trường theo năm."

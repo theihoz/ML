@@ -6,7 +6,7 @@ from streamlit.testing.v1 import AppTest
 
 from career_market import MarketService
 
-PAGE = Path(__file__).parents[1] / "pages/10_Cong_ty.py"
+PAGE = Path(__file__).parents[1] / "pages/tools/companies.py"
 
 
 def test_company_page_displays_the_service_groups_provenance_and_csv():

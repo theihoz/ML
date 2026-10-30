@@ -59,6 +59,16 @@ class RawPreview:
 class MarketService:
     """Public application seam; adapters only render its results."""
 
+    def estimate_salary(self, role, location):
+        from .inference import estimate_salary
+
+        try:
+            return estimate_salary(self, role, location)
+        except (OSError, ValueError, KeyError) as error:
+            raise MarketError(
+                "Chưa tải được mô hình dự đoán. Kiểm tra lại bộ model đã lưu."
+            ) from error
+
     def audit_training_run(self, run_dir=None):
         from .training import audit_run
 
@@ -123,21 +133,10 @@ class MarketService:
         except ValueError as error:
             raise MarketError(str(error)) from error
 
-    def predict_profile(self, profile):
+    def normalize_profile(self, profile):
         from .profiles import normalize_profile
 
-        normalized = normalize_profile(self, profile)
-        return {
-            "status": "invalid_input" if normalized["errors"] else "model_unavailable",
-            "reason": (
-                "; ".join(normalized["errors"])
-                if normalized["errors"]
-                else "Chưa mở suy luận/tư vấn cho hồ sơ này: cần artifact và độ phủ dữ liệu đủ hỗ trợ. Run thăm dò hiện chưa có số năm kinh nghiệm được xác minh."
-            ),
-            "salary_prediction": None,
-            "advice": [],
-            "profile": normalized,
-        }
+        return normalize_profile(self, profile)
 
     def profile_columns(self, content, delimiter=","):
         from .profiles import parse_csv

@@ -1,26 +1,39 @@
-"""Local EDA dashboard using the shared business service."""
+"""Salary demo navigation with advanced audit routes hidden from the menu."""
 
 import streamlit as st
 
-from career_market.dashboard import render_dashboard
+from career_market.presentation import apply_theme
 
-pages = [st.Page(render_dashboard, title="Phân tích nhu cầu", default=True)]
+st.set_page_config(page_title="Dự đoán lương CNTT", layout="wide")
+apply_theme()
+pages = [
+    st.Page("pages/predict.py", title="Dự đoán lương", default=True),
+    st.Page("pages/market.py", title="Thị trường việc làm", url_path="Thi_truong"),
+    st.Page("pages/models.py", title="So sánh mô hình", url_path="Huan_luyen"),
+    st.Page("pages/data.py", title="Dữ liệu", url_path="Du_lieu"),
+]
 for filename, title, url in [
-    ("0_Nguon_du_lieu.py", "Nguồn dữ liệu", "Nguon_du_lieu"),
-    ("1_Tai_nguon.py", "Tải lại nguồn", "Tai_nguon"),
-    ("2_Vai_tro.py", "Vai trò", "Vai_tro"),
-    ("3_Dia_diem.py", "Địa điểm", "Dia_diem"),
-    ("4_Ky_nang.py", "Kỹ năng", "Ky_nang"),
-    ("5_Luong.py", "Lương", "Luong"),
-    ("6_Kinh_nghiem.py", "Kinh nghiệm", "Kinh_nghiem"),
-    ("7_Chat_luong.py", "Chất lượng dữ liệu", "Chat_luong"),
-    ("8_Do_phu_thoi_gian.py", "Độ phủ thời gian", "Do_phu_thoi_gian"),
-    ("9_Preview_CSV.py", "Preview hồ sơ CSV", "Preview_CSV"),
-    ("10_Du_doan.py", "Dự đoán lương", "Du_doan"),
-    ("10_Cong_ty.py", "Đối chiếu công ty", "Cong_ty"),
-    ("10_Preview_XLSX.py", "Preview hồ sơ Excel", "Preview_XLSX"),
-    ("11_Chia_tap.py", "Train / validation / test", "Chia_tap"),
-    ("12_Huan_luyen.py", "Kết quả huấn luyện", "Huan_luyen"),
+    ("tools/sources.py", "Nguồn dữ liệu", "Nguon_du_lieu"),
+    ("tools/download.py", "Tải lại nguồn", "Tai_nguon"),
+    ("tools/roles.py", "Vai trò", "Vai_tro"),
+    ("tools/locations.py", "Địa điểm", "Dia_diem"),
+    ("tools/skills.py", "Kỹ năng", "Ky_nang"),
+    ("tools/salary.py", "Lương", "Luong"),
+    ("tools/experience.py", "Kinh nghiệm", "Kinh_nghiem"),
+    ("tools/quality.py", "Chất lượng dữ liệu", "Chat_luong"),
+    ("tools/time_coverage.py", "Độ phủ thời gian", "Do_phu_thoi_gian"),
+    ("tools/preview_csv.py", "Preview hồ sơ CSV", "Preview_CSV"),
+    ("tools/companies.py", "Đối chiếu công ty", "Cong_ty"),
+    ("tools/preview_xlsx.py", "Preview hồ sơ Excel", "Preview_XLSX"),
+    ("tools/split.py", "Train / validation / test", "Chia_tap"),
 ]:
     pages.append(st.Page(f"pages/{filename}", title=title, url_path=url))
-st.navigation(pages, expanded=True).run()
+navigation = st.navigation(pages, position="hidden")
+with st.sidebar:
+    st.markdown("### Lương CNTT")
+    st.caption("Phân tích & dự đoán")
+    for page in pages[:4]:
+        st.page_link(page)
+    st.divider()
+    st.caption("Demo dữ liệu tuyển dụng Việt Nam")
+navigation.run()

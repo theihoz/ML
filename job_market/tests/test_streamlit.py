@@ -2,7 +2,7 @@ from pathlib import Path
 
 from streamlit.testing.v1 import AppTest
 
-APP = Path(__file__).parents[1] / "pages/0_Nguon_du_lieu.py"
+APP = Path(__file__).parents[1] / "pages/tools/sources.py"
 
 
 def test_dashboard_previews_real_records_and_switches_sources():
@@ -17,7 +17,7 @@ def test_dashboard_previews_real_records_and_switches_sources():
     assert app.dataframe[0].value.iloc[0]["title"] == "GẤP\nUnity Developer (2+ Yoe) – Game Mobile"
     assert "CC-BY-4.0" in app.caption[0].value
     assert any("Thiếu JD" in item.value for item in app.warning)
-    assert any("ML bị chặn" in item.value for item in app.info)
+    assert any("nguồn EDA" in item.value for item in app.info)
     assert any("7 cột" in item.value for item in app.markdown)
 
 

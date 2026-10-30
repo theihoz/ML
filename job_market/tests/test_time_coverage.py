@@ -48,7 +48,7 @@ def test_time_coverage_uses_posting_dates_and_does_not_invent_cross_source_trend
 
 
 def test_coverage_page_discloses_real_source_years_and_insufficient_evidence():
-    page = Path(__file__).parents[1] / "pages/8_Do_phu_thoi_gian.py"
+    page = Path(__file__).parents[1] / "pages/tools/time_coverage.py"
     app = AppTest.from_file(str(page), default_timeout=30).run()
     assert not app.exception
     table = app.dataframe[0].value.set_index("source_id")
