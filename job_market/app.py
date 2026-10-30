@@ -18,6 +18,8 @@ for filename, title, url in [
     ("9_Preview_CSV.py", "Preview hồ sơ CSV", "Preview_CSV"),
     ("10_Du_doan.py", "Dự đoán lương", "Du_doan"),
     ("10_Cong_ty.py", "Đối chiếu công ty", "Cong_ty"),
+    ("10_Preview_XLSX.py", "Preview hồ sơ Excel", "Preview_XLSX"),
+    ("11_Chia_tap.py", "Train / validation / test", "Chia_tap"),
 ]:
     pages.append(st.Page(f"pages/{filename}", title=title, url_path=url))
 st.navigation(pages, expanded=True).run()

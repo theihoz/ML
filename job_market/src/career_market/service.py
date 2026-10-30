@@ -59,6 +59,11 @@ class RawPreview:
 class MarketService:
     """Public application seam; adapters only render its results."""
 
+    def preview_split(self, rows, *, basis, scope):
+        from .splitting import preview_split
+
+        return preview_split(rows, basis=basis, scope=scope)
+
     def xlsx_sheets(self, content, filename="profiles.xlsx"):
         from .xlsx_profiles import inspect_xlsx
 

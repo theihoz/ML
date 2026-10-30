@@ -15,6 +15,12 @@ def main() -> int:
     commands = parser.add_subparsers(dest="command", required=True)
     commands.add_parser("sources", help="Danh mục nguồn và xuất xứ")
     company_arguments(commands.add_parser("companies", help="Đối chiếu công ty và nhóm tin"))
+    split = commands.add_parser("split-preview", help="Xem trước ba tập theo nhóm công ty")
+    split.add_argument("--basis", choices=["unknown", "gross", "net"], required=True)
+    split.add_argument("--scope", required=True)
+    split.add_argument(
+        "--output", type=Path, help="Lưu báo cáo preview JSON, không phải manifest train"
+    )
     prepare = commands.add_parser("prepare", help="Chuẩn hóa và xuất snapshot EDA có manifest")
     prepare.add_argument("--output", type=Path, required=True)
     prepare.add_argument(
@@ -44,6 +50,17 @@ def main() -> int:
             result = [asdict(source) for source in service.sources()]
         elif args.command == "companies":
             result = run_company_report(service, args)
+        elif args.command == "split-preview":
+            result = service.preview_split(
+                service.prepare()["rows"], basis=args.basis, scope=args.scope
+            )
+            if args.output:
+                try:
+                    args.output.write_text(
+                        json.dumps(result, ensure_ascii=False, indent=2), encoding="utf-8"
+                    )
+                except OSError as error:
+                    raise MarketError(f"Không lưu được preview: {error}") from error
         elif args.command == "prepare":
             result = service.snapshot(output_dir=args.output, review_dir=args.review_dir)[
                 "manifest"
