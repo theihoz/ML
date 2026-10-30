@@ -53,41 +53,16 @@ def preview_profiles(service, content, mapping, delimiter=","):
         def field(key):
             return raw.get(mapping.get(key), "")
 
-        role_raw = field("role")
-        role = next(
-            (name for name in ROLE_PATTERNS if name.casefold() == role_raw.strip().casefold()), None
-        )
-        classification = service.classify_role(role_raw)
-        role = role or classification["role"]
-        experience = service.normalize_experience(field("experience"))
-        locations = service.normalize_locations(field("location"))
-        skills = service.extract_skills(field("skills"))
-        errors, warnings = [], []
+        profile = normalize_profile(service, {key: field(key) for key in mapping})
+        errors = list(profile["errors"])
         if len(values) != len(columns):
             errors.append(f"Sai số cột: cần {len(columns)}, nhận {len(values)}.")
-        if role is None:
-            errors.append("Vai trò chưa khớp rõ một trong bảy nhóm nghề.")
-        if experience["experience_status"] != "ok":
-            errors.append("Kinh nghiệm thiếu hoặc không hợp lệ; không tự gán 0 năm.")
-        if locations["location_status"] != "normalized":
-            warnings.append(locations["location_reason"])
-        if not skills["skills"]:
-            warnings.append(
-                "Chưa trích được kỹ năng trong danh mục; giữ nguyên chuỗi nhập để rà soát."
-            )
         row = {
+            **profile,
             "row_id": index,
             "csv_line": line,
             "status": "invalid" if errors else "valid",
-            "role": role,
-            **experience,
-            **locations,
-            "skills": skills["skills"],
-            "skill_evidence": [
-                {**entry, "field": "skills_input"} for entry in skills["skill_evidence"]
-            ],
             "errors": errors,
-            "warnings": warnings,
             "raw": raw,
             "raw_values": values,
         }
@@ -102,4 +77,64 @@ def preview_profiles(service, content, mapping, delimiter=","):
         "rows": rows,
         "csv": csv_bytes(rows, fields),
         "input_sha256": hashlib.sha256(content).hexdigest(),
+    }
+
+
+def normalize_profile(service, profile):
+    """One normalization path for a single profile and mapped file rows."""
+    if not isinstance(profile, dict):
+        return {
+            "status": "invalid",
+            "errors": ["Hồ sơ phải là một object gồm các trường nhập."],
+            "warnings": [],
+            "raw": profile,
+        }
+    raw = dict(profile)
+    input_errors = []
+    profile = dict(profile)
+    for field in ("role", "skills", "location", "work_mode"):
+        value = profile.get(field)
+        if value is None:
+            profile[field] = ""
+        elif not isinstance(value, str):
+            input_errors.append(f"Trường {field} phải là chuỗi hoặc để trống.")
+            profile[field] = ""
+    role_raw = profile.get("role", "")
+    role = next(
+        (name for name in ROLE_PATTERNS if name.casefold() == role_raw.strip().casefold()), None
+    )
+    role = role or service.classify_role(role_raw)["role"]
+    experience = service.normalize_experience(profile.get("experience"))
+    locations = service.normalize_locations(profile.get("location"))
+    skills = service.extract_skills(profile.get("skills", ""))
+    errors, warnings = input_errors, []
+    work_mode = profile.get("work_mode", "").strip()
+    if work_mode:
+        mode = service.normalize_locations(work_mode)
+        if mode["work_modes"] and not mode["locations"] and not mode["location_unresolved"]:
+            locations["work_modes"] = list(
+                dict.fromkeys(locations["work_modes"] + mode["work_modes"])
+            )
+        else:
+            errors.append("Hình thức làm việc chưa khớp nhãn Remote; có thể để trống khi chưa rõ.")
+    if role is None:
+        errors.append("Vai trò chưa khớp rõ một trong bảy nhóm nghề.")
+    if experience["experience_status"] != "ok":
+        errors.append("Kinh nghiệm thiếu hoặc không hợp lệ; không tự gán 0 năm.")
+    if locations["location_status"] != "normalized":
+        warnings.append(locations["location_reason"])
+    if not skills["skills"]:
+        warnings.append("Chưa trích được kỹ năng trong danh mục; giữ nguyên chuỗi nhập để rà soát.")
+    return {
+        "status": "invalid" if errors else "valid",
+        "role": role,
+        **experience,
+        **locations,
+        "skills": skills["skills"],
+        "skill_evidence": [
+            {**entry, "field": "skills_input"} for entry in skills["skill_evidence"]
+        ],
+        "errors": errors,
+        "warnings": warnings,
+        "raw": raw,
     }

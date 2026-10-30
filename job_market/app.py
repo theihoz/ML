@@ -16,6 +16,7 @@ for filename, title, url in [
     ("7_Chat_luong.py", "Chất lượng dữ liệu", "Chat_luong"),
     ("8_Do_phu_thoi_gian.py", "Độ phủ thời gian", "Do_phu_thoi_gian"),
     ("9_Preview_CSV.py", "Preview hồ sơ CSV", "Preview_CSV"),
+    ("10_Du_doan.py", "Dự đoán lương", "Du_doan"),
 ]:
     pages.append(st.Page(f"pages/{filename}", title=title, url_path=url))
 st.navigation(pages, expanded=True).run()
