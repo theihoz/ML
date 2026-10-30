@@ -351,11 +351,13 @@ def train(service, output_root=None):
     return report
 
 
-def load_run(run_dir):
+def load_run(run_dir, model_name=None):
     import joblib
 
     directory = Path(run_dir)
     report = json.loads((directory / "report.json").read_text())
+    if model_name is not None and model_name not in {"Ridge", "LinearRegression"}:
+        raise ValueError("Unknown prediction model.")
     # Only locally produced artifacts are loaded. No upload/model-import adapter
     # accepts this format, and hashes alone do not authenticate an external pickle.
     if report["chosen_model"] not in {"Ridge", "LinearRegression"}:
@@ -395,7 +397,8 @@ def load_run(run_dir):
     return {
         "report": report,
         "artifact_directory": str(directory.resolve()),
-        "model": joblib.load(directory / f"{report['chosen_model']}.joblib"),
+        "model": joblib.load(directory / f"{model_name or report['chosen_model']}.joblib"),
+        "prediction_model": model_name or report["chosen_model"],
         "train": json.loads((directory / "train-support.json").read_text()),
         "policy": json.loads((directory / "policy.json").read_text()),
     }

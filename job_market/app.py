@@ -8,6 +8,7 @@ st.set_page_config(page_title="Dự đoán lương CNTT", layout="wide")
 apply_theme()
 pages = [
     st.Page("pages/predict.py", title="Dự đoán lương", default=True),
+    st.Page("pages/overview.py", title="Tổng quan", url_path="Tong_quan"),
     st.Page("pages/market.py", title="Thị trường việc làm", url_path="Thi_truong"),
     st.Page("pages/models.py", title="So sánh mô hình", url_path="Huan_luyen"),
     st.Page("pages/data.py", title="Dữ liệu", url_path="Du_lieu"),
@@ -32,7 +33,7 @@ navigation = st.navigation(pages, position="hidden")
 with st.sidebar:
     st.markdown("### Lương CNTT")
     st.caption("Phân tích & dự đoán")
-    for page in pages[:4]:
+    for page in pages[:5]:
         st.page_link(page)
     st.divider()
     st.caption("Demo dữ liệu tuyển dụng Việt Nam")

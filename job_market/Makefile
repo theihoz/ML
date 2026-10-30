@@ -1,6 +1,7 @@
 PYTHON ?= python3
 PORT ?= 8502
 export PYTHONPATH := src
+export MPLCONFIGDIR := $(CURDIR)/.cache/matplotlib
 
 .PHONY: check lint test run sources preview
 check: lint test

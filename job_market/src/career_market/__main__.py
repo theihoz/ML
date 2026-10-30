@@ -44,6 +44,7 @@ def main() -> int:
         "--check-only", action="store_true", help="Chỉ kiểm tra, không tải hoặc ghi"
     )
     predict = commands.add_parser("predict", help="Dự đoán lương theo nghề và thành phố")
+    predict.add_argument("--model", choices=["Ridge", "LinearRegression"])
     for field in ("role", "location"):
         predict.add_argument(f"--{field}", default="")
     args = parser.parse_args()
@@ -75,7 +76,7 @@ def main() -> int:
                 "manifest"
             ]
         elif args.command == "predict":
-            result = service.estimate_salary(args.role, args.location)
+            result = service.estimate_salary(args.role, args.location, model_name=args.model)
         elif args.command == "skills":
             result = service.extract_skills(args.title, args.description, args.requirements)
         elif args.command == "download":

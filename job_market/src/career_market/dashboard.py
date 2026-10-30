@@ -36,9 +36,10 @@ def prepared_report(service):
     return _prepare(str(service.raw_dir), signature)
 
 
-def render_dashboard():
+def render_dashboard(show_title=True):
     st.set_page_config(page_title="Thị trường việc làm CNTT", layout="wide")
-    st.title("Thị trường việc làm")
+    if show_title:
+        st.title("Thị trường việc làm")
     st.caption("Khám phá kỹ năng được nhắc trong tin tuyển dụng CNTT Việt Nam.")
     raw_dir = os.environ.get("CAREER_MARKET_RAW_DIR")
     service = MarketService(raw_dir=Path(raw_dir) if raw_dir else None)

@@ -14,17 +14,36 @@ except MarketError as error:
     st.info(str(error))
     st.stop()
 report = audit["report"]
-a, b, c = st.columns(3)
-a.metric("Mô hình đang dùng", report["chosen_model"])
-b.metric("Tin dùng huấn luyện", report["counts"]["train"])
-c.metric("Tin dùng kiểm tra", report["counts"]["test"])
-st.caption("Bản thử nghiệm từ 14 tin / 11 công ty. Sai số càng thấp càng tốt.")
+selected_model = st.selectbox(
+    "Mô hình",
+    ["Ridge", "LinearRegression"],
+    format_func=lambda name: "Linear Regression" if name == "LinearRegression" else name,
+    key="compare_model",
+)
 part = st.radio(
     "Đánh giá trên",
     ["test", "validation"],
-    format_func=lambda v: "Tập kiểm tra" if v == "test" else "Tập chọn mô hình",
+    format_func=lambda value: "Tập kiểm tra" if value == "test" else "Tập chọn mô hình",
     horizontal=True,
+    key="compare_part",
 )
+selected_scores = report["metrics"][selected_model][part]
+a, b, c = st.columns(3)
+a.metric("Mô hình đang xem", selected_model)
+b.metric("Sai số trung bình", f"{selected_scores['MAE'] / 1e6:.2f}")
+c.metric("Sai số RMSE", f"{selected_scores['RMSE'] / 1e6:.2f}")
+st.caption(
+    f"{report['source_entities']} tin / {report['company_count']} công ty · {selected_scores['n']} tin đánh giá · triệu đồng/tháng"
+)
+if st.button("Dự đoán với mô hình này", type="primary"):
+    chosen_inputs = dict(
+        st.session_state.get("salary_last_inputs", {"role": "Data/ML", "city": "HN"})
+    )
+    chosen_inputs["model"] = selected_model
+    st.session_state["salary_last_inputs"] = chosen_inputs
+    st.session_state.pop("salary_model", None)
+    st.session_state.pop("salary_estimate", None)
+    st.switch_page("pages/predict.py")
 rows = []
 for name, parts in report["metrics"].items():
     score = parts[part]
@@ -38,14 +57,30 @@ for name, parts in report["metrics"].items():
     )
 table = pd.DataFrame(rows)
 figure, axis = plt.subplots(figsize=(9, 3.8))
-sns.barplot(data=table, x="Mô hình", y="Sai số trung bình", color="#247f8c", ax=axis)
+sns.barplot(
+    data=table,
+    x="Mô hình",
+    y="Sai số trung bình",
+    hue="Mô hình",
+    palette={name: "#2563eb" if name == selected_model else "#cbd5e1" for name in table["Mô hình"]},
+    legend=False,
+    ax=axis,
+)
 axis.set_ylabel("Triệu đồng / tháng")
 axis.set_xlabel("")
 sns.despine(ax=axis)
 figure.tight_layout()
 st.pyplot(figure)
 plt.close(figure)
-st.dataframe(table, hide_index=True, use_container_width=True)
+st.dataframe(
+    table,
+    hide_index=True,
+    width="stretch",
+    column_config={
+        "Sai số trung bình": st.column_config.NumberColumn(format="%.2f"),
+        "Sai số RMSE": st.column_config.NumberColumn(format="%.2f"),
+    },
+)
 st.caption(
     "Đơn vị: triệu đồng/tháng. Ridge được chọn bằng tập chọn mô hình, không chọn theo kết quả kiểm tra."
 )

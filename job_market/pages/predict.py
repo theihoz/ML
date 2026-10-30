@@ -15,6 +15,7 @@ ROLES = {
 }
 CITIES = {"HN": "Hà Nội", "HCM": "TP. Hồ Chí Minh", "Đà Nẵng": "Đà Nẵng"}
 last_inputs = st.session_state.get("salary_last_inputs", {"role": "Data/ML", "city": "HN"})
+MODELS = ["Ridge", "LinearRegression"]
 
 st.caption("LƯƠNG CNTT VIỆT NAM")
 st.title("Dự đoán lương")
@@ -24,6 +25,15 @@ with left:
     with st.container(border=True):
         st.subheader("Thông tin công việc")
         with st.form("salary_demo"):
+            model_name = st.selectbox(
+                "Mô hình",
+                MODELS,
+                index=MODELS.index(last_inputs.get("model", "Ridge")),
+                format_func=lambda name: (
+                    "Linear Regression" if name == "LinearRegression" else name
+                ),
+                key="salary_model",
+            )
             role = st.selectbox(
                 "Nghề nghiệp",
                 list(ROLES),
@@ -41,11 +51,12 @@ with left:
             submitted = st.form_submit_button(
                 "Dự đoán lương", type="primary", use_container_width=True
             )
-        st.caption("Có thể thử: Dữ liệu & AI tại Hà Nội hoặc TP. Hồ Chí Minh.")
     if submitted:
-        st.session_state["salary_last_inputs"] = {"role": role, "city": city}
+        st.session_state["salary_last_inputs"] = {"role": role, "city": city, "model": model_name}
         try:
-            st.session_state["salary_estimate"] = MarketService().estimate_salary(role, city)
+            st.session_state["salary_estimate"] = MarketService().estimate_salary(
+                role, city, model_name=model_name
+            )
         except MarketError as error:
             st.session_state["salary_estimate"] = {"status": "error", "message": str(error)}
 with right:
@@ -56,22 +67,23 @@ with right:
             st.metric("Triệu đồng / tháng", "—")
             st.caption("Kết quả xuất hiện sau khi bạn bấm dự đoán.")
         elif result["status"] == "ok":
-            st.caption(f"{ROLES[result['role']]} · {CITIES[result['location']]}")
-            st.metric("Triệu đồng / tháng", f"{result['salary_vnd_month'] / 1e6:.1f}")
-            st.caption("Lương chào tuyển, chưa xác nhận gross hay net.")
             st.caption(
-                f"Bản thử nghiệm · {result['dataset_count']} tin · Sai số kiểm tra khoảng {result['test_mae_vnd_month'] / 1e6:.0f} triệu/tháng."
+                f"{ROLES[result['role']]} · {CITIES[result['location']]} · {result['model']}"
             )
-            with st.expander("Kết quả được tính thế nào?"):
-                st.write(
-                    f"Mô hình {result['model']} đã lưu. Có {result['support_count']} tin trong tập học khớp nghề và thành phố này."
-                )
-                st.write(
-                    "Hiện ước tính theo nghề và thành phố; chưa tính tác động của kinh nghiệm hoặc kỹ năng riêng."
-                )
+            st.metric("Triệu đồng / tháng", f"{result['salary_vnd_month'] / 1e6:.1f}")
         else:
             st.info(result["message"])
-            st.caption("Chưa hiển thị lương khi lựa chọn thiếu dữ liệu.")
+if result is not None and result["status"] == "ok":
+    st.subheader("Lương ước tính theo thành phố")
+    try:
+        chart = MarketService().salary_scenarios(
+            result["role"], result["location"], model_name=result["model"]
+        )
+        if chart["png"]:
+            st.image(chart["png"], width="stretch")
+    except MarketError:
+        st.info("Chưa tải được biểu đồ. Kết quả dự đoán vẫn được giữ ở trên.")
+
 st.divider()
 a, b = st.columns(2)
 with a:
