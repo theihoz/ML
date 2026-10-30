@@ -59,6 +59,33 @@ class RawPreview:
 class MarketService:
     """Public application seam; adapters only render its results."""
 
+    def xlsx_sheets(self, content, filename="profiles.xlsx"):
+        from .xlsx_profiles import inspect_xlsx
+
+        try:
+            return inspect_xlsx(content, filename=filename)
+        except ValueError as error:
+            raise MarketError(str(error)) from error
+
+    def xlsx_profile_columns(self, content, sheet, filename="profiles.xlsx"):
+        from .xlsx_profiles import inspect_xlsx
+
+        try:
+            if sheet is None:
+                raise ValueError("Cần chọn sheet tường minh trước khi preview.")
+            result = inspect_xlsx(content, sheet, filename)
+            return {"columns": result["columns"], "row_count": len(result["records"])}
+        except ValueError as error:
+            raise MarketError(str(error)) from error
+
+    def preview_xlsx_profiles(self, content, mapping, sheet, filename="profiles.xlsx"):
+        from .xlsx_profiles import preview_xlsx
+
+        try:
+            return preview_xlsx(self, content, mapping, sheet, filename)
+        except ValueError as error:
+            raise MarketError(str(error)) from error
+
     def predict_profile(self, profile):
         from .profiles import normalize_profile
 

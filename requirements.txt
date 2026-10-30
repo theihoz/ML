@@ -5,7 +5,7 @@ pandas
 numpy
 matplotlib
 seaborn
-openpyxl
+openpyxl==3.1.5
 scikit-learn
 nbformat
 nbclient
