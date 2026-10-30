@@ -43,6 +43,7 @@ def snapshot(report, output_dir=None):
         "sources": json.loads(json.dumps(report.get("sources", []))),
         "summary": report["summary"],
         "ml_state": report["ml_state"],
+        "reviewed_labels": report.get("reviewed_labels", {}),
         "salary_gate": "https://github.com/theihoz/ML/issues/42",
         "counts_note": "Các partition raw đối chiếu rời nhau; review và salary_targets là tập con, không cộng vào raw.",
         "repost_note": "Nhóm giống trường quan sát để rà soát và chia tập sau này; không tự loại URL khác như cùng một tin. EDA hợp nhất bằng chứng tương thích theo posting_id, truy về rows qua evidence_row_ids; tin mâu thuẫn được cách ly entity_review.",

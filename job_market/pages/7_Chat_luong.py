@@ -32,7 +32,11 @@ for column, (label, key) in zip(
 ):
     column.metric(label, summary[key])
 st.info(
-    "ML bị chặn: gate nhãn lương chưa được giải quyết. Snapshot nhãn rỗng vẫn giữ schema; không huấn luyện khi mở trang."
+    "ML bị chặn: nhập nhãn đã duyệt không mở gate #42. Cần đủ nhóm công ty cho train/validation/test và khóa policy hỗ trợ trước fit; không huấn luyện khi mở trang."
+)
+st.caption(
+    f"Đã nhập {report['reviewed_labels']['imported_postings']} tin từ ledger được duyệt. "
+    "Chứng cứ JD bổ sung chỉ áp dụng đúng tin, không gán kỳ tháng cho toàn nguồn."
 )
 st.caption(
     "Raw = trùng + ID lỗi + ngoài nghề + nghề cần review + tin mâu thuẫn cần review + EDA. Review theo trường có thể chồng lắp EDA; không cộng review vào tổng raw. Nhóm giống nội dung dùng để rà soát, không tự coi URL khác là một tin."
@@ -52,6 +56,13 @@ visible = [
             "locations",
             "work_modes",
             "salary_reason",
+            "salary_raw",
+            "salary_target_vnd_month",
+            "salary_basis",
+            "compensation_scope",
+            "salary_label_origin",
+            "salary_label_review_id",
+            "salary_label_evidence",
             "review_reasons",
             "evidence_row_ids",
             "entity_conflicts",
@@ -63,6 +74,7 @@ st.dataframe(visible, hide_index=True)
 if not selected:
     st.info("Tập này hiện không có bản ghi; file CSV xuất vẫn có đầy đủ tên cột.")
 st.subheader("Nguồn và phiên bản snapshot")
+st.json(report["reviewed_labels"])
 st.json(snapshot["manifest"])
 archive = io.BytesIO()
 with zipfile.ZipFile(archive, "w", zipfile.ZIP_DEFLATED) as zipped:

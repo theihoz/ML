@@ -122,7 +122,7 @@ class MarketService:
 
         return prepare_records(self, records)
 
-    def prepare(self, source_ids=None):
+    def prepare(self, source_ids=None, *, review_dir=None):
         sources = self.sources()
         selected = list(source_ids) if source_ids is not None else [s.source_id for s in sources]
         if not selected or len(set(selected)) != len(selected):
@@ -134,13 +134,23 @@ class MarketService:
         from dataclasses import asdict
 
         result["sources"] = [asdict(s) for s in sources if s.source_id in selected]
-        return result
+        from .reviewed_labels import apply_reviewed_labels
 
-    def snapshot(self, source_ids=None, output_dir=None):
+        try:
+            return apply_reviewed_labels(
+                self,
+                result,
+                review_dir or self.raw_dir.parent / "labels/2026-10-29",
+                required=review_dir is not None,
+            )
+        except (OSError, ValueError, KeyError, TypeError) as error:
+            raise MarketError(f"Không nhập được ledger nhãn đã duyệt: {error}") from error
+
+    def snapshot(self, source_ids=None, output_dir=None, *, review_dir=None):
         from .snapshots import snapshot
 
         try:
-            return snapshot(self.prepare(source_ids), output_dir)
+            return snapshot(self.prepare(source_ids, review_dir=review_dir), output_dir)
         except OSError as error:
             raise MarketError(f"Không xuất được snapshot: {error}") from error
 

@@ -21,6 +21,7 @@ packages = ["src/career_market"]
 [tool.hatch.build.targets.wheel.force-include]
 "datasets/raw" = "career_market/datasets/raw"
 "datasets/provenance" = "career_market/datasets/provenance"
+"datasets/labels/2026-10-29" = "career_market/datasets/labels/2026-10-29"
 
 [tool.pytest.ini_options]
 testpaths = ["tests"]

@@ -8,7 +8,7 @@ from datetime import datetime
 
 from .postings import posting_key
 
-RULES_VERSION = "eda-v5"
+RULES_VERSION = "eda-v6"
 
 
 def digest(value):

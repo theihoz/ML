@@ -1,5 +1,6 @@
 """Streamlit presentation of filtered, observed skill demand."""
 
+import hashlib
 import os
 from pathlib import Path
 
@@ -16,7 +17,13 @@ def _prepare(raw_dir, signature):
 
 def prepared_report(service):
     try:
-        signature = (RULES_VERSION,) + tuple(
+        review_dir = service.raw_dir.parent / "labels/2026-10-29"
+        review_signature = tuple(
+            (path.name, hashlib.sha256(path.read_bytes()).hexdigest())
+            for path in sorted(review_dir.glob("*"))
+            if path.suffix in {".json", ".csv"}
+        )
+        signature = (RULES_VERSION, review_signature) + tuple(
             (
                 s.source_id,
                 (service.raw_dir / s.filename).stat().st_mtime_ns,
@@ -89,9 +96,10 @@ def render_dashboard():
         "Tải biểu đồ PNG theo bộ lọc", result["png"], "skill-demand.png", "image/png"
     )
     st.info(
-        "ML bị chặn: chưa có nhãn lương đủ kỳ và tiền tệ. Chưa có model, metric hoặc dự đoán mới."
+        "ML bị chặn: nhãn đã duyệt vẫn cần đủ công ty/nhóm cho train/validation/test và policy hỗ trợ đã khóa. Chưa có model, metric hoặc dự đoán mới."
     )
     with st.expander("Quy mô và xuất xứ"):
         st.json(report["summary"])
+        st.json(report["reviewed_labels"])
         for key in chosen:
             st.write(sources[key].attribution)

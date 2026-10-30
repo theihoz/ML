@@ -44,16 +44,17 @@ def test_preparation_reconciles_rows_and_keeps_missing_salary_in_eda():
     assert result["targets"] == []
 
 
-def test_real_snapshot_is_reproducible_and_has_empty_salary_targets(tmp_path):
+def test_real_snapshot_is_reproducible_with_reviewed_targets_and_blocked_training(tmp_path):
     service = MarketService()
     first = service.snapshot(output_dir=tmp_path / "first")
     second = service.snapshot(output_dir=tmp_path / "second")
     assert first["report"]["summary"]["raw_rows"] == 3606
     assert first["manifest"] == second["manifest"]
-    assert first["manifest"]["summary"]["salary_targets"] == 0
+    assert first["manifest"]["summary"]["salary_targets"] == 2
     assert first["manifest"]["ml_state"] == "blocked_pending_salary_gate"
     assert len(first["manifest"]["sources"]) == 2
-    assert list(csv.DictReader(io.StringIO(first["files"]["salary_targets.csv"].decode()))) == []
+    labels = list(csv.DictReader(io.StringIO(first["files"]["salary_targets.csv"].decode())))
+    assert {row["job_id"] for row in labels} == {"35BB58E5", "35BB58DC"}
     assert "salary_target_vnd_month" in first["files"]["salary_targets.csv"].decode()
     assert json.loads((tmp_path / "first/manifest.json").read_text()) == first["manifest"]
     assert first["files"]["eda.csv"] == second["files"]["eda.csv"]
@@ -63,6 +64,6 @@ def test_quality_page_shows_real_reconciliation_and_blocked_ml():
     page = Path(__file__).parents[1] / "pages/7_Chat_luong.py"
     app = AppTest.from_file(str(page), default_timeout=30).run()
     assert not app.exception
-    assert [m.value for m in app.metric] == ["3606", "320", "0", "0"]
+    assert [m.value for m in app.metric] == ["3606", "320", "0", "2"]
     assert any("ML bị chặn" in item.value for item in app.info)
     assert app.get("download_button")[0].proto.url

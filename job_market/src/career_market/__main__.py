@@ -15,6 +15,7 @@ def main() -> int:
     commands.add_parser("sources", help="Danh mục nguồn và xuất xứ")
     prepare = commands.add_parser("prepare", help="Chuẩn hóa và xuất snapshot EDA có manifest")
     prepare.add_argument("--output", type=Path, required=True)
+    prepare.add_argument("--review-dir", type=Path, help="Ledger đã duyệt có manifest/hash đối chiếu")
     preview = commands.add_parser("preview", help="Kiểm tra và xem raw dạng JSON")
     preview.add_argument("source_id")
     preview.add_argument("--limit", type=int, default=5)
@@ -35,7 +36,7 @@ def main() -> int:
         if args.command == "sources":
             result = [asdict(source) for source in service.sources()]
         elif args.command == "prepare":
-            result = service.snapshot(output_dir=args.output)["manifest"]
+            result = service.snapshot(output_dir=args.output, review_dir=args.review_dir)["manifest"]
         elif args.command == "skills":
             result = service.extract_skills(args.title, args.description, args.requirements)
         elif args.command == "download":
