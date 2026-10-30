@@ -16,10 +16,13 @@ def apply_theme():
     h1 {letter-spacing: -.035em; color: #15253e; font-size: 2.5rem;}
     h2,h3 {color: #20314b;}
     [data-testid="stVerticalBlockBorderWrapper"] {background: white; border-radius: 16px;}
-    [data-testid="stMetricValue"] {color: #166c77;}
-    button[kind="primary"],button[kind="primaryFormSubmit"] {background: #176b77; border-color: #176b77; border-radius: 9px;}
+    [data-testid="stMetricValue"] {color: #2563eb;}
+    button[kind="primary"],button[kind="primaryFormSubmit"] {background: #2563eb; border-color: #2563eb; border-radius: 9px;}
     button[kind="primary"] p,button[kind="primaryFormSubmit"] p {color: white !important;}
     [data-testid="stForm"] {border: 0; padding: 0;}
+    [class*="st-key-overview_"] {background: white; border-radius: 14px; box-shadow: 0 3px 18px rgba(31, 49, 80, .035);}
+    [class*="st-key-overview_chart_"] h3 {font-size: 1.15rem;}
+    .st-key-overview_kpi_tech h3 {font-size: 1.2rem;}
     </style>
     """,
         unsafe_allow_html=True,

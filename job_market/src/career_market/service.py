@@ -59,11 +59,35 @@ class RawPreview:
 class MarketService:
     """Public application seam; adapters only render its results."""
 
-    def estimate_salary(self, role, location):
+    def market_overview(self):
+        from .overview import market_overview
+
+        try:
+            return market_overview(self)
+        except (OSError, ValueError, KeyError) as error:
+            raise MarketError(str(error)) from error
+
+    def salary_scenarios(self, role, city, model_name=None):
+        from .salary_visuals import scenarios
+
+        try:
+            return scenarios(self, role, city, model_name)
+        except (OSError, ValueError, KeyError) as error:
+            raise MarketError("Chưa tải được biểu đồ dự đoán.") from error
+
+    def salary_analysis(self, cohort="salary", charts=None):
+        from .salary_visuals import salary_analysis
+
+        try:
+            return salary_analysis(self, cohort, charts)
+        except (ValueError, KeyError, OSError) as error:
+            raise MarketError(str(error)) from error
+
+    def estimate_salary(self, role, location, model_name=None):
         from .inference import estimate_salary
 
         try:
-            return estimate_salary(self, role, location)
+            return estimate_salary(self, role, location, model_name=model_name)
         except (OSError, ValueError, KeyError) as error:
             raise MarketError(
                 "Chưa tải được mô hình dự đoán. Kiểm tra lại bộ model đã lưu."

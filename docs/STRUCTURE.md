@@ -5,7 +5,8 @@
 | Đường dẫn | Nội dung |
 | --- | --- |
 | `Makefile` | Lệnh chạy demo và kiểm tra từ thư mục gốc |
-| `job_market/app.py` | Điều hướng bốn trang chính |
+| `job_market/app.py` | Điều hướng năm trang chính |
+| `job_market/pages/overview.py` | Dashboard tổng quan bốn ô thống kê và bốn biểu đồ |
 | `job_market/pages/predict.py` | Nhập lựa chọn và hiển thị lương dự đoán |
 | `job_market/pages/market.py`, `models.py`, `data.py` | Biểu đồ, so sánh mô hình và bảng dữ liệu |
 | `job_market/pages/tools/` | Công cụ kiểm nguồn, chuẩn hóa và nhập CSV/Excel |
@@ -20,6 +21,6 @@
 | `docs/adr/`, `docs/rebuild/` | Lịch sử quyết định, nghiên cứu và báo cáo thực hiện |
 | `.github/workflows/job-market.yml` | Kiểm tra tự động cho ứng dụng |
 
-Demo chỉ dùng nghề và địa điểm để gọi Ridge đã lưu; không huấn luyện lại khi dự đoán. Giữ dữ liệu, nhãn, policy và artifact cùng bằng chứng xuất xứ để đối chiếu kết quả.
+Demo dùng nghề và địa điểm để gọi Ridge hoặc Linear Regression theo lựa chọn trên web; không huấn luyện lại khi dự đoán. Giữ dữ liệu, nhãn, policy và artifact cùng bằng chứng xuất xứ để đối chiếu kết quả.
 
 Các ghi chép cũ có thể mô tả phạm vi trước đây, gồm tư vấn nghề nghiệp hoặc những phần chưa triển khai. Giữ chúng làm hồ sơ lịch sử; phạm vi demo hiện tại được mô tả trong README và `docs/DEMO.md`.

@@ -1,16 +1,17 @@
-"""Salary-only demo for supported role/city queries; never fit or recommend skills."""
+"""Salary-only academic demo using the saved pipeline for valid role/city queries."""
 
 import math
 
-from .companies import canonical_name
 from .roles import ROLE_PATTERNS
 from .training import default_runs, features, load_run
 
 
-def estimate_salary(service, role, location):
+def estimate_salary(service, role, location, model_name=None):
     empty = {"salary_vnd_month": None}
     if not isinstance(role, str) or not isinstance(location, str):
         return {**empty, "status": "invalid_input", "message": "Chọn nghề và thành phố."}
+    if model_name is not None and model_name not in {"Ridge", "LinearRegression"}:
+        return {**empty, "status": "invalid_input", "message": "Chọn mô hình hợp lệ."}
     role = next(
         (name for name in ROLE_PATTERNS if name.casefold() == role.strip().casefold()), None
     )
@@ -27,8 +28,8 @@ def estimate_salary(service, role, location):
             "message": "Chọn một nghề và một thành phố hợp lệ.",
         }
     city = places["locations"][0]
-    run = load_run(default_runs() / "7137291a5d16b71f1861")
-    report, policy = run["report"], run["policy"]
+    run = load_run(default_runs() / "7137291a5d16b71f1861", model_name=model_name)
+    report = run["report"]
     if not report["promoted"]:
         return {
             **empty,
@@ -37,20 +38,8 @@ def estimate_salary(service, role, location):
         }
     role_rows = [row for row in run["train"] if row["role"] == role]
     local_rows = [row for row in role_rows if city in row["locations"]]
-    companies = {canonical_name(row["company_raw"]) for row in role_rows}
-    support = policy["support"]
-    if (
-        len(role_rows) < support["role_entities"]
-        or len(companies) < support["role_companies"]
-        or len(local_rows) < support["location_entities"]
-    ):
-        return {
-            **empty,
-            "status": "unsupported",
-            "message": "Nghề và thành phố này chưa đủ dữ liệu để dự đoán.",
-            "role": role,
-            "location": city,
-        }
+    # Academic demo: no minimum-sample gate. DictVectorizer keeps the frozen
+    # vocabulary and ignores unseen category keys; no retraining or city mean.
     # This is explicitly a role/city query with other fields unobserved, exactly
     # the missing-feature representation of the frozen training cohort.
     query = {
@@ -74,11 +63,11 @@ def estimate_salary(service, role, location):
         "salary_vnd_month": salary,
         "role": role,
         "location": city,
-        "model": report["chosen_model"],
+        "model": run["prediction_model"],
         "run_id": report["run_id"],
         "support_count": len(local_rows),
         "dataset_count": report["source_entities"],
-        "test_mae_vnd_month": report["metrics"][report["chosen_model"]]["test"]["MAE"],
+        "test_mae_vnd_month": report["metrics"][run["prediction_model"]]["test"]["MAE"],
         "cohort": report["cohort"],
         "scope": "role_and_city_only",
     }
