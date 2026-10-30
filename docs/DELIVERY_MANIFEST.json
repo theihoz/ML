@@ -1,9 +1,0 @@
-{
-  "path": "/Users/scara2906/Downloads/ML/outputs/delivery/qwen_salary_demo_20261025.zip",
-  "bytes": 43675137,
-  "sha256": "9987304eaa4da25a7ec232a8f70fd6fdbc0fd596cbdcea5edec7cfc2e20d6866",
-  "files": 97,
-  "source_git_commit": "e8b6c18e48a82937641e329744166c385b456312",
-  "verified": true,
-  "packaged_model_reload_passed": true
-}
