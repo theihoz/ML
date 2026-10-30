@@ -1,0 +1,26 @@
+{
+  "adjudication": "agent-reviewed under explicit user delegation, not publisher certification",
+  "source": "https://www.kaggle.com/datasets/vitthnhnguyn138/vietnam-it-job-posts",
+  "revision": 1,
+  "declared_license": "MIT",
+  "publisher": "Việt Thành Nguyễn",
+  "source_raw_sha256": "d201d539d1bbc79a54a369eafc94d85efbb10bdece9f6ac80b9e5e4c9a0bc30c",
+  "source_rows": 6779,
+  "accepted_entities": 14,
+  "companies": 11,
+  "labels_sha256": "f232b465f2d4a410a41b616ae794a741fee71cafae866bfa8a2f53f6bc85c111",
+  "policy_sha256": "33cadf3ac969766f3eec7cb9503ae04613c1f1688f352c44ec0fd044cec7ce86",
+  "files": {
+    "readiness-before-fit.json": "91c7de5d41f26415b0f28052011d97143b8bfd40aaaf088adaa02cae190286e4",
+    "accepted.json": "e0e5891b5b7f9e534e7e842616f28c574bce998323fc71b7b9dc5a656cfed64f",
+    "accepted.csv": "1695627b32d5abe044187093ca23a3052b3715db50785054edf11105046b2c19",
+    "review-ledger.json": "e0aed8648ee0a9df8852e4fdcb1d4c7d31e1da928cc1adca94ae393fdec9586b"
+  },
+  "limitations": [
+    "small_exploratory_cohort",
+    "title_only_skills",
+    "unknown_gross_net",
+    "salary_components_unspecified",
+    "numeric_experience_units_unconfirmed"
+  ]
+}

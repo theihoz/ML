@@ -1,0 +1,17 @@
+# Tự động kiểm duyệt và khóa policy cho run thăm dò
+
+Ngày 30/10/2026, người dùng yêu cầu: “tự động kiểm duyệt thêm nhãn và khóa policy và huấn luyện cho tôi đang cần gấp”. Đây là ủy quyền chốt các ngưỡng còn thiếu và nhận nguồn mới có bằng chứng; không phải cho phép bịa đơn vị, trộn cohort hoặc đổi tiêu chí phát hành sau test.
+
+Nhận nguồn vitthnhnguyn138/vietnam-it-job-posts v1, publisher Việt Thành Nguyễn, khai báo MIT trong metadata Kaggle. Lưu raw đầy đủ 6.779 dòng, README publisher và metadata nguyên bản. Nguồn công khai có khai báo giấy phép tích cực; dự án ghi nhận khai báo đó, không coi nó là kiểm chứng độc lập quyền của mọi bên trong từng tin. Raw mới lấy trong đợt nghiên cứu này, không lấy lại dữ liệu/model cũ của người dùng.
+
+Từ các tin có khoảng ghi rõ `tr-tr ₫/tháng`, nhận 14 entity ở 11 tên công ty chuẩn hóa, dựa vào vai trò rõ ràng trong tiêu đề gốc. Nguồn thiếu JD vẫn dùng được bằng chứng tiêu đề giới hạn, giống cách đã xử lý nguồn TopCV; không suy diễn kỹ năng thiếu. AI/NLP Engineer, AI Solution Architect/Architect và trưởng nhóm nghiên cứu AI được duyệt riêng vào Data/ML. Trưởng phòng giải pháp Mobile chưa rõ công việc, Web & Mobile hỗn hợp, User Acquisition, QA phần cứng, recruiter chưa rõ khách hàng, HICAS/VCI/SAPP có phiên bản mâu thuẫn không vào nhãn. Hai phiên bản AI Architect cùng ID/công ty/khoảng giữ một entity, lưu cả ordinal. Repost Sunteco cùng tiêu đề/khoảng giữ một đại diện; mọi tin Sunteco vẫn chung nhóm. Các tin “thu nhập” không trộn với salary_components_unspecified; hai YODY cũ không vào run này. USD/tháng không đổi sang VND.
+
+Policy `job_market/config/training-policy-v1.json` khóa trước fit và trước khi xem metric: tối thiểu 14 entity/10 nhóm; train/validation/test ít nhất 8/2/2 entity và 6/2/2 nhóm; mục tiêu 70/15/15, seed42. Đây là sàn cho một run thăm dò nhỏ có thể tái lập, không phải khẳng định 14 mẫu đủ đại diện thị trường hoặc đủ chính xác để tư vấn. Giữ toàn bộ nhãn hợp lệ, không trim outlier; Ridge alpha10 solverSVD cố định, OLS mặc định, không dò tham số. Lương chia một triệu trong fit để ổn định số học, metric/prediction trả lại VND/tháng. Vocabulary và scaler chỉ fit train, không refit train+validation.
+
+Missing kinh nghiệm có indicator, không có giá trị số giả. Không đoán số năm từ `3` hoặc cấp bậc khi tài liệu nguồn không xác nhận đơn vị. Vì toàn bộ 14 nhãn chưa có số năm được xác minh, run này không chứng minh học được ảnh hưởng của kinh nghiệm. Feature allowlist vẫn giữ schema kinh nghiệm để nhận dữ liệu có bằng chứng ở những run tương lai; không thêm feature từ held-out vào vocabulary.
+
+Support được khóa: nghề ít nhất 3 tin/2 công ty train, địa điểm ít nhất 3 tin train, kỹ năng ít nhất 3 tin/2 công ty train. Hồ sơ có kinh nghiệm chưa được train hỗ trợ, nghề/địa điểm/kỹ năng chưa đủ hỗ trợ không trả lương/tư vấn. Không bịa gợi ý để demo. Policy cho phép fit thăm dò nhưng không tự đảm bảo hồ sơ bất kỳ đủ hỗ trợ.
+
+Giữ nguyên quyết định phát hành: chọn validation MAE chưa làm tròn nhỏ nhất, hòa chọn OLS; ghi lựa chọn trước đánh giá test; chỉ promote khi model được chọn thắng trung vị train trên cả validation và test. Test fail giữ model/run/báo cáo, không chọn lại hoặc thử seed/alpha khác trên test đó. Các quy tắc này được chốt trước lần fit đầu tiên; không đổi theo kết quả.
+
+Gate được mở có phạm vi duy nhất cho source hash/cohort/policy này. Preview EDA/YODY cũ vẫn có thể báo blocked vì nó là cohort khác. Không tuyên bố các ticket artifact/inference/advice/batch đã hoàn tất chỉ vì đã fit hai model.

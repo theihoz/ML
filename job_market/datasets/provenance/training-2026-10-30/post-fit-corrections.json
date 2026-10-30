@@ -1,0 +1,16 @@
+{
+  "run_id": "7137291a5d16b71f1861",
+  "timing": "Independent review after the first fixed evaluation; no refit or metric replacement.",
+  "corrections": [
+    {
+      "source_rows": [779, 2243],
+      "issue": "Sunteco identical employer/title/salary repost was excluded but lineage lacked its representative link.",
+      "resolution": "Row 779 represents the pair. Current adjudication links both ordinals. Original frozen evidence and evaluated model remain unchanged; the audit addendum retains the missing lineage."
+    },
+    {
+      "source_rows": [5831],
+      "issue": "First-fit feature extraction missed explicit Go inside the parenthesized language list.",
+      "resolution": "Public skill parser corrected and regression-tested. The first-fit frozen dataset/run retain their historical feature values; correcting features does not authorize another evaluation on exposed test. Future model correction requires new untouched holdout."
+    }
+  ]
+}

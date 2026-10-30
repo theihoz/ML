@@ -59,6 +59,38 @@ class RawPreview:
 class MarketService:
     """Public application seam; adapters only render its results."""
 
+    def audit_training_run(self, run_dir=None):
+        from .training import audit_run
+
+        try:
+            return audit_run(run_dir)
+        except (OSError, ValueError, KeyError) as error:
+            raise MarketError(str(error)) from error
+
+    def training_readiness(self):
+        from .training import readiness
+
+        try:
+            return readiness(self)
+        except (OSError, ValueError, KeyError) as error:
+            raise MarketError(str(error)) from error
+
+    def train_models(self, output_root=None):
+        from .training import train
+
+        try:
+            return train(self, output_root)
+        except (OSError, ValueError, KeyError) as error:
+            raise MarketError(str(error)) from error
+
+    def adjudicate_training_labels(self):
+        from .training_labels import adjudicate
+
+        try:
+            return adjudicate(self)
+        except (OSError, ValueError, KeyError) as error:
+            raise MarketError(str(error)) from error
+
     def preview_split(self, rows, *, basis, scope):
         from .splitting import preview_split
 
@@ -100,7 +132,7 @@ class MarketService:
             "reason": (
                 "; ".join(normalized["errors"])
                 if normalized["errors"]
-                else "Chưa có artifact model được kiểm tra để dự đoán lương chào tuyển."
+                else "Chưa mở suy luận/tư vấn cho hồ sơ này: cần artifact và độ phủ dữ liệu đủ hỗ trợ. Run thăm dò hiện chưa có số năm kinh nghiệm được xác minh."
             ),
             "salary_prediction": None,
             "advice": [],

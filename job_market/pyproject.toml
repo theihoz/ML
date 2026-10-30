@@ -7,7 +7,7 @@ name = "career-market"
 version = "0.1.0"
 description = "Independent raw preview of approved Vietnamese job postings"
 requires-python = ">=3.11"
-dependencies = ["streamlit==1.66.1", "pandas==3.1.0", "matplotlib==3.11.2", "seaborn==0.13.2", "openpyxl==3.1.5"]
+dependencies = ["streamlit==1.66.1", "pandas==3.1.0", "matplotlib==3.11.2", "seaborn==0.13.2", "openpyxl==3.1.5", "scikit-learn==1.9.1", "joblib==1.6.0", "numpy==2.4.6", "scipy==1.17.1"]
 
 [project.optional-dependencies]
 dev = ["pytest==9.2.0", "ruff==0.17.3"]
@@ -22,6 +22,9 @@ packages = ["src/career_market"]
 "datasets/raw" = "career_market/datasets/raw"
 "datasets/provenance" = "career_market/datasets/provenance"
 "datasets/labels/2026-10-29" = "career_market/datasets/labels/2026-10-29"
+"datasets/labels/2026-10-30" = "career_market/datasets/labels/2026-10-30"
+"config" = "career_market/config"
+"artifacts/runs" = "career_market/artifacts/runs"
 
 [tool.pytest.ini_options]
 testpaths = ["tests"]

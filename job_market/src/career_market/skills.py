@@ -73,6 +73,19 @@ def _technical_context(text: str, match: re.Match) -> bool:
         return False
     if match.group().lower() == "golang":
         return True
+    opening = text.rfind("(", 0, match.start())
+    closing = text.find(")", match.end())
+    if (
+        opening >= 0
+        and closing >= 0
+        and re.search(r"developer|engineer|lập trình", text[:opening], re.I)
+    ):
+        parts = re.split(r"[,/]", text[opening + 1 : closing])
+        if len(parts) > 1 and all(
+            re.fullmatch("(?:" + "|".join(LANGUAGES.values()) + ")", part.strip(), re.I)
+            for part in parts
+        ):
+            return True
     language_list = all(
         re.fullmatch(r"(?:" + "|".join(LANGUAGES.values()) + r")", part.strip(), re.I)
         for part in re.split(r"[,/]", text)

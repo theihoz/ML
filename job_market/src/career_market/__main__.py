@@ -14,6 +14,9 @@ def main() -> int:
     parser = argparse.ArgumentParser(description="Xem nguồn tin tuyển dụng gốc đã duyệt.")
     commands = parser.add_subparsers(dest="command", required=True)
     commands.add_parser("sources", help="Danh mục nguồn và xuất xứ")
+    commands.add_parser("training-readiness", help="Kiểm nhãn và policy đã khóa, không fit")
+    commands.add_parser("train", help="Fit ngoại tuyến hai model trên cohort đã duyệt")
+    commands.add_parser("training-report", help="Nạp lại artifact và kiểm dự đoán, không fit")
     company_arguments(commands.add_parser("companies", help="Đối chiếu công ty và nhóm tin"))
     split = commands.add_parser("split-preview", help="Xem trước ba tập theo nhóm công ty")
     split.add_argument("--basis", choices=["unknown", "gross", "net"], required=True)
@@ -48,6 +51,12 @@ def main() -> int:
         service = MarketService(raw_dir=args.raw_dir if args.command == "download" else None)
         if args.command == "sources":
             result = [asdict(source) for source in service.sources()]
+        elif args.command == "training-readiness":
+            result = service.training_readiness()
+        elif args.command == "train":
+            result = service.train_models()
+        elif args.command == "training-report":
+            result = service.audit_training_run()
         elif args.command == "companies":
             result = run_company_report(service, args)
         elif args.command == "split-preview":

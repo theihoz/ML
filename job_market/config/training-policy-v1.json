@@ -1,0 +1,22 @@
+{
+  "version": "vn-title-salary-pilot-v1",
+  "authorized_on": "2026-10-30",
+  "authorization": "User delegated automatic label review, policy locking and training in this chat.",
+  "source_raw_sha256": "d201d539d1bbc79a54a369eafc94d85efbb10bdece9f6ac80b9e5e4c9a0bc30c",
+  "cohort": {"currency": "VND", "period": "MONTH", "basis": "unknown", "scope": "salary_components_unspecified"},
+  "seed": 42,
+  "target_ratios": {"train": 0.7, "validation": 0.15, "test": 0.15},
+  "minimum_entities": 14,
+  "minimum_groups": 10,
+  "minimum_split_entities": {"train": 8, "validation": 2, "test": 2},
+  "minimum_split_groups": {"train": 6, "validation": 2, "test": 2},
+  "features": ["role", "experience_min", "experience_max", "experience_kind", "skills", "locations", "work_modes"],
+  "experience_policy": "Only explicit source units; retain bounds/kind. Missing values have indicators and no numeric feature; never infer years from seniority or bare source numbers.",
+  "outlier_policy": "Retain all verified positive finite labels, including high salaries. No target-dependent clipping, winsorization, log transform or post-test exclusions.",
+  "models": {"Ridge": {"alpha": 10.0, "solver": "svd"}, "LinearRegression": {}},
+  "selection": "Lowest unrounded validation MAE; exact tie chooses LinearRegression.",
+  "release": "Chosen model MAE must beat train-median baseline on both validation and test; no model switching or tuning after test.",
+  "support": {"role_entities": 3, "role_companies": 2, "location_entities": 3, "skill_entities": 3, "skill_companies": 2},
+  "scope": "Exploratory coursework run, not a statistically representative salary estimate. Small holdouts reported explicitly. No accuracy guarantee.",
+  "data_gate": "Open only for the reviewed checksum-pinned source and this single cohort; existing YODY and other cohorts stay separate."
+}

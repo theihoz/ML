@@ -1,0 +1,16 @@
+{
+  "chosen": "Ridge",
+  "validation": {
+    "Ridge": {
+      "MAE": 10504846.075637113,
+      "RMSE": 11617552.375389922,
+      "n": 2
+    },
+    "LinearRegression": {
+      "MAE": 13583333.333333336,
+      "RMSE": 13717891.804339163,
+      "n": 2
+    }
+  },
+  "policy_sha256": "33cadf3ac969766f3eec7cb9503ae04613c1f1688f352c44ec0fd044cec7ce86"
+}

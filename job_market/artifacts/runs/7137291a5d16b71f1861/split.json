@@ -1,0 +1,136 @@
+{
+  "status": "locked",
+  "training_ready": true,
+  "blockers": [],
+  "seed": 42,
+  "target_ratios": {
+    "train": 0.7,
+    "validation": 0.15,
+    "test": 0.15
+  },
+  "cohort": {
+    "currency": "VND",
+    "period": "MONTH",
+    "basis": "unknown",
+    "scope": "salary_components_unspecified"
+  },
+  "eligible_entities": 14,
+  "eligible_groups": 11,
+  "conflicting_entities": [],
+  "counts": {
+    "train": 10,
+    "validation": 2,
+    "test": 2
+  },
+  "actual_ratios": {
+    "train": 0.7142857142857143,
+    "validation": 0.14285714285714285,
+    "test": 0.14285714285714285
+  },
+  "membership": [
+    {
+      "entity_id": "vietnamworks:2051570",
+      "group_id": "company-group:45ffeeba3f862630f71d49b3732aaf3763850624fa404ec2e45a619ae35bd0d0",
+      "company_canonical": "công ty cổ phần consortio việt nam",
+      "source_id": "vitthnhnguyn138/vietnam-it-job-posts",
+      "split": "train"
+    },
+    {
+      "entity_id": "vietnamworks:2051900",
+      "group_id": "company-group:2be6128ae0fee1a89a7f32df6d7b498473e09bb91b06f28a88b4136db662d7e2",
+      "company_canonical": "công ty tnhh công nghệ coderpush",
+      "source_id": "vitthnhnguyn138/vietnam-it-job-posts",
+      "split": "test"
+    },
+    {
+      "entity_id": "vietnamworks:2052311",
+      "group_id": "company-group:1afe457f8d17ceab70cff645329a308d3c1fe05c5a5df7d711efb9a5b07cfa90",
+      "company_canonical": "công ty tnhh thương mại và giao nhận vận tải quốc tế trang huy",
+      "source_id": "vitthnhnguyn138/vietnam-it-job-posts",
+      "split": "train"
+    },
+    {
+      "entity_id": "vietnamworks:2053411",
+      "group_id": "company-group:1f7cb830e900bf78780f8cd89dbb7126917710bd0cbe008d5818d250d47c13a4",
+      "company_canonical": "công ty tnhh vnd credit",
+      "source_id": "vitthnhnguyn138/vietnam-it-job-posts",
+      "split": "train"
+    },
+    {
+      "entity_id": "vietnamworks:2055050",
+      "group_id": "company-group:c0c47cc2ba48f7b3175aba484b30d235e2baa0b7229f6771e82c6716555beb06",
+      "company_canonical": "công ty cổ phần khoa học dữ liệu",
+      "source_id": "vitthnhnguyn138/vietnam-it-job-posts",
+      "split": "validation"
+    },
+    {
+      "entity_id": "vietnamworks:2056352",
+      "group_id": "company-group:79eecdd10fe5228ed41f90f5762eacdde859572c586f6b7bf9a11f718015a734",
+      "company_canonical": "công ty cổ phần sunteco",
+      "source_id": "vitthnhnguyn138/vietnam-it-job-posts",
+      "split": "train"
+    },
+    {
+      "entity_id": "vietnamworks:2056641",
+      "group_id": "company-group:79eecdd10fe5228ed41f90f5762eacdde859572c586f6b7bf9a11f718015a734",
+      "company_canonical": "công ty cổ phần sunteco",
+      "source_id": "vitthnhnguyn138/vietnam-it-job-posts",
+      "split": "train"
+    },
+    {
+      "entity_id": "vietnamworks:2058261",
+      "group_id": "company-group:308261ab7d32e9f8a4ddda575857f827e7b42fbb5c4af4f2597656f11bf3678d",
+      "company_canonical": "công ty tnhh phát triển hương việt",
+      "source_id": "vitthnhnguyn138/vietnam-it-job-posts",
+      "split": "test"
+    },
+    {
+      "entity_id": "vietnamworks:2067775",
+      "group_id": "company-group:cbaf14f71faf72a624f84360e4dc16f515d95b6dc23a2f80d8152a85a8fb734b",
+      "company_canonical": "công ty tnhh t.m.g",
+      "source_id": "vitthnhnguyn138/vietnam-it-job-posts",
+      "split": "train"
+    },
+    {
+      "entity_id": "vietnamworks:2069837",
+      "group_id": "company-group:cf36e55badc71c8b52134d8168570c68ac3e60599631aa5294312e153e786869",
+      "company_canonical": "công ty tnhh socotec việt nam",
+      "source_id": "vitthnhnguyn138/vietnam-it-job-posts",
+      "split": "validation"
+    },
+    {
+      "entity_id": "vietnamworks:2071752",
+      "group_id": "company-group:8a0aab8789f35b884e50512593344e8a9a89786b16bd83ebf87056d455e78f57",
+      "company_canonical": "công ty tnhh thư viện pháp luật",
+      "source_id": "vitthnhnguyn138/vietnam-it-job-posts",
+      "split": "train"
+    },
+    {
+      "entity_id": "vietnamworks:2077363",
+      "group_id": "company-group:8a0aab8789f35b884e50512593344e8a9a89786b16bd83ebf87056d455e78f57",
+      "company_canonical": "công ty tnhh thư viện pháp luật",
+      "source_id": "vitthnhnguyn138/vietnam-it-job-posts",
+      "split": "train"
+    },
+    {
+      "entity_id": "vietnamworks:2077365",
+      "group_id": "company-group:8a0aab8789f35b884e50512593344e8a9a89786b16bd83ebf87056d455e78f57",
+      "company_canonical": "công ty tnhh thư viện pháp luật",
+      "source_id": "vitthnhnguyn138/vietnam-it-job-posts",
+      "split": "train"
+    },
+    {
+      "entity_id": "vietnamworks:2077676",
+      "group_id": "company-group:780b36ebb75c3dc3a59085491d786b8f1f658e60b34bbbd632b4c846f5423120",
+      "company_canonical": "tổng công ty bưu điện việt nam - vietnampost",
+      "source_id": "vitthnhnguyn138/vietnam-it-job-posts",
+      "split": "train"
+    }
+  ],
+  "membership_sha256": "a6073a431bed2727f07a710b8e9aac27045ede55c876603cce2015ca57d497b9",
+  "input_sha256": "7483e5d7fef2ed86629703fd43e295044eecefda9089b85d251c8d6e23c0cfde",
+  "group_rules_version": "company-groups-v1",
+  "policy_sha256": "33cadf3ac969766f3eec7cb9503ae04613c1f1688f352c44ec0fd044cec7ce86",
+  "note": "Xem trước cấu trúc; chưa khóa manifest huấn luyện. Không fit hoặc chọn model.",
+  "labels_sha256": "f232b465f2d4a410a41b616ae794a741fee71cafae866bfa8a2f53f6bc85c111"
+}

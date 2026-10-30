@@ -1,0 +1,130 @@
+{
+  "run_id": "7137291a5d16b71f1861",
+  "run_dir": "/Users/scara2906/Downloads/ML/job_market/artifacts/runs/7137291a5d16b71f1861",
+  "status": "trained",
+  "chosen_model": "Ridge",
+  "promoted": true,
+  "release_reason": "beats_baseline_on_validation_and_test",
+  "metrics": {
+    "Ridge": {
+      "train": {
+        "MAE": 15663876.460489685,
+        "RMSE": 21028377.25922839,
+        "n": 10
+      },
+      "validation": {
+        "MAE": 10504846.075637113,
+        "RMSE": 11617552.375389922,
+        "n": 2
+      },
+      "test": {
+        "MAE": 21975802.331783254,
+        "RMSE": 22197367.426695526,
+        "n": 2
+      }
+    },
+    "LinearRegression": {
+      "train": {
+        "MAE": 11400000.0,
+        "RMSE": 19690945.465704113,
+        "n": 10
+      },
+      "validation": {
+        "MAE": 13583333.333333336,
+        "RMSE": 13717891.804339163,
+        "n": 2
+      },
+      "test": {
+        "MAE": 17576149.425287355,
+        "RMSE": 17663768.677910294,
+        "n": 2
+      }
+    },
+    "train_median_baseline": {
+      "train": {
+        "MAE": 23800000.0,
+        "RMSE": 37951943.29675359,
+        "n": 10
+      },
+      "validation": {
+        "MAE": 11250000.0,
+        "RMSE": 11858541.225631423,
+        "n": 2
+      },
+      "test": {
+        "MAE": 32500000.0,
+        "RMSE": 42573465.914816,
+        "n": 2
+      }
+    }
+  },
+  "unit": "VND/month",
+  "cohort": {
+    "currency": "VND",
+    "period": "MONTH",
+    "basis": "unknown",
+    "scope": "salary_components_unspecified"
+  },
+  "counts": {
+    "train": 10,
+    "validation": 2,
+    "test": 2
+  },
+  "actual_ratios": {
+    "train": 0.7142857142857143,
+    "validation": 0.14285714285714285,
+    "test": 0.14285714285714285
+  },
+  "labels_sha256": "f232b465f2d4a410a41b616ae794a741fee71cafae866bfa8a2f53f6bc85c111",
+  "policy_sha256": "33cadf3ac969766f3eec7cb9503ae04613c1f1688f352c44ec0fd044cec7ce86",
+  "membership_sha256": "a6073a431bed2727f07a710b8e9aac27045ede55c876603cce2015ca57d497b9",
+  "source_raw_sha256": "d201d539d1bbc79a54a369eafc94d85efbb10bdece9f6ac80b9e5e4c9a0bc30c",
+  "source_entities": 14,
+  "company_count": 11,
+  "feature_names": [
+    "experience_kind=missing",
+    "experience_max_missing",
+    "experience_min_missing",
+    "locations=HCM",
+    "locations=HN",
+    "role=Backend",
+    "role=Data/ML",
+    "role=DevOps",
+    "role=Frontend",
+    "skills=C#",
+    "skills=Java",
+    "skills=Python"
+  ],
+  "feature_coverage": {
+    "experience_evidenced": 0,
+    "with_title_skills": 3,
+    "train_roles": {
+      "Frontend": 1,
+      "Backend": 2,
+      "Data/ML": 6,
+      "DevOps": 1
+    }
+  },
+  "limitations": [
+    "small_exploratory_cohort",
+    "title_only_skills",
+    "unknown_gross_net",
+    "salary_components_unspecified",
+    "numeric_experience_units_unconfirmed"
+  ],
+  "versions": {
+    "sklearn": "1.9.1",
+    "numpy": "2.4.6",
+    "joblib": "1.6.0"
+  },
+  "artifact_sha256": {
+    "LinearRegression.joblib": "98cdeec2ec376bce6b358b54b7505f4386be342e14694487834f11f75b045af1",
+    "policy.json": "1b92a43158d42b6566c37787cfa42d8d93ecfbb6735e6632ce7f6df363fe7f0c",
+    "train-support.json": "4c5d1cf5dd75260f7aec60aab176dea1feaa02277d1dee32276b1b31f903ee93",
+    "Ridge.joblib": "821737a99a1794d2f44607e9a194cf4ae057366d214aaada9703043e7bc24fcc",
+    "selection.json": "2c5b99f3bacbb027510da8e4cd766f21680e7adbf7a41079f3876c8d8cb025d0",
+    "split.json": "b8652ad056cc6d34fe725eb1a59080d9934ba6261f7f0e7f2bc137097c04f434",
+    "predictions.json": "861086d918c3950b0d0fb9407498e2f627e279529e69819fe70957988e1f5bf1"
+  },
+  "test_policy": "One fixed split, selection locked before test; no refit on train+validation or test-driven retry."
+}

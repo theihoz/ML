@@ -1,0 +1,3 @@
+# Preserve evidence bytes and the frozen CSV's original CRLF checksum.
+job_market/datasets/raw/vietnam_it_job_posts_v1.csv -text
+job_market/datasets/labels/2026-10-30/accepted.csv -text whitespace=cr-at-eol

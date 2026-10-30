@@ -1,0 +1,226 @@
+[
+  {
+    "model": "Ridge",
+    "split": "train",
+    "posting_id": "vietnamworks:2051570",
+    "actual_vnd_month": 17500000.0,
+    "predicted_vnd_month": 24956553.327666376,
+    "role": "Frontend"
+  },
+  {
+    "model": "Ridge",
+    "split": "train",
+    "posting_id": "vietnamworks:2052311",
+    "actual_vnd_month": 21000000.0,
+    "predicted_vnd_month": 27796889.71948597,
+    "role": "Backend"
+  },
+  {
+    "model": "Ridge",
+    "split": "train",
+    "posting_id": "vietnamworks:2053411",
+    "actual_vnd_month": 25000000.0,
+    "predicted_vnd_month": 34456578.32891644,
+    "role": "Data/ML"
+  },
+  {
+    "model": "Ridge",
+    "split": "train",
+    "posting_id": "vietnamworks:2056352",
+    "actual_vnd_month": 40000000.0,
+    "predicted_vnd_month": 34456578.32891644,
+    "role": "Data/ML"
+  },
+  {
+    "model": "Ridge",
+    "split": "train",
+    "posting_id": "vietnamworks:2056641",
+    "actual_vnd_month": 19500000.0,
+    "predicted_vnd_month": 21414666.85834291,
+    "role": "Backend"
+  },
+  {
+    "model": "Ridge",
+    "split": "train",
+    "posting_id": "vietnamworks:2067775",
+    "actual_vnd_month": 25000000.0,
+    "predicted_vnd_month": 63238115.7391203,
+    "role": "Data/ML"
+  },
+  {
+    "model": "Ridge",
+    "split": "train",
+    "posting_id": "vietnamworks:2071752",
+    "actual_vnd_month": 76000000.0,
+    "predicted_vnd_month": 63238115.7391203,
+    "role": "Data/ML"
+  },
+  {
+    "model": "Ridge",
+    "split": "train",
+    "posting_id": "vietnamworks:2077363",
+    "actual_vnd_month": 110000000.0,
+    "predicted_vnd_month": 63238115.7391203,
+    "role": "Data/ML"
+  },
+  {
+    "model": "Ridge",
+    "split": "train",
+    "posting_id": "vietnamworks:2077365",
+    "actual_vnd_month": 90000000.0,
+    "predicted_vnd_month": 76747807.89039452,
+    "role": "DevOps"
+  },
+  {
+    "model": "Ridge",
+    "split": "train",
+    "posting_id": "vietnamworks:2077676",
+    "actual_vnd_month": 20000000.0,
+    "predicted_vnd_month": 34456578.32891644,
+    "role": "Data/ML"
+  },
+  {
+    "model": "Ridge",
+    "split": "validation",
+    "posting_id": "vietnamworks:2055050",
+    "actual_vnd_month": 32500000.0,
+    "predicted_vnd_month": 47966270.480190665,
+    "role": "DevOps"
+  },
+  {
+    "model": "Ridge",
+    "split": "validation",
+    "posting_id": "vietnamworks:2069837",
+    "actual_vnd_month": 40000000.0,
+    "predicted_vnd_month": 34456578.32891644,
+    "role": "Data/ML"
+  },
+  {
+    "model": "Ridge",
+    "split": "test",
+    "posting_id": "vietnamworks:2051900",
+    "actual_vnd_month": 85000000.0,
+    "predicted_vnd_month": 59895742.37045186,
+    "role": "Fullstack"
+  },
+  {
+    "model": "Ridge",
+    "split": "test",
+    "posting_id": "vietnamworks:2058261",
+    "actual_vnd_month": 30000000.0,
+    "predicted_vnd_month": 48847347.03401837,
+    "role": "Data/ML"
+  },
+  {
+    "model": "LinearRegression",
+    "split": "train",
+    "posting_id": "vietnamworks:2051570",
+    "actual_vnd_month": 17500000.0,
+    "predicted_vnd_month": 17500000.000000022,
+    "role": "Frontend"
+  },
+  {
+    "model": "LinearRegression",
+    "split": "train",
+    "posting_id": "vietnamworks:2052311",
+    "actual_vnd_month": 21000000.0,
+    "predicted_vnd_month": 20999999.999999993,
+    "role": "Backend"
+  },
+  {
+    "model": "LinearRegression",
+    "split": "train",
+    "posting_id": "vietnamworks:2053411",
+    "actual_vnd_month": 25000000.0,
+    "predicted_vnd_month": 28333333.33333332,
+    "role": "Data/ML"
+  },
+  {
+    "model": "LinearRegression",
+    "split": "train",
+    "posting_id": "vietnamworks:2056352",
+    "actual_vnd_month": 40000000.0,
+    "predicted_vnd_month": 28333333.33333332,
+    "role": "Data/ML"
+  },
+  {
+    "model": "LinearRegression",
+    "split": "train",
+    "posting_id": "vietnamworks:2056641",
+    "actual_vnd_month": 19500000.0,
+    "predicted_vnd_month": 19499999.999999993,
+    "role": "Backend"
+  },
+  {
+    "model": "LinearRegression",
+    "split": "train",
+    "posting_id": "vietnamworks:2067775",
+    "actual_vnd_month": 25000000.0,
+    "predicted_vnd_month": 70333333.33333334,
+    "role": "Data/ML"
+  },
+  {
+    "model": "LinearRegression",
+    "split": "train",
+    "posting_id": "vietnamworks:2071752",
+    "actual_vnd_month": 76000000.0,
+    "predicted_vnd_month": 70333333.33333334,
+    "role": "Data/ML"
+  },
+  {
+    "model": "LinearRegression",
+    "split": "train",
+    "posting_id": "vietnamworks:2077363",
+    "actual_vnd_month": 110000000.0,
+    "predicted_vnd_month": 70333333.33333334,
+    "role": "Data/ML"
+  },
+  {
+    "model": "LinearRegression",
+    "split": "train",
+    "posting_id": "vietnamworks:2077365",
+    "actual_vnd_month": 90000000.0,
+    "predicted_vnd_month": 90000000.0,
+    "role": "DevOps"
+  },
+  {
+    "model": "LinearRegression",
+    "split": "train",
+    "posting_id": "vietnamworks:2077676",
+    "actual_vnd_month": 20000000.0,
+    "predicted_vnd_month": 28333333.33333332,
+    "role": "Data/ML"
+  },
+  {
+    "model": "LinearRegression",
+    "split": "validation",
+    "posting_id": "vietnamworks:2055050",
+    "actual_vnd_month": 32500000.0,
+    "predicted_vnd_month": 47999999.99999999,
+    "role": "DevOps"
+  },
+  {
+    "model": "LinearRegression",
+    "split": "validation",
+    "posting_id": "vietnamworks:2069837",
+    "actual_vnd_month": 40000000.0,
+    "predicted_vnd_month": 28333333.33333332,
+    "role": "Data/ML"
+  },
+  {
+    "model": "LinearRegression",
+    "split": "test",
+    "posting_id": "vietnamworks:2051900",
+    "actual_vnd_month": 85000000.0,
+    "predicted_vnd_month": 69181034.48275863,
+    "role": "Fullstack"
+  },
+  {
+    "model": "LinearRegression",
+    "split": "test",
+    "posting_id": "vietnamworks:2058261",
+    "actual_vnd_month": 30000000.0,
+    "predicted_vnd_month": 49333333.333333336,
+    "role": "Data/ML"
+  }
+]
