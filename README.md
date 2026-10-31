@@ -15,6 +15,16 @@ make demo
 
 Mở http://127.0.0.1:8502. Kiểm tra mã và kiểm thử bằng `make check` trong cùng môi trường.
 
+## Chạy bằng Docker
+
+Yêu cầu Docker Engine và Docker Compose plugin:
+
+```sh
+docker compose up --build
+```
+
+Mở http://127.0.0.1:8502. Nhấn `Ctrl+C` để dừng; nếu chạy Compose ở chế độ nền bằng `docker compose up --build -d`, dùng `docker compose down` để dừng và xóa container.
+
 ## Phạm vi
 
 Chọn Ridge hoặc Linear Regression, một trong bảy nhóm nghề và một trong ba thành phố HN/HCM/Đà Nẵng. Demo dùng trực tiếp pipeline đã lưu, không chặn chỉ vì ít mẫu và không thay bằng trung bình thành phố. Danh mục chưa có trong train được bộ mã hóa bỏ qua; một số nhóm vì thế có thể có kết quả giống nhau.
