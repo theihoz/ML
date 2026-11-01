@@ -8,6 +8,9 @@ from pathlib import Path
 
 from . import MarketError, MarketService
 from .company_cli import company_arguments, run_company_report
+from .salary_dataset import ROLE_ORDER, write_dataset
+from .salary_model import advise
+from .salary_model import train as train_v2
 
 
 def main() -> int:
@@ -47,6 +50,13 @@ def main() -> int:
     predict.add_argument("--model", choices=["Ridge", "LinearRegression"])
     for field in ("role", "location"):
         predict.add_argument(f"--{field}", default="")
+    commands.add_parser("build-dataset", help="Gộp ba nguồn thô thành bộ salary-v2 có split")
+    commands.add_parser("train-v2", help="Huấn luyện Ridge/RF/Gradient Boosting trên salary-v2")
+    advice = commands.add_parser("advise", help="Dự đoán lương và gợi ý kỹ năng cho hồ sơ")
+    advice.add_argument("--role", choices=ROLE_ORDER, required=True)
+    advice.add_argument("--region", default="Hà Nội")
+    advice.add_argument("--years", type=float, default=0)
+    advice.add_argument("--skills", default="", help="Danh sách kỹ năng, phân tách bằng dấu phẩy")
     args = parser.parse_args()
     try:
         service = MarketService(raw_dir=args.raw_dir if args.command == "download" else None)
@@ -54,6 +64,19 @@ def main() -> int:
             result = [asdict(source) for source in service.sources()]
         elif args.command == "training-readiness":
             result = service.training_readiness()
+        elif args.command == "build-dataset":
+            result = write_dataset()
+        elif args.command == "train-v2":
+            result = train_v2()
+        elif args.command == "advise":
+            result = advise(
+                {
+                    "role": args.role,
+                    "region": args.region,
+                    "experience_years": args.years,
+                    "skills": [s.strip() for s in args.skills.split(",") if s.strip()],
+                }
+            )
         elif args.command == "train":
             result = service.train_models()
         elif args.command == "training-report":

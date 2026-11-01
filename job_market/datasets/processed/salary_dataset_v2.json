@@ -1,0 +1,50 @@
+{
+  "version": "salary-v2",
+  "rows": 3809,
+  "companies": 685,
+  "funnel": {
+    "raw": 8523,
+    "has_salary": 5041,
+    "it_role": 3857,
+    "deduplicated": 3809
+  },
+  "split": {
+    "train": 2461,
+    "test": 696,
+    "valid": 652
+  },
+  "roles": {
+    "Backend Developer": 718,
+    "Kiểm thử (QA/QC)": 445,
+    "Frontend Developer": 318,
+    "Mobile Developer": 284,
+    "Fullstack Developer": 265,
+    "DevOps / Cloud": 221,
+    "Software Engineer (chung)": 219,
+    "Business Analyst": 196,
+    "Embedded / IoT": 189,
+    "Bảo mật": 156,
+    "AI / ML Engineer": 151,
+    "Quản lý dự án / sản phẩm": 122,
+    "Tech Lead / Architect": 117,
+    "Quản trị hệ thống / Mạng": 79,
+    "Data Engineer": 75,
+    "IT Support / Helpdesk": 74,
+    "Data Analyst / BI": 56,
+    "ERP / SAP Consultant": 31,
+    "Game Developer": 30,
+    "BrSE / Cầu nối": 23,
+    "Quản lý IT / CTO": 21,
+    "UI/UX Designer": 11,
+    "Quản trị CSDL (DBA)": 8
+  },
+  "sources": {
+    "IT Jobs 2026 (vietnamworks)": 965,
+    "IT Jobs 2026 (topcv)": 827,
+    "IT Jobs 2026 (itviec)": 686,
+    "IT Jobs 2026 (careerviet)": 680,
+    "TopCV 2026": 609,
+    "CareerBuilder 2023": 42
+  },
+  "sha256": "af76906cc77b1b178c0d3706e1ac9f4d774c1ae3e1b084957e85509a35ba48c1"
+}

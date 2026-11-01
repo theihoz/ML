@@ -5,8 +5,9 @@ from pathlib import Path
 from streamlit.testing.v1 import AppTest
 
 
-def test_prediction_is_home_and_both_cities_use_real_model():
+def test_pilot_prediction_page_and_both_cities_use_real_model():
     app = AppTest.from_file(Path(__file__).parents[1] / "app.py", default_timeout=30).run()
+    app.switch_page("pages/predict.py").run()
     assert not app.exception
     assert app.title[0].value == "Dự đoán lương"
     assert not app.text_input
@@ -54,6 +55,7 @@ def test_data_page_distinguishes_fit_and_held_out_labels():
 
 def test_manual_model_switching_updates_prediction_and_comparison():
     app = AppTest.from_file(Path(__file__).parents[1] / "app.py", default_timeout=40).run()
+    app.switch_page("pages/predict.py").run()
     app.button[0].click().run()
     ridge = app.metric[0].value
     app.selectbox(key="salary_model").select("LinearRegression")
@@ -73,13 +75,15 @@ def test_manual_model_switching_updates_prediction_and_comparison():
     assert app.selectbox(key="salary_model").value == "LinearRegression"
 
 
-def test_overview_has_real_kpis_four_charts_and_prediction_shortcut():
-    app = AppTest.from_file(Path(__file__).parents[1] / "app.py", default_timeout=40).run()
-    app.switch_page("pages/overview.py").run(timeout=40)
+def test_overview_shows_every_role_and_links_to_advisor():
+    app = AppTest.from_file(Path(__file__).parents[1] / "app.py", default_timeout=60).run()
+    app.switch_page("pages/overview.py").run(timeout=60)
     assert not app.exception
     assert app.title[0].value == "Tổng quan thị trường việc làm"
-    assert [metric.value for metric in app.metric] == ["45.1 triệu", "2", "320"]
-    assert len(app.get("image")) == 4
+    assert len(app.metric) == 3
+    assert app.metric[1].value == "23"
+    assert len(app.get("image")) == 6
+    assert any("23 vai trò" in header.value for header in app.subheader)
     app.button[0].click().run()
     assert not app.exception
-    assert app.title[0].value == "Dự đoán lương"
+    assert app.title[0].value == "Tư vấn & dự đoán lương"

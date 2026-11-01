@@ -1,6 +1,6 @@
-# Dự đoán lương CNTT
+# Dự đoán lương CNTT và tư vấn kỹ năng
 
-Demo Streamlit dự đoán lương theo nhóm nghề và địa điểm, dùng hai mô hình Ridge và Linear Regression đã tự huấn luyện và lưu sẵn. Giao diện tiếng Việt, không tư vấn nghề nghiệp.
+Ứng dụng Streamlit phân tích thị trường việc làm CNTT Việt Nam, dự đoán mức lương lập trình viên và gợi ý kỹ năng nên học thêm. Giao diện tiếng Việt.
 
 ## Chạy demo
 
@@ -13,7 +13,7 @@ python -m pip install './job_market[dev]'
 make demo
 ```
 
-Mở http://127.0.0.1:8502. Kiểm tra mã và kiểm thử bằng `make check` trong cùng môi trường.
+Mở http://127.0.0.1:8502. Kiểm tra mã và kiểm thử bằng `make check` trong cùng môi trường. Tạo lại bộ dữ liệu và huấn luyện lại bằng `make train-v2` (khoảng 20 giây).
 
 ## Chạy bằng Docker
 
@@ -23,16 +23,29 @@ Yêu cầu Docker Engine và Docker Compose plugin:
 docker compose up --build
 ```
 
-Mở http://127.0.0.1:8502. Nhấn `Ctrl+C` để dừng; nếu chạy Compose ở chế độ nền bằng `docker compose up --build -d`, dùng `docker compose down` để dừng và xóa container.
+Mở http://127.0.0.1:8502. Nhấn `Ctrl+C` để dừng; nếu chạy ở chế độ nền bằng `docker compose up --build -d`, dùng `docker compose down` để dừng.
 
-## Phạm vi
+## Dữ liệu và mô hình
 
-Chọn Ridge hoặc Linear Regression, một trong bảy nhóm nghề và một trong ba thành phố HN/HCM/Đà Nẵng. Demo dùng trực tiếp pipeline đã lưu, không chặn chỉ vì ít mẫu và không thay bằng trung bình thành phố. Danh mục chưa có trong train được bộ mã hóa bỏ qua; một số nhóm vì thế có thể có kết quả giống nhau.
+Bộ dữ liệu `salary-v2` gộp ba nguồn thô sẵn có trong `job_market/datasets/raw` (TopCV 2026, Vietnam IT Job Posts 2026, CareerBuilder 2023). Từ 8.523 tin, 3.809 tin có lương đọc được, thuộc 23 vai trò CNTT và không trùng lặp. Lương chuẩn hóa về trung điểm khoảng, triệu VND/tháng. Mỗi tin có nhãn train/valid/test (2.461/652/696), chia 70/15/15 theo công ty để một công ty không nằm ở hai tập.
 
-Không yêu cầu nhập kinh nghiệm hoặc kỹ năng: chưa có số năm kinh nghiệm được xác minh trong 14 mẫu; bằng chứng kỹ năng quá ít để hỗ trợ điều chỉnh dự đoán. Kết quả là lương chào tuyển ước tính theo VND/tháng, chưa xác định gross/net.
+| Mô hình | MAE test | RMSE test | R² test | MAPE test |
+| --- | --- | --- | --- | --- |
+| Mốc trung vị | 12,15 | 17,17 | −0,04 | 48,3% |
+| Ridge | 5,95 | 8,50 | 0,745 | 22,0% |
+| Random Forest | 5,73 | 8,58 | 0,740 | 20,8% |
+| **Gradient Boosting** (chọn theo valid) | **5,38** | **7,96** | **0,776** | **19,7%** |
 
-Run thăm dò có 14 mẫu từ 11 công ty, chia train/validation/test là 10/2/2 theo công ty. Ridge được chọn theo validation, giữ nguyên mô hình đã lưu, không huấn luyện khi bấm dự đoán. Test MAE là **21,98 triệu đồng/tháng**, sai số còn lớn và tập test chỉ có 2 mẫu. Đây là demo thăm dò, chưa phải bản mẫu đầy đủ theo đề bài hay công cụ xác định mức lương cá nhân.
+Đơn vị MAE/RMSE: triệu VND/tháng. Kết quả là lương chào tuyển ước tính, chưa phân biệt gross/net.
 
-Dashboard Tổng quan có bốn ô số liệu và biểu đồ công nghệ, kinh nghiệm–thu nhập, lương theo nghề, địa điểm. Các số liệu là dữ liệu đã tải của dự án, không phải dữ liệu trực tiếp hoặc tỷ lệ tăng trưởng.
+## Các trang
 
-Cách thao tác nằm trong `docs/DEMO.md`; bố cục mã trong `docs/STRUCTURE.md`. Số liệu gốc được ghi ở `docs/rebuild/ml/TRAINING_RUN-2026-10-30.md`.
+- **Tư vấn & dự đoán lương** (trang chủ): nhập vai trò, khu vực, kinh nghiệm, kỹ năng; nhận lương dự đoán, khoảng thường gặp, kỹ năng nên học và lộ trình theo kinh nghiệm. Có thể chia sẻ hồ sơ qua đường dẫn, ví dụ `/?role=Data%20Engineer&years=3&skills=Python,SQL`.
+- **Tổng quan**: dashboard top công nghệ theo nhu cầu và theo lương, kinh nghiệm – thu nhập, lương theo đủ 23 vai trò, theo khu vực và vai trò × khu vực.
+- **Thị trường việc làm**: nhu cầu kỹ năng theo nguồn và bộ lọc.
+- **Đánh giá mô hình**: MAE, RMSE, R², MAPE trên train/valid/test, thực tế – dự đoán, mức quan trọng đặc trưng, giá trị gia tăng của kỹ năng.
+- **Dữ liệu huấn luyện**: phễu làm sạch, nhãn train/valid/test, tải CSV.
+
+Bản thăm dò ban đầu (Ridge/Linear Regression trên 14 nhãn duyệt tay) vẫn giữ ở các đường dẫn ẩn `Du_doan_tham_do`, `Huan_luyen`, `Du_lieu` làm hồ sơ.
+
+Báo cáo tiểu luận, sơ đồ draw.io và hình minh họa nằm trong `report/`. Cách thao tác nằm trong `docs/DEMO.md`; bố cục mã trong `docs/STRUCTURE.md`.
