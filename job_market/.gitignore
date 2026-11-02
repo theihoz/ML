@@ -4,7 +4,9 @@ __pycache__/
 .venv/
 dist/
 *.egg-info/
-datasets/processed/
+datasets/processed/*
+!datasets/processed/salary_dataset_v2.csv
+!datasets/processed/salary_dataset_v2.json
 datasets/archives/
 reports/
 artifacts/evaluation-reservations/

@@ -7,12 +7,19 @@ from career_market.presentation import apply_theme
 st.set_page_config(page_title="Dự đoán lương CNTT", layout="wide")
 apply_theme()
 pages = [
-    st.Page("pages/predict.py", title="Dự đoán lương", default=True),
+    st.Page("pages/advisor.py", title="Tư vấn & dự đoán lương", default=True),
     st.Page("pages/overview.py", title="Tổng quan", url_path="Tong_quan"),
     st.Page("pages/market.py", title="Thị trường việc làm", url_path="Thi_truong"),
-    st.Page("pages/models.py", title="So sánh mô hình", url_path="Huan_luyen"),
-    st.Page("pages/data.py", title="Dữ liệu", url_path="Du_lieu"),
+    st.Page("pages/evaluation.py", title="Đánh giá mô hình", url_path="Danh_gia"),
+    st.Page("pages/dataset.py", title="Dữ liệu huấn luyện", url_path="Du_lieu_huan_luyen"),
 ]
+# Bản thăm dò 14 nhãn đã duyệt tay được giữ làm hồ sơ, không hiện trong menu chính.
+for filename, title, url in [
+    ("predict.py", "Dự đoán lương (thăm dò)", "Du_doan_tham_do"),
+    ("models.py", "So sánh mô hình (thăm dò)", "Huan_luyen"),
+    ("data.py", "Dữ liệu (thăm dò)", "Du_lieu"),
+]:
+    pages.append(st.Page(f"pages/{filename}", title=title, url_path=url))
 for filename, title, url in [
     ("tools/sources.py", "Nguồn dữ liệu", "Nguon_du_lieu"),
     ("tools/download.py", "Tải lại nguồn", "Tai_nguon"),

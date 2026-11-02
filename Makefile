@@ -1,7 +1,7 @@
 PYTHON ?= python3
 PORT ?= 8502
 
-.PHONY: demo check train
+.PHONY: demo check train dataset train-v2
 demo:
 	$(MAKE) -C job_market run PYTHON="$(PYTHON)" PORT="$(PORT)"
 
@@ -10,3 +10,9 @@ check:
 
 train:
 	cd job_market && PYTHONPATH=src $(PYTHON) -m career_market train
+
+dataset:
+	cd job_market && PYTHONPATH=src $(PYTHON) -m career_market build-dataset
+
+train-v2: dataset
+	cd job_market && PYTHONPATH=src $(PYTHON) -m career_market train-v2

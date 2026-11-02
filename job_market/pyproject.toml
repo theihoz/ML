@@ -25,6 +25,9 @@ packages = ["src/career_market"]
 "datasets/labels/2026-10-30" = "career_market/datasets/labels/2026-10-30"
 "config" = "career_market/config"
 "artifacts/runs" = "career_market/artifacts/runs"
+"artifacts/salary-v2" = "career_market/artifacts/salary-v2"
+"datasets/processed/salary_dataset_v2.csv" = "career_market/datasets/processed/salary_dataset_v2.csv"
+"datasets/processed/salary_dataset_v2.json" = "career_market/datasets/processed/salary_dataset_v2.json"
 
 [tool.pytest.ini_options]
 testpaths = ["tests"]
