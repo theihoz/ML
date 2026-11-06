@@ -9,7 +9,7 @@ import pytest
 from career_market.data.dataset import write_dataset
 from career_market.model import versions
 from career_market.paths import current_version
-from career_market.refresh import RefreshStopped, check_crawl_output, refresh
+from career_market.refresh import refresh
 
 COLUMNS = ["source", "title", "company", "location", "salary_text"]
 COLUMNS += ["experience_text", "description", "url", "posted_date"]
@@ -93,30 +93,20 @@ def test_refresh_imports_builds_creates_a_version_and_reports_the_gate(setup):
     assert queue["reason"].tolist() == ["lương thoả thuận"]
 
 
-def test_bad_crawl_output_stops_before_build_and_keeps_current(setup):
-    crawled = pd.DataFrame(
-        [{c: "x" for c in COLUMNS} for _ in range(10)],
-    )
-    crawled.loc[:3, "salary_text"] = ""  # 40% thiếu lương
+def test_refresh_stops_on_a_batch_without_valid_rows_and_keeps_current(setup, tmp_path):
+    bad = tmp_path / "hong.csv"
+    pd.DataFrame([{c: "" for c in COLUMNS}]).to_csv(bad, index=False)
 
     def build():
-        raise AssertionError("không được dựng dữ liệu khi crawl hỏng")
+        raise AssertionError("không được dựng dữ liệu khi lô hỏng")
 
     result = refresh(
-        crawler=lambda: crawled,
+        [bad],
         build=build,
         retrain=setup["retrain"],
         batches_dir=setup["batches"],
         root=setup["root"],
         log=lambda line: None,
     )
-    assert result["status"] == "stopped" and "40%" in result["error"]
+    assert result["status"] == "stopped" and "không có dòng hợp lệ" in result["error"]
     assert current_version(setup["root"]) == "salary-v2"
-
-
-def test_crawl_output_check_rejects_empty_and_accepts_mostly_complete():
-    with pytest.raises(RefreshStopped, match="0 tin"):
-        check_crawl_output(pd.DataFrame(columns=COLUMNS))
-    frame = pd.DataFrame([{c: "x" for c in COLUMNS} for _ in range(10)])
-    frame.loc[0, "company"] = ""
-    assert check_crawl_output(frame) == pytest.approx(0.1)

@@ -114,3 +114,13 @@ def test_advice_explains_intern_proxy_and_missing_role_anchor():
     assert rare["calibration"]["role_factor"] == 1
     assert rare["calibration"]["scope"] == "level"
     assert len(rare["calibration"]["warnings"]) >= 2
+
+
+@pytest.mark.parametrize(
+    ("role", "expect_warning"), [("Backend Developer", False), ("DevOps / Cloud", True)]
+)
+def test_role_mapping_note_is_shown_in_plain_vietnamese_only_when_inexact(role, expect_warning):
+    warnings = advise({**PROFILE, "role": role})["calibration"]["warnings"]
+    assert "exact" not in warnings
+    assert not any(w.isascii() for w in warnings)  # không lộ ghi chú kỹ thuật tiếng Anh
+    assert any("nhóm gần nhất" in w for w in warnings) is expect_warning

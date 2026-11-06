@@ -33,6 +33,7 @@ FAIRNESS_GROUPS = {
 
 
 def _predictions(directory=None):
+    """Dự đoán của mọi mô hình đã lưu trên tập chọn và tập kiểm tra."""
     directory = Path(directory) if directory else artifacts_dir()
     frame = load_dataset()
     report = json.loads((directory / "metrics.json").read_text(encoding="utf-8"))
@@ -56,6 +57,7 @@ def interval_ratios(actual, predicted, level):
 
 
 def calibration(valid, valid_pred, test, test_pred):
+    """Khoảng lương 50%/80%/90% có thật chứa đúng tỉ lệ lương thật như vậy không."""
     rows, by_role, by_band = [], [], []
     for level in RELIABILITY_LEVELS:
         low, high = interval_ratios(valid["salary"].to_numpy(), valid_pred, level)
@@ -94,6 +96,7 @@ def calibration(valid, valid_pred, test, test_pred):
 
 
 def _metrics(actual, predicted):
+    """MAE và R² của một nhóm tin."""
     error = predicted - actual
     total = ((actual - actual.mean()) ** 2).sum()
     return {
@@ -104,6 +107,7 @@ def _metrics(actual, predicted):
 
 
 def _company_samples(test, rounds, seed):
+    """Bốc ngẫu nhiên lại các công ty (có thể trùng) cho mỗi lần thi lại bootstrap."""
     rng = np.random.default_rng(seed)
     groups = [idx.to_numpy() for _, idx in test.groupby("company_key").groups.items()]
     for _ in range(rounds):
@@ -112,6 +116,7 @@ def _company_samples(test, rounds, seed):
 
 
 def _interval(values):
+    """Khoảng tin cậy 95%: phân vị 2,5 và 97,5 của các lần thi lại."""
     values = np.asarray(values, dtype=float)
     return [float(np.percentile(values, 2.5)), float(np.percentile(values, 97.5))]
 
@@ -213,6 +218,7 @@ def fairness(test, predicted, rounds=BOOTSTRAP_ROUNDS, seed=SEED):
 
 
 def gender_audit(frame):
+    """Đếm tin ghi điều kiện giới tính (mô hình không dùng giới tính)."""
     counts = frame["gender_requirement"].value_counts().to_dict()
     restricted = frame[frame["gender_requirement"] != "Không đề cập"]
     return {
@@ -280,6 +286,7 @@ def validate(output=None, rounds=BOOTSTRAP_ROUNDS, directory=None):
 
 
 def load_validation():
+    """Đọc kết quả kiểm định đã lưu (tự chạy nếu chưa có)."""
     path = artifacts_dir() / "validation.json"
     if not path.exists():
         return validate()

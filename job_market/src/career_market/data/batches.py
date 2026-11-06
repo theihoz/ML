@@ -34,6 +34,7 @@ class BatchError(ValueError):
 
 
 def batches_dir():
+    """Thư mục lưu các lô tin đã nhập (datasets/batches)."""
     return data_root() / "batches"
 
 
@@ -63,10 +64,12 @@ def validate_batch(frame, source=None):
 
 
 def _slug(text):
+    """Rút gọn tên nguồn thành chuỗi an toàn để đặt tên thư mục lô."""
     return re.sub(r"[^\w]+", "-", text.lower()).strip("-")[:40] or "lo"
 
 
 def _digest(frame):
+    """Mã băm SHA-256 của lô: hai lô giống hệt nhau có cùng mã, để không nhập trùng."""
     return hashlib.sha256(frame.to_csv(index=False).encode()).hexdigest()
 
 
@@ -78,6 +81,7 @@ def stored_batches(directory=None):
 
 
 def load_batch(manifest, directory=None):
+    """Đọc lại một lô đã lưu và kiểm tra nội dung chưa bị sửa (so mã băm)."""
     root = Path(directory) if directory else batches_dir()
     frame = pd.read_csv(root / manifest["id"] / "batch.csv", dtype=str, keep_default_na=False)
     if _digest(frame) != manifest["sha256"]:

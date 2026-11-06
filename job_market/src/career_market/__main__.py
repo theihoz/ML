@@ -3,9 +3,11 @@
 build-dataset   Bước 2: tạo lại datasets/processed/salary_dataset_v2.csv
 train           Bước 3: huấn luyện thành phiên bản mới, chỉ phục vụ khi qua cổng
 versions        Liệt kê phiên bản model, đánh dấu bản đang phục vụ
+use             Nạp một phiên bản để phục vụ (mặc định: bản vừa huấn luyện)
+scores          In sai số MAE/RMSE/R²/MAPE trên tập train / valid / test
 rollback        Quay lại phiên bản đã phục vụ trước đó
 validate        Bước 5: kiểm định mô hình đã lưu (gồm chuẩn production)
-reality-check   Đối chiếu mô hình đã lưu với báo cáo lương và hồ sơ vàng
+reality-check   Đối chiếu mô hình đã lưu với báo cáo lương bên ngoài
 advise          Bước 4: dự đoán + gợi ý kỹ năng cho một hồ sơ
 import-batch    Nhập lô tin tuyển dụng từ CSV
 refresh         Nhập lô → dựng dữ liệu → huấn luyện → cổng thay model, một lệnh
@@ -21,13 +23,14 @@ from .data.dataset import write_dataset
 from .data.rules import REGIONS, ROLE_ORDER
 from .model.advisor import advise
 from .model.reality import reality_check
-from .model.training import train
+from .model.training import score_rows, train
 from .model.validation import validate
-from .model.versions import list_versions, retrain_version, rollback
+from .model.versions import list_versions, retrain_version, rollback, use_version
 from .refresh import refresh
 
 
 def main() -> int:
+    """Đọc lệnh người dùng gõ, chạy bước tương ứng và in kết quả dạng JSON."""
     parser = argparse.ArgumentParser(description="Dự đoán lương CNTT và tư vấn kỹ năng.")
     commands = parser.add_subparsers(dest="command", required=True)
     build = commands.add_parser("build-dataset", help="Gộp nguồn thô và lô thành bộ salary-v2")
@@ -42,11 +45,11 @@ def main() -> int:
     )
     commands.add_parser("versions", help="Liệt kê phiên bản model và bản đang phục vụ")
     commands.add_parser("rollback", help="Quay lại phiên bản đã phục vụ trước đó")
+    use = commands.add_parser("use", help="Nạp một phiên bản để phục vụ, kể cả bản trượt cổng")
+    use.add_argument("version", nargs="?", default="latest", help="Tên phiên bản hoặc latest")
+    commands.add_parser("scores", help="Sai số của từng mô hình trên train / valid / test")
     commands.add_parser("validate", help="Hiệu chuẩn, bootstrap và công bằng của mô hình đã lưu")
-    reality = commands.add_parser(
-        "reality-check", help="Đối chiếu mô hình đã lưu với báo cáo lương"
-    )
-    reality.add_argument("--golden-path", help="CSV hồ sơ vàng ẩn danh; mặc định dùng mẫu đóng gói")
+    commands.add_parser("reality-check", help="Đối chiếu mô hình đã lưu với báo cáo lương")
     advice = commands.add_parser("advise", help="Dự đoán lương và gợi ý kỹ năng cho hồ sơ")
     advice.add_argument("--role", choices=ROLE_ORDER, required=True)
     advice.add_argument("--region", choices=REGIONS, default="Hà Nội")
@@ -61,7 +64,6 @@ def main() -> int:
     fresh = commands.add_parser("refresh", help="Chạy cả chuỗi huấn luyện lại (#109)")
     fresh.add_argument("csv", nargs="*", type=Path, help="Các lô CSV cần nhập trước khi dựng")
     fresh.add_argument("--source", help="Tên nguồn của các lô, ghi đè cột source")
-    fresh.add_argument("--crawl", help="Crawl trang (ví dụ topcv) trước khi dựng")
     args = parser.parse_args()
 
     if args.command == "build-dataset":
@@ -74,6 +76,25 @@ def main() -> int:
         )
     elif args.command == "versions":
         result = list_versions()
+    elif args.command == "use":
+        try:
+            result = use_version(args.version)
+        except ValueError as error:
+            print(str(error), file=sys.stderr)
+            return 2
+    elif args.command == "scores":
+        # In bảng chữ cho dễ đọc thay vì JSON.
+        print(
+            f"{'Mô hình':<18} {'Tập':<6} {'MAE':>7} {'RMSE':>7} {'R²':>7} {'MAPE %':>7} {'Số tin':>7}"
+        )
+        for row in score_rows():
+            name = row["model"] + (" *" if row["selected"] else "")
+            print(
+                f"{name:<18} {row['part']:<6} {row['MAE']:>7.2f} {row['RMSE']:>7.2f} "
+                f"{row['R2']:>7.3f} {row['MAPE']:>7.1f} {row['n']:>7}"
+            )
+        print("* mô hình được chọn (theo MAE trên valid). Đơn vị MAE/RMSE: triệu VND/tháng.")
+        return 0
     elif args.command == "rollback":
         try:
             result = rollback()
@@ -85,7 +106,7 @@ def main() -> int:
         for difference in result["bootstrap"]["differences"].values():
             difference.pop("samples")  # bỏ 1000 mẫu bootstrap cho gọn khi in
     elif args.command == "reality-check":
-        result = reality_check(golden_path=args.golden_path)
+        result = reality_check()
     elif args.command == "import-batch":
         try:
             result = import_batch(args.csv, args.source, directory=args.batches_dir)
@@ -93,10 +114,6 @@ def main() -> int:
             print(str(error), file=sys.stderr)
             return 2
     elif args.command == "refresh":
-        if args.crawl:
-            # Crawler TopCV (#110) chờ ticket điều khoản thu thập (#103).
-            print(f"Chưa có crawler cho {args.crawl!r} (#110 chờ #103).", file=sys.stderr)
-            return 2
         result = refresh(
             args.csv,
             args.source,

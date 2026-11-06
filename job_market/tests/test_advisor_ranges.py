@@ -117,3 +117,14 @@ def test_shared_profile_preserves_explicit_level_model_empty_skills_and_defaults
         replay.session_state["advisor_result"]["salary_range"]
         == app.session_state["advisor_result"]["salary_range"]
     )
+
+
+def test_role_position_is_shown_in_words_with_an_explanation():
+    app = AppTest.from_file(str(APP), default_timeout=60).run()
+    app.button[0].click().run()
+    assert not app.exception
+    result = app.session_state["advisor_result"]
+    position = next(m for m in app.metric if m.label == "Vị trí so với vai trò")
+    share = result["market"]["percentile"]
+    assert position.value == f"Cao hơn {share:.0f}% tin"
+    assert f"P{share:.0f}" in position.help and "không phải lương gross" in position.help

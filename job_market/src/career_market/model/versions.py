@@ -20,17 +20,20 @@ MANIFEST = "manifest.json"
 
 
 def _history(root):
+    """Danh sách các phiên bản đã từng phục vụ, theo thứ tự."""
     path = Path(root) / HISTORY
     return json.loads(path.read_text(encoding="utf-8")) if path.exists() else [FIRST_VERSION]
 
 
 def _point(root, name, history):
+    """Ghi con trỏ CURRENT sang phiên bản mới và lưu lịch sử."""
     root = Path(root)
     (root / POINTER).write_text(name + "\n", encoding="utf-8")
     (root / HISTORY).write_text(json.dumps(history, ensure_ascii=False, indent=2), "utf-8")
 
 
 def _production(directory):
+    """Đọc kết quả chấm chuẩn production của một phiên bản."""
     path = Path(directory) / "validation.json"
     if not path.exists():
         return None
@@ -63,6 +66,7 @@ def write_manifest(directory, *, created_at=None, promoted=None, batches=None):
 
 
 def read_manifest(directory):
+    """Đọc thông tin của một phiên bản (ngày tạo, số tin, trạng thái chuẩn)."""
     path = Path(directory) / MANIFEST
     return json.loads(path.read_text(encoding="utf-8")) if path.exists() else None
 
@@ -79,8 +83,6 @@ def list_versions(root=None):
     serving = current_version(root)
     rows = []
     for directory in sorted(p for p in root.iterdir() if (p / "metrics.json").exists()):
-        if directory.name.endswith("-candidate"):
-            continue
         manifest = read_manifest(directory) or {"version": directory.name}
         rows.append({**manifest, "current": directory.name == serving})
     return sorted(rows, key=lambda row: (row.get("created_at") or "", row["version"]))
@@ -143,6 +145,32 @@ def rollback(root=None):
     history = history[:-1]
     _point(root, history[-1], history)
     return {"current": history[-1], "history": history}
+
+
+def use_version(name="latest", root=None):
+    """Nạp một phiên bản để phục vụ, kể cả bản đã trượt cổng; "latest" = bản huấn luyện gần nhất.
+
+    Mục này làm gì: đổi con trỏ ``CURRENT`` sang phiên bản được chọn và ghi vào lịch sử, nên
+    ``rollback`` vẫn quay lại được bản trước đó.
+    """
+    root = Path(root) if root else artifacts_root()
+    if name == "latest":
+        rows = list_versions(root)
+        if not rows:
+            raise ValueError("Chưa có phiên bản nào trong artifacts/.")
+        name = rows[-1]["version"]
+    if not (root / name / "metrics.json").exists():
+        raise ValueError(f"Không có phiên bản {name!r} trong {root}.")
+    history = _history(root)
+    if history[-1] != name:
+        history = [*history, name]
+    _point(root, name, history)
+    manifest = read_manifest(root / name) or {}
+    return {
+        "current": name,
+        "production_ready": manifest.get("production_ready"),
+        "history": history,
+    }
 
 
 def freshness_line(manifest=None):

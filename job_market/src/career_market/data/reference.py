@@ -6,6 +6,7 @@ from ..paths import data_root
 
 
 def load_reference(path=None):
+    """Đọc bảng số liệu lương từ báo cáo bên ngoài (TopDev, ITviec) và kiểm tra hợp lệ."""
     frame = pd.read_csv(
         path or data_root() / "reference" / "salary_reference.csv", dtype=object
     ).fillna("")
@@ -17,6 +18,7 @@ def load_reference(path=None):
 
 
 def matching_profiles(frame, row):
+    """Lọc các hồ sơ khớp một ô của báo cáo (vai trò, cấp bậc, khu vực, số năm)."""
     mask = pd.Series(True, index=frame.index)
     for key in ("role", "region"):
         if row[key]:

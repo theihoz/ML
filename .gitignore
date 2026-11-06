@@ -19,8 +19,6 @@ frontend/dist/
 report/figures/*.png
 !report/figures/ui-*.png
 
-# Ứng viên huấn luyện lại chưa qua cổng thay model (#90)
-job_market/artifacts/salary-v2-candidate/
 
 # Công cụ agent/trình duyệt, không thuộc dự án
 .claude/

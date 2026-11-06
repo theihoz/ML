@@ -191,6 +191,18 @@ with right, st.container(border=True):
         for warning in result["data_sufficiency"]["warnings"]:
             st.warning(warning)
         market = result["market"]
+        if market["role_median"] is not None and result["supported"]:
+            # Mục này: vị trí của dự đoán trong các tin cùng vai trò (phân vị), nói bằng chữ.
+            share = market["percentile"]
+            st.metric(
+                "Vị trí so với vai trò",
+                f"Cao hơn {share:.0f}% tin",
+                help=(
+                    f"Mức lương dự đoán cho bạn cao hơn {share:.0f}% số tin tuyển dụng cùng vai "
+                    f"trò và thấp hơn {100 - share:.0f}% còn lại (phân vị P{share:.0f}). "
+                    "So trên lương ghi trong tin tuyển dụng, không phải lương gross."
+                ),
+            )
         if market["role_median"] is not None:
             st.caption(
                 f"Trung vị lương chào tuyển trong {market['role_postings']} tin của vai trò: "

@@ -9,6 +9,8 @@ PYTHONPATH=src python -m career_market build-dataset     # tạo lại bộ sala
 PYTHONPATH=src python -m career_market train             # huấn luyện thành phiên bản mới, qua cổng
 PYTHONPATH=src python -m career_market validate          # kiểm định model đang phục vụ
 PYTHONPATH=src python -m career_market reality-check     # đối chiếu với báo cáo lương
+PYTHONPATH=src python -m career_market scores            # sai số trên train / valid / test
+PYTHONPATH=src python -m career_market use latest        # nạp phiên bản vừa huấn luyện
 PYTHONPATH=src python -m career_market advise --role "Backend Developer" --years 2 --skills "Java,SQL"
 ```
 
@@ -20,7 +22,7 @@ Lô tin tuyển dụng là file CSV có đúng các cột `source, title, compan
 PYTHONPATH=src python -m career_market refresh lo_moi.csv --source "Tên nguồn"
 ```
 
-`refresh` chạy một lượt: nhập lô (bản thô lưu bất biến trong `datasets/batches/`) → dựng bộ dữ liệu → huấn luyện thành một phiên bản mới trong `artifacts/` → kiểm định → cổng thay model. Mỗi bước in số tin mới, số tin vào hàng đợi duyệt tay, số tin trùng, và model được thay hay giữ kèm lý do. Bước nào lỗi thì dừng, model đang phục vụ giữ nguyên. Từ thư mục gốc có thể chạy `make refresh CSV="lo_moi.csv"` (đường dẫn tính từ `job_market/`). Cờ `--crawl topcv` dành cho crawler (#110), chưa có cho tới khi ticket điều khoản thu thập (#103) xác nhận.
+`refresh` chạy một lượt: nhập lô (bản thô lưu bất biến trong `datasets/batches/`) → dựng bộ dữ liệu → huấn luyện thành một phiên bản mới trong `artifacts/` → kiểm định → cổng thay model. Mỗi bước in số tin mới, số tin vào hàng đợi duyệt tay, số tin trùng, và model được thay hay giữ kèm lý do. Bước nào lỗi thì dừng, model đang phục vụ giữ nguyên. Từ thư mục gốc có thể chạy `make refresh CSV="lo_moi.csv"` (đường dẫn tính từ `job_market/`).
 
 Tin của lô mới mà bộ gắn nhãn không xử lý được (lương thoả thuận, lương bất thường, không phân loại được vai trò) được ghi vào `datasets/processed/review_queue.csv`. Duyệt bằng mục 11 của notebook `notebooks/gan_nhan_du_lieu.ipynb`; quyết định ghi vào `datasets/labels/reviewed.csv` và được áp dụng ở lần dựng sau.
 

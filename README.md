@@ -15,6 +15,17 @@ make demo
 
 Mở http://127.0.0.1:8502. Kiểm tra mã và kiểm thử bằng `make check` trong cùng môi trường. Tạo lại bộ dữ liệu và huấn luyện lại bằng `make train` (khoảng 30 giây). Mỗi lần huấn luyện tạo một phiên bản mới trong `job_market/artifacts/` và chỉ thành bản phục vụ khi qua cổng chuẩn production (đạt chuẩn, hoặc tốt hơn model hiện tại khi cả hai chưa đạt); lệnh in rõ thay hay giữ và lý do. Thêm dữ liệu mới, phiên bản và quay lại bản cũ: xem `job_market/README.md`.
 
+Các lệnh `make` thường dùng (gõ `make help` để xem đủ):
+
+| Lệnh | Làm gì |
+| --- | --- |
+| `make train` | Dựng dữ liệu, huấn luyện thành phiên bản mới, qua cổng thay model |
+| `make load` | Nạp model vừa train để phục vụ, kể cả khi trượt cổng (`VERSION=tên` để chọn bản khác) |
+| `make valid` | Kiểm định model đang phục vụ, đối chiếu báo cáo lương và in bảng sai số |
+| `make scores` | In MAE / RMSE / R² / MAPE của từng mô hình trên train / valid / test |
+| `make test` | Chạy kiểm thử (không lint); `make check` = lint + kiểm thử |
+| `make versions`, `make rollback` | Xem các phiên bản; quay lại bản đã phục vụ trước đó |
+
 ## Chạy bằng Docker
 
 Yêu cầu Docker Desktop đang chạy (Windows/macOS), hoặc Docker Engine và Docker Compose plugin (Linux). Không cần cài Python riêng.
@@ -96,4 +107,4 @@ docs/                       Hướng dẫn demo, quyết định thiết kế (a
 report/                     Báo cáo, slide, sơ đồ, hình
 ```
 
-Cách thao tác nằm trong `docs/DEMO.md`.
+Cách thao tác nằm trong `docs/DEMO.md`. Công nghệ, thuật ngữ, phương pháp và công thức của dự án: `docs/kien-thuc-du-an/` (bắt đầu từ `00-muc-luc.md`).

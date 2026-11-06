@@ -97,6 +97,7 @@ STATUS_LABELS = {"pass": "Đạt", "fail": "Không đạt", "not_scored": "Khôn
 
 
 def _limit(value):
+    """Viết ngưỡng dạng chữ (một số, hoặc khoảng "a–b")."""
     return f"{value[0]}–{value[1]}" if isinstance(value, list | tuple) else str(value)
 
 
@@ -237,20 +238,6 @@ st.caption(
     "Ô thiếu hồ sơ vẫn tính trong mẫu số. Dự đoán năm 2026; gross thị trường gần đúng sau hiệu chỉnh."
 )
 st.dataframe(pd.DataFrame(reference["cells"]), hide_index=True, width="stretch")
-golden = reality["golden"]
-st.subheader("Hồ sơ vàng")
-st.metric(
-    "Lương gross của hồ sơ ẩn danh",
-    golden["status"],
-    f"{golden['pass_rate']:.0%} hồ sơ đạt" if golden["pass_rate"] is not None else None,
-)
-st.caption(
-    f"{golden['scored']}/{golden['total']} hồ sơ được chấm; "
-    "yêu cầu sai lệch ≤20% ở ≥70% hồ sơ. Mẫu trống chưa được chấm, không tính là trượt. "
-    "Điền datasets/reference/golden_profiles.csv rồi khởi động lại ứng dụng để cập nhật."
-)
-if golden["cells"]:
-    st.dataframe(pd.DataFrame(golden["cells"]), hide_index=True, width="stretch")
 for limitation in reality["limitations"]:
     st.caption(limitation)
 with st.expander("Mốc mean gross đã dùng fit city: trước/sau role (không kiểm chứng độc lập)"):
@@ -261,3 +248,86 @@ with st.expander("ITviec 2025–2026: gross/net chưa xác định, chỉ tham k
     st.dataframe(pd.DataFrame(reality["unknown_basis_cells"]), hide_index=True, width="stretch")
 with st.expander("Vai trò nguồn thay thế: Cloud và QA-QC, chỉ tham khảo"):
     st.dataframe(pd.DataFrame(reality["context_cells"]), hide_index=True, width="stretch")
+with st.expander("Giải thích các chỉ số đánh giá mô hình (MAE, RMSE, R², MAPE)"):
+    st.markdown("""
+    Các chỉ số MAE, RMSE, R² và MAPE được sử dụng để đánh giá
+    mức độ chính xác của các mô hình hồi quy trong bài toán
+    dự đoán mức lương lập trình viên.
+
+    **1. MAE (Mean Absolute Error - Sai số tuyệt đối trung bình)**
+
+    - Đo lường trung bình độ chênh lệch tuyệt đối giữa mức lương
+      dự đoán và mức lương thực tế.
+    - Công thức: MAE = trung bình của |Giá trị thực tế - Giá trị dự đoán|.
+    - Đơn vị: triệu VND/tháng.
+    - MAE càng nhỏ, mô hình dự đoán càng chính xác.
+    - Ít nhạy cảm với các giá trị ngoại lai hơn RMSE.
+
+    **Ý nghĩa trong dự án:** Nếu MAE = 2, mô hình dự đoán mức
+    lương lệch trung bình khoảng 2 triệu VND/tháng so với thực tế.
+
+    ---
+
+    **2. RMSE (Root Mean Squared Error - Căn bậc hai sai số bình phương trung bình)**
+
+    - Là căn bậc hai của trung bình bình phương sai số dự đoán.
+    - Công thức: RMSE = sqrt(mean((y thực tế - y dự đoán)²)).
+    - Đơn vị: triệu VND/tháng.
+    - RMSE càng nhỏ, mô hình càng tốt.
+    - Phạt nặng hơn đối với những dự đoán có sai số lớn.
+
+    **Ý nghĩa trong dự án:** RMSE giúp phát hiện các trường hợp
+    mô hình dự đoán mức lương sai lệch quá lớn. Nếu RMSE lớn
+    hơn MAE đáng kể, có thể tồn tại một số dự đoán sai nghiêm trọng.
+
+    ---
+
+    **3. R² (R-squared - Hệ số xác định)**
+
+    - Đo lường mức độ mô hình giải thích sự biến động của mức lương
+      dựa trên các đặc trưng đầu vào.
+    - Công thức: R² = 1 - (Tổng bình phương sai số / Tổng bình
+      phương độ lệch so với giá trị trung bình).
+    - R² càng gần 1, mô hình càng giải thích tốt biến động dữ liệu.
+    - R² = 0: mô hình có hiệu quả tương đương dự đoán bằng giá trị
+      trung bình trên tập đánh giá.
+    - R² < 0: mô hình có kết quả kém hơn baseline dự đoán trung bình.
+
+    **Ý nghĩa trong dự án:** R² cho biết mô hình giải thích được
+    bao nhiêu phần biến động của mức lương trong dữ liệu đánh giá.
+    Ví dụ R² = 0.85 tương ứng mức giải thích 85% biến động
+    theo cách diễn giải thông thường.
+
+    ---
+
+    **4. MAPE (Mean Absolute Percentage Error - Sai số phần trăm tuyệt đối trung bình)**
+
+    - Đo lường sai số tuyệt đối trung bình dưới dạng phần trăm
+      so với mức lương thực tế.
+    - Công thức: MAPE = trung bình(|(y thực tế - y dự đoán)
+      / y thực tế|) × 100%.
+    - Không có đơn vị đo.
+    - MAPE càng nhỏ, mô hình càng chính xác.
+    - Hạn chế: Không phù hợp khi giá trị thực tế bằng 0 hoặc
+      rất gần 0.
+
+    **Ý nghĩa trong dự án:** Nếu MAPE = 10%, mức lương dự đoán
+    có sai số phần trăm tuyệt đối trung bình khoảng 10% so với
+    mức lương thực tế.
+
+    ---
+
+    **Tổng kết cách sử dụng:**
+
+    | Chỉ số | Mục đích | Giá trị tốt |
+    |---|---|---|
+    | MAE | Đo sai số trung bình | Càng nhỏ càng tốt |
+    | RMSE | Đánh giá và phạt lỗi lớn | Càng nhỏ càng tốt |
+    | R² | Đánh giá khả năng giải thích biến động | Càng gần 1 càng tốt |
+    | MAPE | Đánh giá sai số theo phần trăm | Càng nhỏ càng tốt |
+
+    **Trong dự án:** Kết hợp cả bốn chỉ số giúp đánh giá mô hình
+    toàn diện hơn. MAE được sử dụng làm tiêu chí lựa chọn mô hình
+    trên tập validation; RMSE, R² và MAPE cung cấp thêm góc nhìn
+    về sai số và khả năng dự đoán.
+    """)

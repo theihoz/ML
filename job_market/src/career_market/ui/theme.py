@@ -4,6 +4,7 @@ import streamlit as st
 
 
 def apply_theme():
+    """Chèn CSS chung (màu, font, khung) cho mọi trang."""
     st.markdown(
         """
     <style>

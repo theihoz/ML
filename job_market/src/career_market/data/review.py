@@ -30,10 +30,12 @@ QUEUE_COLUMNS = ["key", "batch", "source", "title", "company", "salary_text", "r
 
 
 def ledger_path():
+    """Đường dẫn sổ nhãn đã duyệt (datasets/labels/reviewed.csv)."""
     return data_root() / "labels" / "reviewed.csv"
 
 
 def queue_path():
+    """Đường dẫn hàng đợi duyệt tay (datasets/processed/review_queue.csv)."""
     return data_root() / "processed" / "review_queue.csv"
 
 
@@ -109,6 +111,7 @@ def ledger_salary(entry):
 
 
 def salary_reason(text):
+    """Giải thích bằng lời vì sao không đọc được lương của một tin."""
     raw = str(text or "").lower()
     if re.search(r"thỏa thuận|thoả thuận|thương lượng|cạnh tranh|negotiable", raw):
         return "lương thoả thuận"
@@ -118,6 +121,7 @@ def salary_reason(text):
 
 
 def load_queue(path=None):
+    """Đọc hàng đợi duyệt tay (bảng rỗng nếu chưa có)."""
     path = Path(path) if path else queue_path()
     if not path.exists():
         return pd.DataFrame(columns=QUEUE_COLUMNS)
