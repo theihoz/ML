@@ -33,10 +33,7 @@ def test_feature_notebook_runs_end_to_end(path):
         resources={"metadata": {"path": str(path.parent)}},
     ).execute()
     outputs = [
-        output
-        for cell in notebook.cells
-        if cell.cell_type == "code"
-        for output in cell.outputs
+        output for cell in notebook.cells if cell.cell_type == "code" for output in cell.outputs
     ]
     assert not [output for output in outputs if output.output_type == "error"]
     assert any("image/png" in output.get("data", {}) for output in outputs)

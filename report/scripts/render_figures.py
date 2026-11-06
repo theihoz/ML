@@ -11,11 +11,13 @@ from pathlib import Path
 
 import pandas as pd
 
-from career_market import salary_charts as charts
-from career_market.salary_dataset import load_dataset
-from career_market.salary_model import MODEL_LABELS, artifacts_dir, load_report, load_skill_value
-from career_market.salary_validation import load_validation
-from career_market.salary_visuals import png
+from career_market.ui import charts
+from career_market.data.dataset import load_dataset
+from career_market.model.estimators import MODEL_LABELS
+from career_market.model.training import load_report, load_skill_value
+from career_market.paths import artifacts_dir
+from career_market.model.validation import load_validation
+from career_market.ui.charts import png
 
 ROOT = Path(__file__).resolve().parents[2]
 FIGURES = ROOT / "report" / "figures"

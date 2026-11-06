@@ -4,7 +4,7 @@ import numpy as np
 import pandas as pd
 import pytest
 
-from career_market.production_standard import THRESHOLDS, assess
+from career_market.model.production import THRESHOLDS, assess
 
 BAND = (0.9, 1.1)
 

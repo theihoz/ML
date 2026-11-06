@@ -2,7 +2,7 @@
 
 import pytest
 
-from career_market.salary_model import advise, predict_profile
+from career_market.model.advisor import advise, predict_profile
 
 
 def _profile(role, years, skills=(), region="Hà Nội"):
@@ -122,7 +122,7 @@ def test_advisor_leads_with_the_band_and_states_the_supporting_postings():
 
 
 def test_advisor_warns_on_top_when_the_model_is_not_production_ready():
-    from career_market.salary_model import load_production
+    from career_market.model.training import load_production
 
     app = _advisor("Backend Developer")
     shown = any("mang tính tham khảo" in str(item.value) for item in app.info)

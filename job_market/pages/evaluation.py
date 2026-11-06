@@ -1,15 +1,19 @@
-"""So sánh các mô hình salary-v2 đã lưu. Trang này không huấn luyện lại."""
+"""Trang Đánh giá mô hình — đọc kết quả đã lưu, không huấn luyện lại.
+
+Mục này làm gì: so sánh MAE/RMSE/R²/MAPE, thực tế–dự đoán, đặc trưng quan trọng,
+rồi kiểm định độ tin cậy (hiệu chuẩn, bootstrap, công bằng).
+"""
 
 import pandas as pd
 import streamlit as st
 
-from career_market import salary_app
-from career_market import salary_charts as charts
-from career_market.salary_model import MODEL_LABELS, artifacts_dir
-from career_market.salary_visuals import png
+from career_market.model.estimators import MODEL_LABELS
+from career_market.paths import artifacts_dir
+from career_market.ui import cache, charts
+from career_market.ui.charts import png
 
 st.title("Đánh giá mô hình")
-report = salary_app.report()
+report = cache.report()
 split = report["split"]
 st.caption(
     f"Train {split['train']:,} · Valid {split['valid']:,} · Test {split['test']:,} tin "
@@ -30,6 +34,7 @@ a.metric("MAPE", f"{selected['MAPE']:.1f}%")
 b.metric("MAE", f"{selected['MAE']:.2f}")
 c.metric("RMSE", f"{selected['RMSE']:.2f}")
 d.metric("R²", f"{selected['R2']:.3f}")
+# Mục này: bảng so sánh 4 mô hình trên tập đang chọn.
 rows = [
     {
         "Mô hình": values["label"],
@@ -57,6 +62,7 @@ st.image(png(charts.model_comparison(report, part)), width="stretch")
 st.caption(
     "Mô hình được chọn theo MAE nhỏ nhất trên tập valid; tập test chỉ dùng để báo cáo cuối cùng."
 )
+# Mục này: phân tích lỗi trên tập test.
 predictions = pd.read_csv(artifacts_dir() / "test_predictions.csv")
 left, right = st.columns(2, gap="medium")
 with left, st.container(border=True):
@@ -64,12 +70,12 @@ with left, st.container(border=True):
     st.image(png(charts.actual_vs_predicted(predictions)), width="stretch")
 with right, st.container(border=True):
     st.subheader("Mức độ quan trọng của đặc trưng")
-    st.image(salary_app.chart("importance"), width="stretch")
+    st.image(cache.chart("importance"), width="stretch")
 left, right = st.columns(2, gap="medium")
 with left, st.container(border=True):
     st.subheader("Kỹ năng mang lại giá trị gia tăng thu nhập")
     st.caption("Mức tăng lương dự đoán trung bình khi bổ sung kỹ năng, các yếu tố khác giữ nguyên")
-    st.image(salary_app.chart("uplift"), width="stretch")
+    st.image(cache.chart("uplift"), width="stretch")
 with right, st.container(border=True):
     st.subheader("Sai số theo vai trò (tập test)")
     st.image(png(charts.error_by_role(predictions)), width="stretch")
@@ -78,8 +84,9 @@ with st.expander("Kết quả dò siêu tham số trên tập valid"):
         st.write(f"**{report['models'][name]['label']}**")
         st.dataframe(pd.DataFrame(trials), hide_index=True, width="stretch")
 
+# Mục này: kiểm định (model/validation.py) — mô hình có đáng tin không.
 st.header("Kiểm định độ tin cậy của mô hình")
-check = salary_app.validation()
+check = cache.validation()
 production = check["production"]
 STANDARD_LABELS = {
     "median_error_pct": "Trung vị sai số %",
@@ -166,7 +173,7 @@ with calibration_tab:
         )
     left, right = st.columns(2, gap="medium")
     with left:
-        st.image(salary_app.chart("reliability"), width="stretch")
+        st.image(cache.chart("reliability"), width="stretch")
     with right:
         st.caption("Tỉ lệ bao phủ của khoảng 80% theo mức lương thật")
         st.dataframe(
@@ -198,7 +205,7 @@ with bootstrap_tab:
         for name, values in boot["differences"].items()
     ]
     st.dataframe(pd.DataFrame(differences), hide_index=True, width="stretch")
-    st.image(salary_app.chart("bootstrap"), width="stretch")
+    st.image(cache.chart("bootstrap"), width="stretch")
 with fairness_tab:
     groups = check["fairness"]
     column = (
@@ -211,7 +218,7 @@ with fairness_tab:
         )
         or "region"
     )
-    st.image(salary_app.chart("fairness", column), width="stretch")
+    st.image(cache.chart("fairness", column), width="stretch")
     st.dataframe(pd.DataFrame(groups[column]["groups"]), hide_index=True, width="stretch")
     gender = check["gender"]
     st.caption(
@@ -219,3 +226,38 @@ with fairness_tab:
         f"{gender['mentioned']} tin ({gender['share_pct']:.2f}%) ghi điều kiện giới tính trong nội dung "
         "— quá ít để đo thống kê; đây là dấu hiệu phân biệt cần cảnh báo khi đăng tin."
     )
+
+
+st.header("Độ chính xác thực tế")
+reality = cache.reality()
+reference = reality["reference"]
+st.metric("Bộ đối chiếu gross", reference["status"], f"{reference['pass_rate']:.0%} ô đạt")
+st.caption(
+    f"{reference['scored']}/{reference['total']} ô có hồ sơ; yêu cầu sai lệch ≤15% ở ≥80% ô. "
+    "Ô thiếu hồ sơ vẫn tính trong mẫu số. Dự đoán năm 2026; gross thị trường gần đúng sau hiệu chỉnh."
+)
+st.dataframe(pd.DataFrame(reference["cells"]), hide_index=True, width="stretch")
+golden = reality["golden"]
+st.subheader("Hồ sơ vàng")
+st.metric(
+    "Lương gross của hồ sơ ẩn danh",
+    golden["status"],
+    f"{golden['pass_rate']:.0%} hồ sơ đạt" if golden["pass_rate"] is not None else None,
+)
+st.caption(
+    f"{golden['scored']}/{golden['total']} hồ sơ được chấm; "
+    "yêu cầu sai lệch ≤20% ở ≥70% hồ sơ. Mẫu trống chưa được chấm, không tính là trượt. "
+    "Điền datasets/reference/golden_profiles.csv rồi khởi động lại ứng dụng để cập nhật."
+)
+if golden["cells"]:
+    st.dataframe(pd.DataFrame(golden["cells"]), hide_index=True, width="stretch")
+for limitation in reality["limitations"]:
+    st.caption(limitation)
+with st.expander("Mốc mean gross đã dùng fit city: trước/sau role (không kiểm chứng độc lập)"):
+    st.dataframe(pd.DataFrame(reality["calibration_cells"]), hide_index=True, width="stretch")
+with st.expander("ITviec 2023–2025 đã dùng fit composite vai trò (không kiểm chứng độc lập)"):
+    st.dataframe(pd.DataFrame(reality["role_calibration_cells"]), hide_index=True, width="stretch")
+with st.expander("ITviec 2025–2026: gross/net chưa xác định, chỉ tham khảo"):
+    st.dataframe(pd.DataFrame(reality["unknown_basis_cells"]), hide_index=True, width="stretch")
+with st.expander("Vai trò nguồn thay thế: Cloud và QA-QC, chỉ tham khảo"):
+    st.dataframe(pd.DataFrame(reality["context_cells"]), hide_index=True, width="stretch")

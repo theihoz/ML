@@ -1,289 +1,289 @@
 row_id,title,role,region,level,experience_years,salary,predicted,abs_error
-v2-00007,AI Engineer (Middle Level) (Thu Nhập 20-30 Triệu),AI / ML Engineer,Hà Nội,Middle,2.0,25.0,35.75139991079194,10.751399910791939
-v2-00008,Backend Engineer (Middle+) (Thu Nhập 20-30 Triệu),Backend Developer,Hà Nội,Middle,3.0,25.0,31.0161093774812,6.0161093774812
-v2-00010,Kỹ Sư Phát Triển Phần Mềm,Software Engineer (chung),Hà Nội,Fresher,0.0,17.5,19.694375467464283,2.1943754674642832
-v2-00028,Middle Senior Backend Engineer English Fullstack Plus,Fullstack Developer,TP. Hồ Chí Minh,Senior,3.0,55.9,29.168264824596783,26.731735175403216
-v2-00031,Network Engineer,Quản trị hệ thống / Mạng,TP. Hồ Chí Minh,Junior,1.0,19.5,21.197481007859068,1.6974810078590679
-v2-00041,Software Engineer,Software Engineer (chung),Hà Nội,Middle,3.0,42.9,26.515671710893315,16.384328289106683
-v2-00042,Nhan Vien Quan Tri Website Kiem Ho Tro Ky Thuat Cong Nghe Thong Tin It Helpdesk,IT Support / Helpdesk,Hà Nội,Junior,1.0,10.0,13.235052333136423,3.235052333136423
-v2-00045,Mobile Flutter Developer Mid Senior,Mobile Developer,Hà Nội,Senior,2.0,24.0,32.710782500153506,8.710782500153506
-v2-00046,Phat Trien San Pham Product Owner Project Manager,Quản lý dự án / sản phẩm,Hà Nội,Junior,2.0,20.0,27.122754292285094,7.122754292285094
-v2-00047,Back End Developer,Backend Developer,Hà Nội,Junior,2.0,17.5,20.8448239269852,3.3448239269851996
-v2-00050,Kỹ Sư Lập Trình Điều Khiển & Tự Động Hóa (PLC/DDC) | Upto 20 Triệu,Software Engineer (chung),Hà Nội,Fresher,0.0,16.0,20.863244682959685,4.863244682959685
-v2-00051,Product Owner,Quản lý dự án / sản phẩm,Hà Nội,Middle,3.0,27.5,39.04526485523276,11.545264855232759
-v2-00068,Product Manager Smart Home (Hà Nội),Quản lý dự án / sản phẩm,Hà Nội,Manager,5.0,86.668,53.518078870113015,33.14992112988699
-v2-00072,UI/UX Designer,UI/UX Designer,Hà Nội,Junior,2.0,19.5,28.776052544716734,9.276052544716734
-v2-00074,Kỹ Sư Triển Khai Mạng và Bảo Mật/ Postsales (Network/ Sercurity) - Upto 25M,Bảo mật,Hà Nội,Junior,2.0,20.0,27.790268881134175,7.790268881134175
-v2-00076,AI Automation Engineer (Fresher / Junior),AI / ML Engineer,Hà Nội,Fresher,0.0,15.0,21.45161405228922,6.451614052289219
-v2-00096,AI Engineer (.NET | Applied AI),AI / ML Engineer,Đà Nẵng,Junior,2.0,30.0,29.31812156882662,0.6818784311733808
-v2-00103,"Senior Fullstack Engineer (React, Java, Graphql)",Fullstack Developer,TP. Hồ Chí Minh,Senior,6.0,85.0,56.48950539930086,28.51049460069914
-v2-00104,Senior IT Executive (Salary Range from Usd1.200 to 1.500),IT Support / Helpdesk,Hà Nội,Senior,5.0,35.1,40.331685388884445,5.2316853888844435
-v2-00131,Business Intelligence Analyst (Supply Chain & Logistics),Data Analyst / BI,Hà Nội,Junior,2.0,22.5,28.776052544716734,6.276052544716734
-v2-00139,"Technology & AI Innovation Manager (Ai, Engineering, Product",AI / ML Engineer,Hà Nội,Manager,6.0,60.0,52.81344120607889,7.186558793921108
-v2-00143,IT Manager,Quản lý IT / CTO,TP. Hồ Chí Minh,Manager,3.0,37.5,38.14310395779115,0.6431039577911477
-v2-00149,Flutter Developer,Mobile Developer,Hà Nội,Junior,2.0,20.0,25.67340455698971,5.673404556989709
-v2-00161,Qc Lead Manager,Kiểm thử (QA/QC),TP. Hồ Chí Minh,Manager,6.0,44.0,40.03901969057457,3.9609803094254303
-v2-00162,Project Manager,Quản lý dự án / sản phẩm,TP. Hồ Chí Minh,Senior,6.0,48.0,50.18674236469173,2.1867423646917317
-v2-00164,Senior Python Developer,Backend Developer,Hà Nội,Senior,4.0,30.0,34.018563063396044,4.018563063396044
-v2-00178,"Specialist, BI & Process Automation",Data Analyst / BI,TP. Hồ Chí Minh,Junior,1.0,18.5,23.928965111173408,5.428965111173408
-v2-00186,Full Stack Developer,Fullstack Developer,TP. Hồ Chí Minh,Middle,3.0,45.5,30.842269422645177,14.657730577354823
-v2-00199,Power Platform Developer (Salary 40M++) 5 Working Days/ Week,Software Engineer (chung),Hà Nội,Senior,5.0,53.334,42.88863377770866,10.44536622229134
-v2-00200,"Technology & AI Innovation Manager (Ai, Agentic AI) Up to 75M, Làm Việc T2-T6",AI / ML Engineer,Hà Nội,Manager,6.0,62.5,52.81344120607889,9.686558793921108
-v2-00207,Chuyên Viên Giải Pháp & Hỗ Trợ Kỹ Thuật,IT Support / Helpdesk,Hà Nội,Junior,1.0,16.0,18.635887248968306,2.635887248968306
-v2-00208,Chuyên Viên Nghiên Cứu & Phát Triển Đối Tác AI,AI / ML Engineer,Hà Nội,Fresher,0.0,22.5,23.194297347909963,0.6942973479099628
-v2-00210,Java Backend Developer Middle 20 35 M,Backend Developer,Hà Nội,Middle,2.0,27.5,22.52259853275197,4.977401467248029
-v2-00214,Qc Mid Senior,Kiểm thử (QA/QC),Hà Nội,Senior,2.0,17.0,21.535255862646576,4.535255862646576
-v2-00221,Ai Tech Lead,Tech Lead / Architect,Hà Nội,Lead,4.0,64.0,31.277537339423276,32.722462660576724
-v2-00224,Technical Support Engineer/ Kỹ Sư Kỹ Thuật (HVAC) - Chấp Nhận Ứng Viên Chưa Có Kinh Nghiệm,IT Support / Helpdesk,Hà Nội,Fresher,0.0,20.5,15.47257318048348,5.027426819516521
-v2-00228,Core Network Engineer (Isp/dc) – Ip/mpls | Lương Upto 35Tr,Quản trị hệ thống / Mạng,Hà Nội,Middle,4.0,28.0,29.324327525099857,1.3243275250998572
-v2-00251,Senior Ui Ux Designer Game Co Vua,UI/UX Designer,TP. Hồ Chí Minh,Senior,3.0,35.0,31.10043658439004,3.8995634156099612
-v2-00260,Business Analyst/ Functional Consultant SAP,Business Analyst,Hà Nội,Middle,3.0,40.0,31.070285533411425,8.929714466588575
-v2-00262,"Thiết Kế Đồ Họa Website, Mobile (UX/UI Designer)",UI/UX Designer,Hà Nội,Junior,2.0,19.5,28.776052544716734,9.276052544716734
-v2-00267,Trưởng Nhóm Nghiệp Vụ Ứng Dụng (ERP) (Upto 60M),Tech Lead / Architect,Hà Nội,Lead,3.0,52.5,34.31465769864602,18.185342301353977
-v2-00271,Software Tester,Kiểm thử (QA/QC),Hà Nội,Junior,1.0,8.0,11.61891420309291,3.61891420309291
-v2-00284,Angular Developer,Frontend Developer,Hà Nội,Middle,3.0,18.5,18.304921559981246,0.1950784400187544
-v2-00285,Frontend Engineer,Frontend Developer,Hà Nội,Junior,1.0,8.0,9.767960723635149,1.7679607236351487
-v2-00294,Vue.js Developer,Frontend Developer,Hà Nội,Middle,3.0,22.0,24.200687729852838,2.200687729852838
-v2-00297,Senior .NET Developer,Backend Developer,Hà Nội,Senior,3.0,20.0,27.665292993618934,7.665292993618934
-v2-00299,Mobile Engineer,Mobile Developer,Hà Nội,Middle,3.0,20.5,21.954671469322594,1.4546714693225944
-v2-00310,Performance Tester,Kiểm thử (QA/QC),Hà Nội,Middle,4.0,18.5,21.466265421676272,2.9662654216762725
-v2-00316,Middle Java Developer,Backend Developer,Hà Nội,Middle,3.0,20.5,20.245617534888204,0.25438246511179585
-v2-00319,Embedded Lead,Embedded / IoT,Hà Nội,Lead,7.0,46.5,63.35921462201118,16.85921462201118
-v2-00320,Senior Web Developer,Software Engineer (chung),Hà Nội,Senior,5.0,36.0,39.42314279229452,3.42314279229452
-v2-00322,Backend Developer,Backend Developer,Hà Nội,Junior,2.0,10.0,17.521601616093264,7.521601616093264
-v2-00323,Software Tester,Kiểm thử (QA/QC),Hà Nội,Intern,0.0,10.5,9.457905448419181,1.0420945515808189
-v2-00332,Data Analyst,Data Analyst / BI,Hà Nội,Middle,3.0,26.0,26.58694933356304,0.5869493335630409
-v2-00339,Android Developer,Mobile Developer,Hà Nội,Middle,3.0,21.5,24.51077421217992,3.0107742121799212
-v2-00340,Android Developer,Mobile Developer,Hà Nội,Middle,3.0,18.5,21.197559800235823,2.6975598002358225
-v2-00344,Senior QA Engineer,Kiểm thử (QA/QC),Hà Nội,Senior,7.0,26.5,42.957746576247665,16.457746576247665
-v2-00347,FPGA Engineer,Embedded / IoT,Hà Nội,Junior,2.0,18.5,21.01866446658356,2.5186644665835587
-v2-00360,Platform Engineer,DevOps / Cloud,Hà Nội,Middle,4.0,24.0,30.28775854088118,6.287758540881178
-v2-00373,Automation Tester,Kiểm thử (QA/QC),Hà Nội,Junior,2.0,17.5,16.705913277118942,0.7940867228810582
-v2-00374,Scrum Master,Quản lý dự án / sản phẩm,Hà Nội,Middle,4.0,21.5,29.009609590767468,7.509609590767468
-v2-00376,System Analyst,Business Analyst,Hà Nội,Middle,3.0,21.5,23.73765261647189,2.237652616471891
-v2-00377,QA Tester,Kiểm thử (QA/QC),Hà Nội,Fresher,0.0,10.0,11.151646285479192,1.1516462854791918
-v2-00379,Product Owner,Quản lý dự án / sản phẩm,Hà Nội,Middle,3.0,18.0,28.789886666547893,10.789886666547893
-v2-00381,Senior iOS Engineer,Mobile Developer,Hà Nội,Senior,5.0,39.5,46.74851556008803,7.24851556008803
-v2-00386,Senior Android Engineer,Mobile Developer,Hà Nội,Senior,7.0,39.0,50.48012607832808,11.480126078328077
-v2-00388,Backend Engineer,Backend Developer,Hà Nội,Middle,3.0,23.5,24.850553616832574,1.350553616832574
-v2-00392,QA Automation Engineer,Kiểm thử (QA/QC),Hà Nội,Junior,2.0,18.5,15.610164277703863,2.8898357222961373
-v2-00393,Automation Tester,Kiểm thử (QA/QC),Hà Nội,Middle,3.0,19.5,24.099270015987052,4.599270015987052
-v2-00395,React Native Developer,Mobile Developer,Hà Nội,Middle,3.0,17.5,25.12767878770799,7.627678787707989
-v2-00396,.NET Developer,Backend Developer,Hà Nội,Junior,1.0,10.5,10.675876551105015,0.17587655110501466
-v2-00398,Full-stack Lead,Fullstack Developer,Hà Nội,Lead,8.0,46.5,59.75005944826304,13.250059448263038
-v2-00406,Senior Android Engineer,Mobile Developer,Hà Nội,Senior,6.0,35.0,43.9409660209716,8.9409660209716
-v2-00411,DevOps Lead,DevOps / Cloud,Hà Nội,Lead,7.0,51.0,77.95794954430247,26.957949544302465
-v2-00415,Junior Security Engineer,Bảo mật,Hà Nội,Junior,1.0,14.5,13.622899076310372,0.8771009236896283
-v2-00419,Full-stack Web Developer,Fullstack Developer,Hà Nội,Junior,1.0,11.5,12.490733920372012,0.990733920372012
-v2-00420,React Engineer,Frontend Developer,Hà Nội,Middle,3.0,22.5,24.434918920359486,1.934918920359486
-v2-00442,Cloud Engineer,DevOps / Cloud,Hà Nội,Intern,1.0,12.0,14.193684239936363,2.1936842399363634
-v2-00444,Cloud Engineer,DevOps / Cloud,Hà Nội,Junior,1.0,14.5,20.996017971400587,6.496017971400587
-v2-00452,Senior .NET Developer,Backend Developer,Hà Nội,Senior,3.0,24.0,23.85306071623882,0.14693928376118137
-v2-00454,Data Scientist,AI / ML Engineer,Hà Nội,Junior,2.0,26.0,26.393262337694658,0.393262337694658
-v2-00455,Security Engineer,Bảo mật,Hà Nội,Middle,4.0,20.0,26.089275477601404,6.089275477601404
-v2-00459,Web Developer,Software Engineer (chung),Hà Nội,Junior,1.0,11.0,11.173955893423441,0.1739558934234413
-v2-00469,Senior Golang Developer,Backend Developer,Hà Nội,Senior,5.0,40.5,51.781325568590574,11.281325568590574
-v2-00475,Frontend Engineer,Frontend Developer,Hà Nội,Junior,1.0,13.5,9.447748222717196,4.0522517772828035
-v2-00477,Senior SRE,DevOps / Cloud,Hà Nội,Senior,6.0,39.0,63.0243132163746,24.0243132163746
-v2-00490,Middle Backend Developer,Backend Developer,Hà Nội,Middle,3.0,25.0,26.02435578895282,1.0243557889528212
-v2-00509,Penetration Tester,Bảo mật,Hà Nội,Middle,3.0,24.5,25.79223074367431,1.2922307436743097
-v2-00513,MEAN Stack Developer,Fullstack Developer,Hà Nội,Middle,3.0,22.5,25.579659173396074,3.079659173396074
-v2-00526,Angular Developer,Frontend Developer,Hà Nội,Middle,3.0,21.0,19.242845598586232,1.7571544014137679
-v2-00527,SOC Analyst,Bảo mật,Hà Nội,Middle,3.0,23.5,29.510697470734957,6.010697470734957
-v2-00537,SOC Analyst,Bảo mật,Hà Nội,Middle,4.0,32.5,29.510697470734957,2.989302529265043
-v2-00554,Full-stack Engineer,Fullstack Developer,Remote,Middle,3.0,26.0,27.419031539879658,1.4190315398796578
-v2-00557,Full-stack Developer,Fullstack Developer,Hà Nội,Junior,2.0,24.0,23.7687526155289,0.23124738447110005
-v2-00558,Vue.js Developer,Frontend Developer,Hà Nội,Junior,2.0,25.0,18.72277293512433,6.277227064875671
-v2-00562,QA Engineer,Kiểm thử (QA/QC),Hà Nội,Middle,3.0,27.0,21.13587862101607,5.864121378983931
-v2-00569,Java Spring Boot Developer,Backend Developer,Hà Nội,Middle,3.0,29.0,29.906542666286494,0.9065426662864944
-v2-00573,Principal Backend Engineer,Backend Developer,Hà Nội,Lead,7.0,42.5,61.000647864216724,18.500647864216724
-v2-00574,QA Tester,Kiểm thử (QA/QC),Remote,Fresher,0.0,11.5,13.432473094816116,1.9324730948161157
-v2-00582,Firmware Engineer,Embedded / IoT,Hà Nội,Fresher,0.0,16.0,14.883518988422978,1.1164810115770223
-v2-00586,QA Automation Engineer,Kiểm thử (QA/QC),Hà Nội,Middle,3.0,24.0,20.28534464576079,3.714655354239209
-v2-00588,Product Manager,Quản lý dự án / sản phẩm,Remote,Middle,4.0,31.0,31.51188803341425,0.5118880334142517
-v2-00593,Test Engineer,Kiểm thử (QA/QC),Hà Nội,Intern,1.0,12.5,9.59946264270399,2.9005373572960096
-v2-00596,Principal Backend Engineer,Backend Developer,Hà Nội,Lead,5.0,45.0,41.07822091841601,3.921779081583992
-v2-00597,Frontend Engineer,Frontend Developer,Hà Nội,Junior,1.0,15.5,12.970921728747442,2.5290782712525584
-v2-00605,Product Owner,Quản lý dự án / sản phẩm,Hà Nội,Junior,2.0,27.0,26.823896449502225,0.17610355049777482
-v2-00611,Senior Vue.js Developer,Frontend Developer,Hà Nội,Senior,5.0,51.0,46.41120849875021,4.588791501249787
-v2-00612,Middle Full-stack Engineer,Fullstack Developer,Hà Nội,Middle,3.0,23.5,25.80776535996874,2.307765359968741
-v2-00624,PHP Developer,Backend Developer,Hà Nội,Junior,1.0,13.0,13.273537341269225,0.27353734126922546
-v2-00633,System Analyst,Business Analyst,Hà Nội,Middle,3.0,34.5,24.09623847867323,10.403761521326771
-v2-00634,Firmware Engineer,Embedded / IoT,Hà Nội,Junior,2.0,29.0,21.01866446658356,7.981335533416441
-v2-00642,Automation Tester,Kiểm thử (QA/QC),Hà Nội,Junior,2.0,29.5,18.719646216538706,10.780353783461294
-v2-00648,Vue.js Developer,Frontend Developer,Remote,Junior,2.0,28.0,27.28927521797714,0.7107247820228615
-v2-00649,Middle Full-stack Engineer,Fullstack Developer,Remote,Middle,4.0,29.0,28.246808639460898,0.7531913605391019
-v2-00650,QA Automation Engineer,Kiểm thử (QA/QC),Hà Nội,Middle,4.0,29.5,29.199699727037114,0.3003002729628861
-v2-00665,Java Spring Boot Developer,Backend Developer,Hà Nội,Middle,4.0,31.0,26.17071537700385,4.829284622996148
-v2-00673,Vue.js Developer,Frontend Developer,Hà Nội,Middle,3.0,27.0,23.113748257732933,3.886251742267067
-v2-00676,Java Spring Boot Developer,Backend Developer,Hà Nội,Middle,3.0,28.0,33.462534442982815,5.462534442982815
-v2-00677,Middle Frontend Developer,Frontend Developer,Hà Nội,Middle,2.0,31.0,28.036274798700898,2.963725201299102
-v2-00679,QA Engineer,Kiểm thử (QA/QC),Hà Nội,Middle,3.0,25.5,24.07746131475208,1.4225386852479183
-v2-00694,Senior Android Engineer,Mobile Developer,Hà Nội,Senior,5.0,52.5,62.096441780051485,9.596441780051485
-v2-00703,Node.js Engineer,Backend Developer,Hà Nội,Middle,3.0,34.5,32.13113226184398,2.3688677381560197
-v2-00714,Cloud Engineer,DevOps / Cloud,Hà Nội,Intern,1.0,19.5,17.69477323236872,1.8052267676312788
-v2-00722,Staff Software Engineer,Software Engineer (chung),Remote,Lead,7.0,59.0,64.58193616066694,5.581936160666942
-v2-00728,Middle Full-stack Engineer,Fullstack Developer,Hà Nội,Middle,2.0,28.5,25.485340351721486,3.0146596482785135
-v2-00736,QA Engineer,Kiểm thử (QA/QC),Hà Nội,Fresher,0.0,13.5,11.644469819627016,1.855530180372984
-v2-00746,Frontend Developer,Frontend Developer,Hà Nội,Junior,2.0,16.5,29.004295740858755,12.504295740858755
-v2-00753,Senior Full-stack Engineer,Fullstack Developer,Remote,Senior,6.0,46.0,56.24173211040688,10.241732110406879
-v2-00764,Senior Web Developer,Software Engineer (chung),Hà Nội,Senior,6.0,51.0,44.62140676537123,6.378593234628767
-v2-00776,Senior .NET Developer,Backend Developer,Hà Nội,Senior,3.0,31.0,26.589412216586187,4.410587783413813
-v2-00784,Senior .NET Developer,Backend Developer,Hà Nội,Senior,2.0,33.5,18.27171405661281,15.228285943387188
-v2-00786,QA Engineer,Kiểm thử (QA/QC),Hà Nội,Middle,3.0,26.5,24.099270015987052,2.4007299840129477
-v2-00788,iOS Developer,Mobile Developer,Hà Nội,Junior,1.0,16.5,15.72626055395669,0.7737394460433098
-v2-00790,Senior Cloud Engineer,DevOps / Cloud,Hà Nội,Senior,5.0,56.5,48.4618385241925,8.038161475807499
-v2-00792,Manual Tester,Kiểm thử (QA/QC),Hà Nội,Junior,1.0,13.0,13.486177944650256,0.4861779446502563
-v2-00800,Full-stack Lead,Fullstack Developer,Hà Nội,Lead,7.0,76.5,91.31052170152671,14.81052170152671
-v2-00804,SRE Engineer,DevOps / Cloud,Hà Nội,Middle,3.0,39.0,36.25801152509484,2.7419884749051633
-v2-00808,LLM Engineer,AI / ML Engineer,Hà Nội,Junior,2.0,41.5,31.909279673601787,9.590720326398213
-v2-00813,QA Engineer,Kiểm thử (QA/QC),Hà Nội,Junior,2.0,30.5,17.806491250100844,12.693508749899156
-v2-00816,React Native Developer,Mobile Developer,Hà Nội,Middle,4.0,35.0,29.887778226613573,5.112221773386427
-v2-00820,Business Analyst,Business Analyst,Hà Nội,Junior,2.0,15.5,22.54916162271759,7.049161622717591
-v2-00821,Performance Tester,Kiểm thử (QA/QC),Hà Nội,Middle,3.0,33.0,28.039990375047182,4.960009624952818
-v2-00827,Software Tester,Kiểm thử (QA/QC),Remote,Intern,1.0,15.5,11.065620907168057,4.434379092831943
-v2-00828,LLM Engineer Junior,AI / ML Engineer,Hà Nội,Junior,0.0,19.0,18.374101978840926,0.6258980211590739
-v2-00829,Vue.js Developer,Frontend Developer,Hà Nội,Junior,2.0,36.5,33.49477432087022,3.0052256791297793
-v2-00830,QA Automation Engineer,Kiểm thử (QA/QC),Hà Nội,Middle,3.0,25.0,25.19499850985119,0.19499850985118883
-v2-00833,MEAN Stack Developer,Fullstack Developer,Hà Nội,Junior,2.0,38.5,35.36808759707378,3.1319124029262184
-v2-00839,LLM Engineer,AI / ML Engineer,Hà Nội,Middle,3.0,42.0,43.03023122843348,1.030231228433479
-v2-00844,Full-stack Architect,Tech Lead / Architect,Hà Nội,Lead,8.0,85.0,52.33485085010966,32.66514914989034
-v2-00845,DevOps Engineer,DevOps / Cloud,Hà Nội,Junior,2.0,35.5,34.62588017922804,0.8741198207719592
-v2-00848,Senior Backend Engineer,Backend Developer,Hà Nội,Senior,7.0,60.5,43.77342768147761,16.726572318522393
-v2-00857,Senior Vue.js Developer,Frontend Developer,Hà Nội,Senior,5.0,51.5,54.448578582698886,2.948578582698886
-v2-00858,Security Analyst,Bảo mật,Hà Nội,Junior,1.0,20.5,13.622899076310372,6.877100923689628
-v2-00866,Android Developer,Mobile Developer,Hà Nội,Middle,4.0,34.5,24.03321147632542,10.46678852367458
-v2-00872,AI Engineer,AI / ML Engineer,Hà Nội,Middle,3.0,51.0,39.64872826871377,11.351271731286232
-v2-00877,Frontend Engineer,Frontend Developer,Hà Nội,Intern,1.0,19.5,11.573042007493212,7.926957992506788
-v2-00887,Senior Full-stack Developer,Fullstack Developer,Hà Nội,Senior,6.0,66.0,63.27844947218334,2.7215505278166603
-v2-00888,PHP Developer,Backend Developer,Hà Nội,Intern,1.0,15.5,13.559827446913838,1.9401725530861622
-v2-00891,Cloud Engineer,DevOps / Cloud,Hà Nội,Middle,3.0,48.0,31.977417725269817,16.022582274730183
-v2-00893,Golang Developer,Backend Developer,Hà Nội,Junior,2.0,40.0,27.43090900503987,12.569090994960131
-v2-00899,Full-stack Engineer,Fullstack Developer,Hà Nội,Middle,3.0,37.5,37.25665030420054,0.2433496957994592
-v2-00900,Security Architect,Tech Lead / Architect,Hà Nội,Lead,5.0,82.5,36.03683428005258,46.46316571994742
-v2-00919,Penetration Tester,Bảo mật,Hà Nội,Middle,3.0,39.5,25.79223074367431,13.70776925632569
-v2-00921,Senior Data Engineer,Data Engineer,Hà Nội,Senior,6.0,76.5,49.8432575912152,26.6567424087848
-v2-00924,Full-stack Engineer,Fullstack Developer,Hà Nội,Middle,3.0,42.0,30.828586038251448,11.171413961748552
-v2-00927,Test Engineer,Kiểm thử (QA/QC),Hà Nội,Junior,2.0,12.0,18.111833732513354,6.111833732513354
-v2-00947,Golang Developer,Backend Developer,Hà Nội,Middle,3.0,43.0,25.973954694319094,17.026045305680906
-v2-00964,Qc Engineer Software Tester,Kiểm thử (QA/QC),Hà Nội,Middle,3.0,12.0,28.365693568705048,16.365693568705048
-v2-00976,Quản Lý Dự Án (Project Manager Pm),Quản lý dự án / sản phẩm,Hà Nội,Manager,3.0,28.0,41.50423851149511,13.50423851149511
-v2-00984,Senior System Engineer (Focus Openstack)_TA165_HN,Quản trị hệ thống / Mạng,Tỉnh/thành khác,Senior,0.0,19.5,23.024925079439438,3.524925079439438
-v2-00986,App Developer,Software Engineer (chung),Hà Nội,Junior,1.0,15.0,15.547878756449201,0.5478787564492009
-v2-01014,TRƯỞNG NHÓM LẬP TRÌNH ỨNG DỤNG (ERP) - UP TO 65M,Tech Lead / Architect,Hà Nội,Lead,5.0,60.0,45.02701447236835,14.97298552763165
-v2-01015,Fullstack Developer Thu Nhap 10 15 Trieu Thang,Fullstack Developer,Hà Nội,Junior,1.0,12.5,18.126502581220254,5.6265025812202545
-v2-01018,Network Engineer (Kỹ Sư Hỗ Trợ Mạng và Hệ Thống),Quản trị hệ thống / Mạng,TP. Hồ Chí Minh,Junior,1.0,19.5,21.197481007859068,1.6974810078590679
-v2-01020,Kỹ Sư Hệ Thống (System Engineer),Quản trị hệ thống / Mạng,Tỉnh/thành khác,Junior,,17.5,19.621198281407963,2.1211982814079633
-v2-01022,Trưởng Nhóm Quản Trị Hệ Thống,Tech Lead / Architect,Hà Nội,Lead,3.0,20.0,34.31465769864602,14.314657698646023
-v2-01026,QC Lead (Customer Quality Control) (Ngành Gỗ),Kiểm thử (QA/QC),Tỉnh/thành khác,Lead,3.0,32.5,34.91494298933975,2.4149429893397496
-v2-01037,Project Manager,Quản lý dự án / sản phẩm,Hà Nội,Manager,3.0,40.0,41.50423851149511,1.5042385114951102
-v2-01041,"Technology & AI Innovation Manager (Lương Cứng Up to 100M/tháng, Thử Việc 100% Lương, Làm Việc T2-T6)",AI / ML Engineer,Hà Nội,Manager,6.0,85.0,52.81344120607889,32.18655879392111
-v2-01049,Chuyên Viên Phân Tích Nghiệp Vụ (Business Analyst – BA),Business Analyst,Hà Nội,Junior,2.0,25.0,28.35725644722018,3.3572564472201805
-v2-01051,Power Apps Developer (Salary 40M++) 5 Working Days/ Week,Software Engineer (chung),Hà Nội,Middle,3.0,47.5,27.12157600314313,20.37842399685687
-v2-01053,Android Developer Thu Nhap Upto 20 Trieu Lam Viec Tai Tu Liem Ha Noi Nghi Thu 7 Chu Nhat,Mobile Developer,Hà Nội,Junior,1.0,15.0,17.6745686249249,2.6745686249248983
-v2-01054,Data Engineer - MSB - KCN - 3I139,Data Engineer,Hà Nội,Middle,3.0,34.58,37.66398901254541,3.083989012545409
-v2-01055,Chuyen Vien Thiet Ke Bao Bi Hop Qua Di Lam Ngay Luong Tu 15 22 Trieu,Data Analyst / BI,TP. Hồ Chí Minh,Middle,3.0,18.5,29.380866277794595,10.880866277794595
-v2-01060,Tester Junior Mid Yeu Cau Tieng Nhat,Kiểm thử (QA/QC),Hà Nội,Junior,1.0,13.0,16.61087260558972,3.6108726055897193
-v2-01063,Tech Architect Tech Lead,Tech Lead / Architect,TP. Hồ Chí Minh,Lead,3.0,40.0,38.34162225751153,1.6583777424884687
-v2-01067,Mobile Developer Kotlin Thu Nhap Upto 20 Trieu Lam Viec Tai Tu Liem Ha Noi Nghi Thu 7 Chu Nhat,Mobile Developer,Hà Nội,Junior,1.0,15.0,18.802609325202503,3.8026093252025035
-v2-01071,Senior System Engineer (Focus Openstack) Id6792,Quản trị hệ thống / Mạng,Hà Nội,Senior,0.0,19.5,22.582670398281543,3.082670398281543
-v2-01110,Business Analyst,Business Analyst,Hà Nội,Middle,4.0,32.5,29.120029783520017,3.3799702164799825
-v2-01122,TECH LEAD / CO-OWNER (MMO Application & Software As A Service),Tech Lead / Architect,Hà Nội,Lead,3.0,22.5,29.26447095323501,6.7644709532350085
-v2-01124,Software Tester (Manual & Automation) | Từ 2 Năm Kinh Nghiệm | Chấp Nhận Onboard Sau Tết,Kiểm thử (QA/QC),Hà Nội,Junior,2.0,18.333,21.005184383154155,2.672184383154157
-v2-01126,Technical Leader (.NET),Backend Developer,Hà Nội,Lead,5.0,41.667,49.839158517487554,8.172158517487553
-v2-01128,Tin mới Chuyên Viên Phân Tích Nghiệp Vụ Business Analyst- Hà Nội,Business Analyst,Hà Nội,Junior,2.0,20.833,25.43031268991885,4.5973126899188514
-v2-01129,Tin mới Backend Developer (Golang),Backend Developer,Hà Nội,Junior,2.0,25.0,24.357414102674355,0.6425858973256453
-v2-01132,Business Analyst,Business Analyst,Hà Nội,Junior,2.0,25.0,25.43031268991885,0.43031268991884986
-v2-01135,Junior QA Tester,Kiểm thử (QA/QC),Hà Nội,Junior,1.0,20.0,15.019285371097386,4.980714628902614
-v2-01141,Business Analyst - Từ 2 Năm Kinh Nghiệm,Business Analyst,Hà Nội,Junior,2.0,25.0,25.43031268991885,0.43031268991884986
-v2-01149,Business Analyst,Business Analyst,TP. Hồ Chí Minh,Middle,3.0,30.0,26.54334953614321,3.456650463856789
-v2-01150,Lập Trình Viên AI,AI / ML Engineer,Hà Nội,Middle,4.0,35.0,32.17715299806523,2.8228470019347682
-v2-01155,Senior .NET (Định Hướng Techlead),Backend Developer,Hà Nội,Senior,5.0,41.667,39.61624805047081,2.050751949529193
-v2-01159,Senior Mobile Developer (Flutter/IOS/Android/Dart),Mobile Developer,TP. Hồ Chí Minh,Senior,3.0,35.0,31.510380249988202,3.489619750011798
-v2-01166,Frontend Developer - Đi Làm Ngay Hoặc Ra Tết Đi Làm,Frontend Developer,Hà Nội,Junior,2.0,27.5,23.261382238980254,4.238617761019746
-v2-01167,Java Developer - Đi Làm Ngay Hoặc Ra Tết Đi Làm,Backend Developer,Hà Nội,Junior,2.0,27.5,23.15420384636785,4.3457961536321505
-v2-01168,Business Analyst - Đi Làm Ngay Hoặc Ra Tết Đi Làm,Business Analyst,Hà Nội,Junior,2.0,25.0,25.43031268991885,0.43031268991884986
-v2-01177,Senior Java Developer,Backend Developer,Hà Nội,Senior,4.0,35.0,31.73102222460525,3.268977775394749
-v2-01186,Nhân Viên IT Xử Lý Phần Mềm,IT Support / Helpdesk,TP. Hồ Chí Minh,Junior,1.0,15.0,12.022333199970058,2.977666800029942
-v2-01197,"Lập Trình Viên Java (Product Domain Bank, Fintech)",Backend Developer,Hà Nội,Middle,3.0,25.0,27.588777128480064,2.5887771284800642
-v2-01201,Chuyên Viên Business Analyst,Business Analyst,Hà Nội,Junior,2.0,12.5,25.43031268991885,12.93031268991885
-v2-01205,Unity Developer (Casual/Puzzle) - Junior/Middle,Game Developer,Hà Nội,Junior,1.0,25.0,18.711527956892514,6.288472043107486
-v2-01206,Playable Ads Developer (Unity),Game Developer,Hà Nội,Fresher,0.5,11.0,11.230099545394372,0.23009954539437238
-v2-01217,Lập Trình IOS,Mobile Developer,Hà Nội,Middle,3.0,32.5,28.80196006641364,3.6980399335863616
-v2-01220,Leader QA Có Kinh Nghiệm Test,Kiểm thử (QA/QC),Hà Nội,Lead,4.0,16.0,35.909092355177144,19.909092355177144
-v2-01227,Chuyên Viên IT Biết Chạy ADS,IT Support / Helpdesk,TP. Hồ Chí Minh,Junior,1.0,12.5,12.022333199970058,0.477666800029942
-v2-01229,Lập Trình Mobile App,Mobile Developer,Hà Nội,Middle,3.0,25.0,28.80196006641364,3.8019600664136384
-v2-01259,Chuyên Viên Tư Vấn Nghiệp Vụ Sản Phẩm (BA),Business Analyst,Hà Nội,Junior,2.0,25.0,25.43031268991885,0.43031268991884986
-v2-01263,Thiết Kế UI/UX (Mảng App Mobile),UI/UX Designer,Hà Nội,Junior,1.0,11.5,18.711527956892514,7.211527956892514
-v2-01264,Lập Trình Viên Dev,Software Engineer (chung),Hà Nội,Junior,1.0,33.333,16.211582712976796,17.121417287023203
-v2-01275,Chuyên Viên Hỗ Trợ Người Dùng IT Helpdesk,IT Support / Helpdesk,Tỉnh/thành khác,Junior,2.0,9.0,16.187827150816656,7.187827150816656
-v2-01278,Junior Developer (Nền Tảng Vận Hành Web),Software Engineer (chung),Hà Nội,Junior,1.0,16.0,16.211582712976796,0.21158271297679576
-v2-01279,IT Comtor/Sub-PM,BrSE / Cầu nối,Hà Nội,Junior,1.0,23.333,18.711527956892514,4.6214720431074845
-v2-01281,Nhân Viên Kiểm Thử Phần Mềm - Software QA,Kiểm thử (QA/QC),Tỉnh/thành khác,Junior,1.0,8.5,12.919912003748376,4.419912003748376
-v2-01292,Playable Ads Developer,Software Engineer (chung),Hà Nội,Junior,1.0,15.0,16.211582712976796,1.2115827129767958
-v2-01297,Graphic Designer Thiết Kế Logo Cho App Mobile,Mobile Developer,Hà Nội,Fresher,0.5,15.0,10.395552061791355,4.604447938208645
-v2-01312,Trưởng Bộ Phận Quản Trị Hệ Thống (MCN),Quản trị hệ thống / Mạng,Hà Nội,Middle,3.0,35.0,25.966984228746064,9.033015771253936
-v2-01330,Embedded Linux Engineer,Embedded / IoT,Hà Nội,Junior,2.0,21.0,24.18949209099653,3.1894920909965307
-v2-01331,LTV Backend (PTPM),Backend Developer,Hà Nội,Fresher,0.5,15.5,9.247449511609512,6.252550488390488
-v2-01347,"Trợ Lý Ứng Dụng AI (Domain ERP, EdTech)- Senior BA",AI / ML Engineer,Hà Nội,Senior,1.0,20.0,18.356993184866738,1.643006815133262
-v2-01348,"AI Developer - Xây Hệ Thống ERP, Misa, CRM",AI / ML Engineer,Hà Nội,Junior,1.0,17.0,16.15204832437443,0.8479516756255698
-v2-01349,Trợ Lý Công Nghệ Thông Tin (BA),Business Analyst,Hà Nội,Junior,,21.5,15.000933812951123,6.499066187048877
-v2-01360,Kỹ Sư IT Vận Hành Hệ Thống,Quản trị hệ thống / Mạng,Hà Nội,Junior,1.0,29.0,14.967614064445026,14.032385935554974
-v2-01362,Nhân Viên Quản Trị Hệ Thống,Quản trị hệ thống / Mạng,Tỉnh/thành khác,Junior,1.0,10.0,14.346154678047325,4.346154678047325
-v2-01367,Nhân Viên Lập Trình Ruby On Rails,Backend Developer,Hà Nội,Junior,2.0,20.0,21.945099009055102,1.9450990090551024
-v2-01372,IT Comtor,BrSE / Cầu nối,TP. Hồ Chí Minh,Junior,1.0,17.5,16.69930376016449,0.80069623983551
-v2-01380,Kỹ Sư Lập Trình PLC,Software Engineer (chung),Hà Nội,Junior,1.0,15.0,16.712447255608016,1.7124472556080157
-v2-01383,User Acquisition (Mobile App),Mobile Developer,Hà Nội,Junior,1.0,15.0,16.38125165948376,1.381251659483759
-v2-01399,IT Comtor,BrSE / Cầu nối,Đà Nẵng,Fresher,0.5,22.5,12.370181602162706,10.129818397837294
-v2-01411,Project Manager,Quản lý dự án / sản phẩm,Hà Nội,Middle,3.0,67.5,33.46920679634956,34.03079320365044
-v2-01438,Fullstack Developer (Thành Thạo NodeJS & ReactJS),Fullstack Developer,Hà Nội,Junior,2.0,25.0,26.742435251227935,1.7424352512279349
-v2-01442,Android Fresher Mobile App (Kotlin),Mobile Developer,Hà Nội,Fresher,0.5,9.5,10.957139366873037,1.4571393668730366
-v2-01444,Flutter Developer,Mobile Developer,Hà Nội,Junior,1.0,15.0,17.532613709926153,2.532613709926153
-v2-01445,Backend Developer (Python),Backend Developer,Hà Nội,Middle,3.0,22.5,30.43585806100378,7.935858061003781
-v2-01446,IOS Developer (Swift) / Từ 6 Tháng Kinh Nghiệm Code Swift Hoặc Objective-C | Thu Nhập Tới 30 Triệu,Mobile Developer,Hà Nội,Fresher,0.5,20.0,11.291496396318102,8.708503603681898
-v2-01450,Trợ Giảng Lập Trình Intern- Fresher,Software Engineer (chung),Hà Nội,Intern,,5.5,8.307170187021372,2.807170187021372
-v2-01453,Software Engineer (Java),Backend Developer,Hà Nội,Middle,4.0,38.25,26.684573061967697,11.565426938032303
-v2-01454,Software Engineer (Fullstack Java/Reactjs),Fullstack Developer,Hà Nội,Middle,3.0,25.5,30.724873918971145,5.224873918971145
-v2-01455,IT Helpdesk,IT Support / Helpdesk,Hà Nội,Junior,1.0,12.5,12.014576620260756,0.48542337973924354
-v2-01460,Kỹ Sư Phần Mềm Ứng Dụng Desktop,Software Engineer (chung),Hà Nội,Junior,1.0,19.125,16.712447255608016,2.4125527443919843
-v2-01490,IT Infrastructure Admin Coordinator,Quản trị hệ thống / Mạng,TP. Hồ Chí Minh,Junior,2.0,30.0,20.721910298590906,9.278089701409094
-v2-01491,"Middle/Senior Frontend Engineer(ReactJS,Fullstack)",Fullstack Developer,TP. Hồ Chí Minh,Senior,4.0,51.0,30.60113919441614,20.39886080558386
-v2-01493,Developer Intern,Software Engineer (chung),Hà Nội,Intern,,4.0,5.9490197975127534,1.9490197975127534
-v2-01495,Chuyên Viên Kiểm Thử Phần Mềm (Tester),Kiểm thử (QA/QC),Hà Nội,Middle,3.0,22.5,24.326556285363502,1.8265562853635018
-v2-01496,Senior QC Engineer (Manual),Kiểm thử (QA/QC),TP. Hồ Chí Minh,Senior,3.0,27.5,24.568247863313783,2.9317521366862174
-v2-01497,"Middle/Senior Backend Engineer (Java, Fullstack)",Fullstack Developer,TP. Hồ Chí Minh,Senior,4.0,51.0,30.378066126922285,20.621933873077715
-v2-01501,Frontend Developer (Angular),Frontend Developer,Hà Nội,Middle,3.0,25.0,29.02943712300248,4.029437123002481
-v2-01502,Senior .NET (C#) Developer (Factory Management System) - Từ 3 Năm Kinh Nghiệm - Upto 1.500 - Đi Làm Ngay,Backend Developer,Hà Nội,Senior,3.0,31.875,26.50581333931312,5.3691866606868786
-v2-01508,Trưởng Nhóm IT,Tech Lead / Architect,Tỉnh/thành khác,Lead,2.0,13.0,27.27469647831689,14.27469647831689
-v2-01512,Nhân Viên IT Helpdesk Kho SPX,IT Support / Helpdesk,Đà Nẵng,Junior,1.0,14.5,12.756423975453984,1.743576024546016
-v2-01514,Senior Flutter Developer,Mobile Developer,Hà Nội,Senior,3.0,25.0,32.86749313547617,7.867493135476167
-v2-01515,Senior Fullstack Web Developer,Fullstack Developer,Hà Nội,Senior,3.0,25.0,33.14005567983287,8.14005567983287
-v2-01516,Chuyên Viên Cấp Cao Kiểm Thử Phần Mềm (Senior Tester),Kiểm thử (QA/QC),Hà Nội,Senior,2.0,20.833,20.006638427534966,0.8263615724650322
-v2-01522,Chuyên Viên IT - Từ 2 Năm Kinh Nghiệm,IT Support / Helpdesk,TP. Hồ Chí Minh,Junior,2.0,11.5,14.928590982041891,3.428590982041891
-v2-01533,Project Manager - Dự Án Khối Chính Phủ,Quản lý dự án / sản phẩm,Hà Nội,Middle,3.0,47.5,33.46920679634956,14.03079320365044
-v2-01534,Chuyên Viên IT,IT Support / Helpdesk,TP. Hồ Chí Minh,Junior,1.0,17.5,12.022333199970058,5.477666800029942
-v2-01535,System Administrator (Call Center),Quản trị hệ thống / Mạng,Hà Nội,Fresher,0.5,19.0,9.650492760439429,9.349507239560571
-v2-01539,IT Helpdesk (Phần Cứng & Mạng Máy Tính),IT Support / Helpdesk,TP. Hồ Chí Minh,Fresher,0.5,10.5,9.372505577957684,1.1274944220423162
-v2-01551,Kỹ Thuật Phần Mềm Cửa Hàng Điện Thoại,Software Engineer (chung),TP. Hồ Chí Minh,Junior,,11.0,14.59400109860155,3.5940010986015505
-v2-01564,Lập Trình Viên Front-End Junior (Angular),Frontend Developer,Hà Nội,Junior,1.0,13.5,16.550556662864043,3.050556662864043
-v2-01577,Kỹ Sư Phát Triển Web Full-Stack / Fullstack Developer (Mức Lương Upto 15 Triệu + Thưởng),Fullstack Developer,Hà Nội,Junior,1.0,11.5,17.91120330717251,6.41120330717251
-v2-01578,Frontend Team Lead (ReactJS/NextJS/React Native),Tech Lead / Architect,Hà Nội,Lead,6.0,76.5,41.875220702615366,34.624779297384634
-v2-01579,Nhân Viên IT - Ưu Tiên Đi Làm Ngay,IT Support / Helpdesk,Hà Nội,Junior,2.0,13.5,14.643129288328039,1.1431292883280388
-v2-01590,Middle PHP,Backend Developer,Hà Nội,Middle,3.0,19.0,25.591055930949803,6.591055930949803
-v2-01604,Lập Trình Viên Mobile,Mobile Developer,Hà Nội,Middle,3.0,25.0,27.59946423827185,2.5994642382718496
-v2-01609,Tester - Từ 2 Năm Kinh Nghiệm,Kiểm thử (QA/QC),Hà Nội,Junior,2.0,22.5,19.72147842540119,2.778521574598809
-v2-01610,IT Helpdesk - Quản Trị Và Hỗ Trợ Hệ Thống CNTT,IT Support / Helpdesk,Hà Nội,Junior,1.0,12.5,12.014576620260756,0.48542337973924354
-v2-01623,Junior Mobile Flutter Developer - Lĩnh Vực Edtech,Mobile Developer,Hà Nội,Junior,0.5,12.5,12.325081077701157,0.17491892229884343
-v2-01624,Product Owner Mobile APP,Quản lý dự án / sản phẩm,Hà Nội,Junior,1.0,20.0,19.961086420665037,0.03891357933496309
-v2-01648,SAP Consultant - Chuyên Viên Tư Vấn Hệ Thống ERP,ERP / SAP Consultant,Hà Nội,Junior,1.0,15.5,17.28644268763566,1.7864426876356596
-v2-01657,Project Manager,Quản lý dự án / sản phẩm,Hà Nội,Junior,2.0,47.5,27.701892702125182,19.798107297874818
-v2-01660,Phó Phòng Công Nghệ Thông Tin - Fullstack Developer - Thu Nhập Upto 40 Triệu,Fullstack Developer,Hà Nội,Senior,5.0,37.5,43.60382606408287,6.103826064082867
-v2-01661,Nhân Viên IT Phần Cứng,IT Support / Helpdesk,Tỉnh/thành khác,Junior,2.0,13.5,16.187827150816656,2.6878271508166556
-v2-01685,Senior Project Manager,Quản lý dự án / sản phẩm,Hà Nội,Senior,4.0,37.5,34.88316831507215,2.6168316849278526
-v2-01698,Junior Android Developer,Mobile Developer,TP. Hồ Chí Minh,Junior,2.0,23.1,22.501317737822262,0.5986822621777392
-v2-01700,Midle PHP Developer,Backend Developer,TP. Hồ Chí Minh,Junior,2.0,22.0,20.21515922767168,1.7848407723283195
-v2-01705,Senior PHP Software Engineer,Backend Developer,TP. Hồ Chí Minh,Senior,4.0,53.438,35.816260153434655,17.621739846565347
-v2-01714,Chuyên viên tư vấn Website - phần mềm tại Hà Nội ( Không yêu cầu kinh nghiệm ),Software Engineer (chung),Hà Nội,Junior,,15.0,13.406960098712874,1.593039901287126
-v2-01715,HCM - Assistant IT Manager,Quản lý IT / CTO,TP. Hồ Chí Minh,Manager,8.0,28.5,48.97041579948241,20.47041579948241
-v2-01722,Lập trình viên Java - Java Developer (Senior/Leader),Backend Developer,Hà Nội,Lead,4.0,37.5,33.4881243042017,4.011875695798302
-v2-01724,TRƯỞNG PHÒNG CÔNG NGHỆ THÔNG TIN,Quản lý IT / CTO,Hà Nội,Manager,2.0,40.0,25.11577059965061,14.88422940034939
+v2-00007,AI Engineer (Middle Level) (Thu Nhập 20-30 Triệu),AI / ML Engineer,Hà Nội,Middle,2.0,25.0,36.37038496069068,11.370384960690679
+v2-00008,Backend Engineer (Middle+) (Thu Nhập 20-30 Triệu),Backend Developer,Hà Nội,Middle,3.0,25.0,28.946461855608888,3.946461855608888
+v2-00010,Kỹ Sư Phát Triển Phần Mềm,Software Engineer (chung),Hà Nội,Fresher,0.0,17.5,17.729884765012446,0.22988476501244648
+v2-00028,Middle Senior Backend Engineer English Fullstack Plus,Fullstack Developer,TP. Hồ Chí Minh,Senior,3.0,55.9,32.24395439195937,23.65604560804063
+v2-00031,Network Engineer,Quản trị hệ thống / Mạng,TP. Hồ Chí Minh,Junior,1.0,19.5,21.67135833873105,2.17135833873105
+v2-00041,Software Engineer,Software Engineer (chung),Hà Nội,Middle,3.0,42.9,27.054743894520822,15.845256105479177
+v2-00042,Nhan Vien Quan Tri Website Kiem Ho Tro Ky Thuat Cong Nghe Thong Tin It Helpdesk,IT Support / Helpdesk,Hà Nội,Junior,1.0,10.0,12.128540181334847,2.128540181334847
+v2-00045,Mobile Flutter Developer Mid Senior,Mobile Developer,Hà Nội,Senior,2.0,24.0,33.62795648060221,9.627956480602208
+v2-00046,Phat Trien San Pham Product Owner Project Manager,Quản lý dự án / sản phẩm,Hà Nội,Junior,2.0,20.0,26.369327874245165,6.369327874245165
+v2-00047,Back End Developer,Backend Developer,Hà Nội,Junior,2.0,17.5,22.262020541141887,4.7620205411418866
+v2-00050,Kỹ Sư Lập Trình Điều Khiển & Tự Động Hóa (PLC/DDC) | Upto 20 Triệu,Software Engineer (chung),Hà Nội,Fresher,0.0,16.0,19.563084475915094,3.563084475915094
+v2-00051,Product Owner,Quản lý dự án / sản phẩm,Hà Nội,Middle,3.0,27.5,39.28376164543852,11.783761645438517
+v2-00068,Product Manager Smart Home (Hà Nội),Quản lý dự án / sản phẩm,Hà Nội,Senior,5.0,86.668,62.29269536967539,24.375304630324614
+v2-00072,UI/UX Designer,UI/UX Designer,Hà Nội,Junior,2.0,19.5,28.755523070966092,9.255523070966092
+v2-00074,Kỹ Sư Triển Khai Mạng và Bảo Mật/ Postsales (Network/ Sercurity) - Upto 25M,Bảo mật,Hà Nội,Junior,2.0,20.0,28.14949032524884,8.149490325248841
+v2-00076,AI Automation Engineer (Fresher / Junior),AI / ML Engineer,Hà Nội,Fresher,0.0,15.0,20.360748926228432,5.360748926228432
+v2-00096,AI Engineer (.NET | Applied AI),AI / ML Engineer,Đà Nẵng,Junior,2.0,30.0,31.436517731450373,1.4365177314503725
+v2-00103,"Senior Fullstack Engineer (React, Java, Graphql)",Fullstack Developer,TP. Hồ Chí Minh,Senior,6.0,85.0,49.43140479253524,35.56859520746476
+v2-00104,Senior IT Executive (Salary Range from Usd1.200 to 1.500),IT Support / Helpdesk,Hà Nội,Senior,5.0,35.1,38.406304192041446,3.306304192041445
+v2-00131,Business Intelligence Analyst (Supply Chain & Logistics),Data Analyst / BI,Hà Nội,Junior,2.0,22.5,28.755523070966092,6.255523070966092
+v2-00139,"Technology & AI Innovation Manager (Ai, Engineering, Product",AI / ML Engineer,Hà Nội,Manager,6.0,60.0,57.03610511283982,2.96389488716018
+v2-00143,IT Manager,Quản lý IT / CTO,TP. Hồ Chí Minh,Manager,3.0,37.5,39.63417882845528,2.1341788284552834
+v2-00149,Flutter Developer,Mobile Developer,Hà Nội,Junior,2.0,20.0,24.979071067471388,4.979071067471388
+v2-00161,Qc Lead Manager,Kiểm thử (QA/QC),TP. Hồ Chí Minh,Manager,6.0,44.0,39.925932325638136,4.074067674361864
+v2-00162,Project Manager,Quản lý dự án / sản phẩm,TP. Hồ Chí Minh,Senior,6.0,48.0,44.6752941833626,3.3247058166373975
+v2-00164,Senior Python Developer,Backend Developer,Hà Nội,Senior,4.0,30.0,33.57736010043157,3.5773601004315694
+v2-00178,"Specialist, BI & Process Automation",Data Analyst / BI,TP. Hồ Chí Minh,Junior,1.0,18.5,28.21083554168308,9.710835541683078
+v2-00186,Full Stack Developer,Fullstack Developer,TP. Hồ Chí Minh,Middle,3.0,45.5,32.041644437656146,13.458355562343854
+v2-00199,Power Platform Developer (Salary 40M++) 5 Working Days/ Week,Software Engineer (chung),Hà Nội,Senior,5.0,53.334,43.38351579115971,9.950484208840294
+v2-00200,"Technology & AI Innovation Manager (Ai, Agentic AI) Up to 75M, Làm Việc T2-T6",AI / ML Engineer,Hà Nội,Manager,6.0,62.5,57.03610511283982,5.46389488716018
+v2-00207,Chuyên Viên Giải Pháp & Hỗ Trợ Kỹ Thuật,IT Support / Helpdesk,Hà Nội,Junior,1.0,16.0,17.677442081039715,1.6774420810397146
+v2-00208,Chuyên Viên Nghiên Cứu & Phát Triển Đối Tác AI,AI / ML Engineer,Hà Nội,Fresher,0.0,22.5,22.79143161694102,0.2914316169410185
+v2-00210,Java Backend Developer Middle 20 35 M,Backend Developer,Hà Nội,Middle,2.0,27.5,22.696613310749296,4.803386689250704
+v2-00214,Qc Mid Senior,Kiểm thử (QA/QC),Hà Nội,Senior,2.0,17.0,20.798317822691676,3.7983178226916756
+v2-00221,Ai Tech Lead,Tech Lead / Architect,Hà Nội,Lead,4.0,64.0,32.54242337499989,31.457576625000108
+v2-00224,Technical Support Engineer/ Kỹ Sư Kỹ Thuật (HVAC) - Chấp Nhận Ứng Viên Chưa Có Kinh Nghiệm,IT Support / Helpdesk,Hà Nội,Fresher,0.0,20.5,15.567954581871145,4.932045418128855
+v2-00228,Core Network Engineer (Isp/dc) – Ip/mpls | Lương Upto 35Tr,Quản trị hệ thống / Mạng,Hà Nội,Middle,4.0,28.0,27.368710552227334,0.6312894477726658
+v2-00251,Senior Ui Ux Designer Game Co Vua,UI/UX Designer,TP. Hồ Chí Minh,Senior,3.0,35.0,29.677114140730083,5.322885859269917
+v2-00260,Business Analyst/ Functional Consultant SAP,Business Analyst,Hà Nội,Middle,3.0,40.0,30.342650241319582,9.657349758680418
+v2-00262,"Thiết Kế Đồ Họa Website, Mobile (UX/UI Designer)",UI/UX Designer,Hà Nội,Junior,2.0,19.5,28.755523070966092,9.255523070966092
+v2-00267,Trưởng Nhóm Nghiệp Vụ Ứng Dụng (ERP) (Upto 60M),Tech Lead / Architect,Hà Nội,Lead,3.0,52.5,34.193325949742146,18.306674050257854
+v2-00271,Software Tester,Kiểm thử (QA/QC),Hà Nội,Junior,1.0,8.0,11.52503777735186,3.5250377773518604
+v2-00284,Angular Developer,Frontend Developer,Hà Nội,Middle,3.0,18.5,18.521626375308596,0.021626375308596124
+v2-00285,Frontend Engineer,Frontend Developer,Hà Nội,Junior,1.0,8.0,9.563452220846129,1.5634522208461288
+v2-00294,Vue.js Developer,Frontend Developer,Hà Nội,Middle,3.0,22.0,21.823936911770208,0.17606308822979244
+v2-00297,Senior .NET Developer,Backend Developer,Hà Nội,Senior,3.0,20.0,28.077725262535047,8.077725262535047
+v2-00299,Mobile Engineer,Mobile Developer,Hà Nội,Middle,3.0,20.5,21.402968126882154,0.9029681268821541
+v2-00310,Performance Tester,Kiểm thử (QA/QC),Hà Nội,Middle,4.0,18.5,22.657214333365772,4.157214333365772
+v2-00316,Middle Java Developer,Backend Developer,Hà Nội,Middle,3.0,20.5,20.848050477296013,0.3480504772960131
+v2-00319,Embedded Lead,Embedded / IoT,Hà Nội,Lead,7.0,46.5,64.58608875789238,18.086088757892384
+v2-00320,Senior Web Developer,Software Engineer (chung),Hà Nội,Senior,5.0,36.0,39.19935273576428,3.199352735764279
+v2-00322,Backend Developer,Backend Developer,Hà Nội,Junior,2.0,10.0,18.90124561784525,8.901245617845252
+v2-00323,Software Tester,Kiểm thử (QA/QC),Hà Nội,Fresher,0.0,10.5,10.599165517627442,0.09916551762744241
+v2-00332,Data Analyst,Data Analyst / BI,Hà Nội,Middle,3.0,26.0,26.552893979129138,0.5528939791291378
+v2-00339,Android Developer,Mobile Developer,Hà Nội,Middle,3.0,21.5,24.02468984710863,2.524689847108629
+v2-00340,Android Developer,Mobile Developer,Hà Nội,Middle,3.0,18.5,20.642601046408885,2.1426010464088847
+v2-00344,Senior QA Engineer,Kiểm thử (QA/QC),Hà Nội,Senior,7.0,26.5,44.71535176578404,18.215351765784042
+v2-00347,FPGA Engineer,Embedded / IoT,Hà Nội,Junior,2.0,18.5,20.890072035464826,2.3900720354648257
+v2-00360,Platform Engineer,DevOps / Cloud,Hà Nội,Middle,4.0,24.0,29.758843528329365,5.758843528329365
+v2-00373,Automation Tester,Kiểm thử (QA/QC),Hà Nội,Junior,2.0,17.5,16.63634189591438,0.8636581040856193
+v2-00374,Scrum Master,Quản lý dự án / sản phẩm,Hà Nội,Middle,4.0,21.5,28.65641888357107,7.156418883571071
+v2-00376,System Analyst,Business Analyst,Hà Nội,Middle,3.0,21.5,23.09596690578129,1.5959669057812889
+v2-00377,QA Tester,Kiểm thử (QA/QC),Hà Nội,Fresher,0.0,10.0,10.599165517627442,0.5991655176274424
+v2-00379,Product Owner,Quản lý dự án / sản phẩm,Hà Nội,Middle,3.0,18.0,27.9465254120642,9.9465254120642
+v2-00381,Senior iOS Engineer,Mobile Developer,Hà Nội,Senior,5.0,39.5,48.92433784434197,9.42433784434197
+v2-00386,Senior Android Engineer,Mobile Developer,Hà Nội,Senior,7.0,39.0,49.98735766721678,10.987357667216777
+v2-00388,Backend Engineer,Backend Developer,Hà Nội,Middle,3.0,23.5,25.311651561112324,1.811651561112324
+v2-00392,QA Automation Engineer,Kiểm thử (QA/QC),Hà Nội,Junior,2.0,18.5,15.595414562469529,2.9045854375304714
+v2-00393,Automation Tester,Kiểm thử (QA/QC),Hà Nội,Middle,3.0,19.5,24.31911854261843,4.81911854261843
+v2-00395,React Native Developer,Mobile Developer,Hà Nội,Middle,3.0,17.5,25.5741357201774,8.074135720177399
+v2-00396,.NET Developer,Backend Developer,Hà Nội,Junior,1.0,10.5,11.184315807987447,0.6843158079874474
+v2-00398,Full-stack Lead,Fullstack Developer,Hà Nội,Lead,8.0,46.5,61.38987768169762,14.88987768169762
+v2-00406,Senior Android Engineer,Mobile Developer,Hà Nội,Senior,6.0,35.0,40.64453144845555,5.644531448455552
+v2-00411,DevOps Lead,DevOps / Cloud,Hà Nội,Lead,7.0,51.0,82.60636992867042,31.606369928670418
+v2-00415,Junior Security Engineer,Bảo mật,Hà Nội,Junior,1.0,14.5,14.141576084731877,0.3584239152681228
+v2-00419,Full-stack Web Developer,Fullstack Developer,Hà Nội,Junior,1.0,11.5,12.951088570520918,1.451088570520918
+v2-00420,React Engineer,Frontend Developer,Hà Nội,Middle,3.0,22.5,22.352665852667496,0.14733414733250427
+v2-00442,Cloud Engineer,DevOps / Cloud,Hà Nội,Junior,1.0,12.0,15.796436777051774,3.796436777051774
+v2-00444,Cloud Engineer,DevOps / Cloud,Hà Nội,Junior,1.0,14.5,19.28837644415999,4.78837644415999
+v2-00452,Senior .NET Developer,Backend Developer,Hà Nội,Senior,3.0,24.0,24.30692795697554,0.30692795697553876
+v2-00454,Data Scientist,AI / ML Engineer,Hà Nội,Junior,2.0,26.0,24.697897582666553,1.3021024173334474
+v2-00455,Security Engineer,Bảo mật,Hà Nội,Middle,4.0,20.0,27.020914572495503,7.020914572495503
+v2-00459,Web Developer,Software Engineer (chung),Hà Nội,Junior,1.0,11.0,11.938615562889082,0.9386155628890815
+v2-00469,Senior Golang Developer,Backend Developer,Hà Nội,Senior,5.0,40.5,53.3793091275035,12.879309127503497
+v2-00475,Frontend Engineer,Frontend Developer,Hà Nội,Junior,1.0,13.5,9.309232636031494,4.190767363968506
+v2-00477,Senior SRE,DevOps / Cloud,Hà Nội,Senior,6.0,39.0,62.7287095899198,23.728709589919802
+v2-00490,Middle Backend Developer,Backend Developer,Hà Nội,Middle,3.0,25.0,26.388866206654985,1.3888662066549848
+v2-00509,Penetration Tester,Bảo mật,Hà Nội,Middle,3.0,24.5,26.040368080759645,1.5403680807596452
+v2-00513,MEAN Stack Developer,Fullstack Developer,Hà Nội,Middle,3.0,22.5,27.209572914429536,4.709572914429536
+v2-00526,Angular Developer,Frontend Developer,Hà Nội,Middle,3.0,21.0,19.91247543097843,1.0875245690215714
+v2-00527,SOC Analyst,Bảo mật,Hà Nội,Middle,3.0,23.5,30.08006159531054,6.580061595310539
+v2-00537,SOC Analyst,Bảo mật,Hà Nội,Middle,4.0,32.5,30.14868601819511,2.351313981804889
+v2-00554,Full-stack Engineer,Fullstack Developer,Remote,Middle,3.0,26.0,29.09043819169712,3.090438191697121
+v2-00557,Full-stack Developer,Fullstack Developer,Hà Nội,Junior,2.0,24.0,24.896287798531073,0.8962877985310733
+v2-00558,Vue.js Developer,Frontend Developer,Hà Nội,Junior,2.0,25.0,20.686082318574897,4.313917681425103
+v2-00562,QA Engineer,Kiểm thử (QA/QC),Hà Nội,Middle,3.0,27.0,21.993667538432728,5.006332461567272
+v2-00569,Java Spring Boot Developer,Backend Developer,Hà Nội,Middle,3.0,29.0,30.17847955236928,1.1784795523692786
+v2-00573,Principal Backend Engineer,Backend Developer,Hà Nội,Lead,7.0,42.5,59.46148543882163,16.961485438821633
+v2-00574,QA Tester,Kiểm thử (QA/QC),Remote,Fresher,0.0,11.5,13.046361961968586,1.5463619619685858
+v2-00582,Firmware Engineer,Embedded / IoT,Hà Nội,Fresher,0.0,16.0,13.317270384613614,2.6827296153863855
+v2-00586,QA Automation Engineer,Kiểm thử (QA/QC),Hà Nội,Middle,3.0,24.0,21.544176790365565,2.455823209634435
+v2-00588,Product Manager,Quản lý dự án / sản phẩm,Remote,Middle,4.0,31.0,34.10591682927143,3.105916829271429
+v2-00593,Test Engineer,Kiểm thử (QA/QC),Hà Nội,Junior,1.0,12.5,11.751847981729346,0.7481520182706536
+v2-00596,Principal Backend Engineer,Backend Developer,Hà Nội,Lead,5.0,45.0,39.78117470162388,5.218825298376117
+v2-00597,Frontend Engineer,Frontend Developer,Hà Nội,Junior,1.0,15.5,12.268325981983129,3.2316740180168715
+v2-00605,Product Owner,Quản lý dự án / sản phẩm,Hà Nội,Junior,2.0,27.0,26.85787219602279,0.14212780397721048
+v2-00611,Senior Vue.js Developer,Frontend Developer,Hà Nội,Senior,5.0,51.0,46.91265902793771,4.087340972062293
+v2-00612,Middle Full-stack Engineer,Fullstack Developer,Hà Nội,Middle,3.0,23.5,26.954532783561017,3.4545327835610173
+v2-00624,PHP Developer,Backend Developer,Hà Nội,Junior,1.0,13.0,13.247855128243069,0.247855128243069
+v2-00633,System Analyst,Business Analyst,Hà Nội,Middle,3.0,34.5,24.024244347147246,10.475755652852754
+v2-00634,Firmware Engineer,Embedded / IoT,Hà Nội,Junior,2.0,29.0,20.890072035464826,8.109927964535174
+v2-00642,Automation Tester,Kiểm thử (QA/QC),Hà Nội,Junior,2.0,29.5,19.350502205121312,10.149497794878688
+v2-00648,Vue.js Developer,Frontend Developer,Remote,Junior,2.0,28.0,27.138527494878886,0.8614725051211138
+v2-00649,Middle Full-stack Engineer,Fullstack Developer,Remote,Middle,4.0,29.0,28.510544144459644,0.4894558555403563
+v2-00650,QA Automation Engineer,Kiểm thử (QA/QC),Hà Nội,Middle,4.0,29.5,29.740313093311137,0.24031309331113704
+v2-00665,Java Spring Boot Developer,Backend Developer,Hà Nội,Middle,4.0,31.0,26.32499837370292,4.675001626297082
+v2-00673,Vue.js Developer,Frontend Developer,Hà Nội,Middle,3.0,27.0,23.65019670044043,3.3498032995595715
+v2-00676,Java Spring Boot Developer,Backend Developer,Hà Nội,Middle,3.0,28.0,34.62942734903684,6.629427349036838
+v2-00677,Middle Frontend Developer,Frontend Developer,Hà Nội,Middle,2.0,31.0,29.099902909211927,1.9000970907880728
+v2-00679,QA Engineer,Kiểm thử (QA/QC),Hà Nội,Middle,3.0,25.5,24.361618620499204,1.138381379500796
+v2-00694,Senior Android Engineer,Mobile Developer,Hà Nội,Senior,5.0,52.5,62.60186328805505,10.10186328805505
+v2-00703,Node.js Engineer,Backend Developer,Hà Nội,Middle,3.0,34.5,31.93214004019852,2.5678599598014813
+v2-00714,Cloud Engineer,DevOps / Cloud,Hà Nội,Junior,1.0,19.5,19.019621558471076,0.4803784415289236
+v2-00722,Staff Software Engineer,Software Engineer (chung),Remote,Senior,7.0,59.0,43.3100132028115,15.689986797188503
+v2-00728,Middle Full-stack Engineer,Fullstack Developer,Hà Nội,Middle,2.0,28.5,24.254367113675407,4.245632886324593
+v2-00736,QA Engineer,Kiểm thử (QA/QC),Hà Nội,Fresher,0.0,13.5,11.035753025575946,2.4642469744240536
+v2-00746,Frontend Developer,Frontend Developer,Hà Nội,Junior,2.0,16.5,29.64602430724479,13.14602430724479
+v2-00753,Senior Full-stack Engineer,Fullstack Developer,Remote,Senior,6.0,46.0,53.79530486798323,7.7953048679832335
+v2-00764,Senior Web Developer,Software Engineer (chung),Hà Nội,Senior,6.0,51.0,47.36440672009483,3.635593279905173
+v2-00776,Senior .NET Developer,Backend Developer,Hà Nội,Senior,3.0,31.0,25.99223543265731,5.00776456734269
+v2-00784,Senior .NET Developer,Backend Developer,Hà Nội,Senior,2.0,33.5,18.893986505850556,14.606013494149444
+v2-00786,QA Engineer,Kiểm thử (QA/QC),Hà Nội,Middle,3.0,26.5,24.31911854261843,2.1808814573815702
+v2-00788,iOS Developer,Mobile Developer,Hà Nội,Junior,1.0,16.5,14.143657878399965,2.3563421216000346
+v2-00790,Senior Cloud Engineer,DevOps / Cloud,Hà Nội,Senior,5.0,56.5,46.8066329159251,9.6933670840749
+v2-00792,Manual Tester,Kiểm thử (QA/QC),Hà Nội,Junior,1.0,13.0,13.288458022725733,0.28845802272573273
+v2-00800,Full-stack Lead,Fullstack Developer,Hà Nội,Lead,7.0,76.5,87.52532200256793,11.025322002567933
+v2-00804,SRE Engineer,DevOps / Cloud,Hà Nội,Middle,3.0,39.0,37.096548570285705,1.9034514297142948
+v2-00808,LLM Engineer,AI / ML Engineer,Hà Nội,Junior,2.0,41.5,30.75932813183096,10.740671868169041
+v2-00813,QA Engineer,Kiểm thử (QA/QC),Hà Nội,Junior,2.0,30.5,17.710983114008926,12.789016885991074
+v2-00816,React Native Developer,Mobile Developer,Hà Nội,Middle,4.0,35.0,31.01964602491352,3.98035397508648
+v2-00820,Business Analyst,Business Analyst,Hà Nội,Junior,2.0,15.5,22.102788694578706,6.602788694578706
+v2-00821,Performance Tester,Kiểm thử (QA/QC),Hà Nội,Middle,3.0,33.0,28.500241702208957,4.499758297791043
+v2-00827,Software Tester,Kiểm thử (QA/QC),Remote,Junior,1.0,15.5,14.635584737125756,0.8644152628742443
+v2-00828,LLM Engineer Junior,AI / ML Engineer,Hà Nội,Junior,0.0,19.0,20.252371873913166,1.252371873913166
+v2-00829,Vue.js Developer,Frontend Developer,Hà Nội,Junior,2.0,36.5,30.188401462204798,6.311598537795202
+v2-00830,QA Automation Engineer,Kiểm thử (QA/QC),Hà Nội,Middle,3.0,25.0,25.98772216074283,0.9877221607428304
+v2-00833,MEAN Stack Developer,Fullstack Developer,Hà Nội,Junior,2.0,38.5,33.3544080677713,5.145591932228697
+v2-00839,LLM Engineer,AI / ML Engineer,Hà Nội,Middle,3.0,42.0,45.065350392684195,3.065350392684195
+v2-00844,Full-stack Architect,Tech Lead / Architect,Hà Nội,Lead,8.0,85.0,50.363557632889915,34.636442367110085
+v2-00845,DevOps Engineer,DevOps / Cloud,Hà Nội,Junior,2.0,35.5,32.362524777214055,3.1374752227859446
+v2-00848,Senior Backend Engineer,Backend Developer,Hà Nội,Senior,7.0,60.5,39.60644733926188,20.893552660738123
+v2-00857,Senior Vue.js Developer,Frontend Developer,Hà Nội,Senior,5.0,51.5,57.16987586208974,5.669875862089739
+v2-00858,Security Analyst,Bảo mật,Hà Nội,Junior,1.0,20.5,14.141576084731877,6.358423915268123
+v2-00866,Android Developer,Mobile Developer,Hà Nội,Middle,4.0,34.5,23.335372953033698,11.164627046966302
+v2-00872,AI Engineer,AI / ML Engineer,Hà Nội,Middle,3.0,51.0,39.848438943251125,11.151561056748875
+v2-00877,Frontend Engineer,Frontend Developer,Hà Nội,Junior,1.0,19.5,22.055748529973364,2.555748529973364
+v2-00887,Senior Full-stack Developer,Fullstack Developer,Hà Nội,Senior,6.0,66.0,60.35392630627768,5.646073693722322
+v2-00888,PHP Developer,Backend Developer,Hà Nội,Junior,1.0,15.5,12.324076405320056,3.1759235946799436
+v2-00891,Cloud Engineer,DevOps / Cloud,Hà Nội,Middle,3.0,48.0,33.20746364213778,14.792536357862218
+v2-00893,Golang Developer,Backend Developer,Hà Nội,Junior,2.0,40.0,27.102423315876376,12.897576684123624
+v2-00899,Full-stack Engineer,Fullstack Developer,Hà Nội,Middle,3.0,37.5,36.075032566699754,1.424967433300246
+v2-00900,Security Architect,Tech Lead / Architect,Hà Nội,Lead,5.0,82.5,34.81553632401506,47.68446367598494
+v2-00919,Penetration Tester,Bảo mật,Hà Nội,Middle,3.0,39.5,26.040368080759645,13.459631919240355
+v2-00921,Senior Data Engineer,Data Engineer,Hà Nội,Senior,6.0,76.5,50.42039919510193,26.07960080489807
+v2-00924,Full-stack Engineer,Fullstack Developer,Hà Nội,Middle,3.0,42.0,31.207905518571884,10.792094481428116
+v2-00927,Test Engineer,Kiểm thử (QA/QC),Hà Nội,Junior,2.0,12.0,18.044918488343892,6.0449184883438924
+v2-00947,Golang Developer,Backend Developer,Hà Nội,Middle,3.0,43.0,24.99520267918991,18.00479732081009
+v2-00964,Qc Engineer Software Tester,Kiểm thử (QA/QC),Hà Nội,Middle,3.0,12.0,27.873584298481877,15.873584298481877
+v2-00976,Quản Lý Dự Án (Project Manager Pm),Quản lý dự án / sản phẩm,Hà Nội,Middle,3.0,28.0,39.28376164543852,11.283761645438517
+v2-00984,Senior System Engineer (Focus Openstack)_TA165_HN,Quản trị hệ thống / Mạng,Tỉnh/thành khác,Senior,0.0,19.5,26.519984575915284,7.019984575915284
+v2-00986,App Developer,Software Engineer (chung),Hà Nội,Junior,1.0,15.0,15.18450881485111,0.18450881485111026
+v2-01014,TRƯỞNG NHÓM LẬP TRÌNH ỨNG DỤNG (ERP) - UP TO 65M,Tech Lead / Architect,Hà Nội,Lead,5.0,60.0,44.7789175799306,15.2210824200694
+v2-01015,Fullstack Developer Thu Nhap 10 15 Trieu Thang,Fullstack Developer,Hà Nội,Junior,1.0,12.5,17.7776192214755,5.277619221475501
+v2-01018,Network Engineer (Kỹ Sư Hỗ Trợ Mạng và Hệ Thống),Quản trị hệ thống / Mạng,TP. Hồ Chí Minh,Junior,1.0,19.5,21.67135833873105,2.17135833873105
+v2-01020,Kỹ Sư Hệ Thống (System Engineer),Quản trị hệ thống / Mạng,Tỉnh/thành khác,Junior,,17.5,21.54857744670747,4.048577446707469
+v2-01022,Trưởng Nhóm Quản Trị Hệ Thống,Tech Lead / Architect,Hà Nội,Lead,3.0,20.0,34.193325949742146,14.193325949742146
+v2-01026,QC Lead (Customer Quality Control) (Ngành Gỗ),Kiểm thử (QA/QC),Tỉnh/thành khác,Lead,3.0,32.5,31.395570875129682,1.1044291248703182
+v2-01037,Project Manager,Quản lý dự án / sản phẩm,Hà Nội,Middle,3.0,40.0,39.28376164543852,0.716238354561483
+v2-01041,"Technology & AI Innovation Manager (Lương Cứng Up to 100M/tháng, Thử Việc 100% Lương, Làm Việc T2-T6)",AI / ML Engineer,Hà Nội,Manager,6.0,85.0,57.03610511283982,27.96389488716018
+v2-01049,Chuyên Viên Phân Tích Nghiệp Vụ (Business Analyst – BA),Business Analyst,Hà Nội,Junior,2.0,25.0,28.2304257016951,3.2304257016951006
+v2-01051,Power Apps Developer (Salary 40M++) 5 Working Days/ Week,Software Engineer (chung),Hà Nội,Middle,3.0,47.5,26.427022543570338,21.072977456429662
+v2-01053,Android Developer Thu Nhap Upto 20 Trieu Lam Viec Tai Tu Liem Ha Noi Nghi Thu 7 Chu Nhat,Mobile Developer,Hà Nội,Junior,1.0,15.0,16.82669614652559,1.8266961465255918
+v2-01054,Data Engineer - MSB - KCN - 3I139,Data Engineer,Hà Nội,Middle,3.0,34.58,34.51866691217468,0.06133308782531799
+v2-01055,Chuyen Vien Thiet Ke Bao Bi Hop Qua Di Lam Ngay Luong Tu 15 22 Trieu,Data Analyst / BI,TP. Hồ Chí Minh,Middle,3.0,18.5,29.856537118994684,11.356537118994684
+v2-01060,Tester Junior Mid Yeu Cau Tieng Nhat,Kiểm thử (QA/QC),Hà Nội,Junior,1.0,13.0,16.292830783096097,3.292830783096097
+v2-01063,Tech Architect Tech Lead,Tech Lead / Architect,TP. Hồ Chí Minh,Lead,3.0,40.0,36.32137391246189,3.678626087538113
+v2-01067,Mobile Developer Kotlin Thu Nhap Upto 20 Trieu Lam Viec Tai Tu Liem Ha Noi Nghi Thu 7 Chu Nhat,Mobile Developer,Hà Nội,Junior,1.0,15.0,17.747375463135512,2.747375463135512
+v2-01071,Senior System Engineer (Focus Openstack) Id6792,Quản trị hệ thống / Mạng,Hà Nội,Senior,0.0,19.5,25.15668353060094,5.65668353060094
+v2-01110,Business Analyst,Business Analyst,Hà Nội,Middle,4.0,32.5,29.183024240948097,3.3169757590519033
+v2-01122,TECH LEAD / CO-OWNER (MMO Application & Software As A Service),Tech Lead / Architect,Hà Nội,Lead,3.0,22.5,29.41936781704341,6.919367817043408
+v2-01124,Software Tester (Manual & Automation) | Từ 2 Năm Kinh Nghiệm | Chấp Nhận Onboard Sau Tết,Kiểm thử (QA/QC),Hà Nội,Junior,2.0,18.333,20.84646999005841,2.513469990058411
+v2-01126,Technical Leader (.NET),Backend Developer,Hà Nội,Lead,5.0,41.667,48.04519121865921,6.378191218659211
+v2-01128,Tin mới Chuyên Viên Phân Tích Nghiệp Vụ Business Analyst- Hà Nội,Business Analyst,Hà Nội,Junior,2.0,20.833,25.352382608893418,4.5193826088934195
+v2-01129,Tin mới Backend Developer (Golang),Backend Developer,Hà Nội,Junior,2.0,25.0,24.972637760859428,0.027362239140572342
+v2-01132,Business Analyst,Business Analyst,Hà Nội,Junior,2.0,25.0,25.352382608893418,0.3523826088934179
+v2-01135,Junior QA Tester,Kiểm thử (QA/QC),Hà Nội,Junior,1.0,20.0,15.103599654348603,4.896400345651397
+v2-01141,Business Analyst - Từ 2 Năm Kinh Nghiệm,Business Analyst,Hà Nội,Junior,2.0,25.0,25.352382608893418,0.3523826088934179
+v2-01149,Business Analyst,Business Analyst,TP. Hồ Chí Minh,Middle,3.0,30.0,27.463758121241746,2.536241878758254
+v2-01150,Lập Trình Viên AI,AI / ML Engineer,Hà Nội,Middle,4.0,35.0,32.01816754712358,2.981832452876418
+v2-01155,Senior .NET (Định Hướng Techlead),Backend Developer,Hà Nội,Senior,5.0,41.667,38.54350708553651,3.1234929144634904
+v2-01159,Senior Mobile Developer (Flutter/IOS/Android/Dart),Mobile Developer,TP. Hồ Chí Minh,Senior,3.0,35.0,29.890897401964732,5.109102598035268
+v2-01166,Frontend Developer - Đi Làm Ngay Hoặc Ra Tết Đi Làm,Frontend Developer,Hà Nội,Junior,2.0,27.5,22.7403855111125,4.7596144888875
+v2-01167,Java Developer - Đi Làm Ngay Hoặc Ra Tết Đi Làm,Backend Developer,Hà Nội,Junior,2.0,27.5,23.605279382817756,3.8947206171822444
+v2-01168,Business Analyst - Đi Làm Ngay Hoặc Ra Tết Đi Làm,Business Analyst,Hà Nội,Junior,2.0,25.0,25.352382608893418,0.3523826088934179
+v2-01177,Senior Java Developer,Backend Developer,Hà Nội,Senior,4.0,35.0,31.662547279077714,3.337452720922286
+v2-01186,Nhân Viên IT Xử Lý Phần Mềm,IT Support / Helpdesk,TP. Hồ Chí Minh,Junior,1.0,15.0,11.502669633180833,3.497330366819167
+v2-01197,"Lập Trình Viên Java (Product Domain Bank, Fintech)",Backend Developer,Hà Nội,Middle,3.0,25.0,27.613140161350245,2.6131401613502447
+v2-01201,Chuyên Viên Business Analyst,Business Analyst,Hà Nội,Junior,2.0,12.5,25.352382608893418,12.852382608893418
+v2-01205,Unity Developer (Casual/Puzzle) - Junior/Middle,Game Developer,Hà Nội,Junior,1.0,25.0,18.991556667449014,6.008443332550986
+v2-01206,Playable Ads Developer (Unity),Game Developer,Hà Nội,Fresher,0.5,11.0,11.635196526658888,0.6351965266588877
+v2-01217,Lập Trình IOS,Mobile Developer,Hà Nội,Middle,3.0,32.5,28.752714668093798,3.747285331906202
+v2-01220,Leader QA Có Kinh Nghiệm Test,Kiểm thử (QA/QC),Hà Nội,Lead,4.0,16.0,33.369617241921084,17.369617241921084
+v2-01227,Chuyên Viên IT Biết Chạy ADS,IT Support / Helpdesk,TP. Hồ Chí Minh,Junior,1.0,12.5,11.502669633180833,0.9973303668191669
+v2-01229,Lập Trình Mobile App,Mobile Developer,Hà Nội,Middle,3.0,25.0,28.752714668093798,3.752714668093798
+v2-01259,Chuyên Viên Tư Vấn Nghiệp Vụ Sản Phẩm (BA),Business Analyst,Hà Nội,Junior,2.0,25.0,25.352382608893418,0.3523826088934179
+v2-01263,Thiết Kế UI/UX (Mảng App Mobile),UI/UX Designer,Hà Nội,Junior,1.0,11.5,18.991556667449014,7.491556667449014
+v2-01264,Lập Trình Viên Dev,Software Engineer (chung),Hà Nội,Junior,1.0,33.333,16.37025218923991,16.96274781076009
+v2-01275,Chuyên Viên Hỗ Trợ Người Dùng IT Helpdesk,IT Support / Helpdesk,Tỉnh/thành khác,Junior,2.0,9.0,16.790845490611655,7.790845490611655
+v2-01278,Junior Developer (Nền Tảng Vận Hành Web),Software Engineer (chung),Hà Nội,Junior,1.0,16.0,16.37025218923991,0.37025218923990977
+v2-01279,IT Comtor/Sub-PM,BrSE / Cầu nối,Hà Nội,Junior,1.0,23.333,18.991556667449014,4.341443332550984
+v2-01281,Nhân Viên Kiểm Thử Phần Mềm - Software QA,Kiểm thử (QA/QC),Tỉnh/thành khác,Junior,1.0,8.5,12.796857577036695,4.296857577036695
+v2-01292,Playable Ads Developer,Software Engineer (chung),Hà Nội,Junior,1.0,15.0,16.37025218923991,1.3702521892399098
+v2-01297,Graphic Designer Thiết Kế Logo Cho App Mobile,Mobile Developer,Hà Nội,Fresher,0.5,15.0,10.923947515244546,4.076052484755454
+v2-01312,Trưởng Bộ Phận Quản Trị Hệ Thống (MCN),Quản trị hệ thống / Mạng,Hà Nội,Middle,3.0,35.0,25.882917614417845,9.117082385582155
+v2-01330,Embedded Linux Engineer,Embedded / IoT,Hà Nội,Junior,2.0,21.0,24.504449463686974,3.5044494636869743
+v2-01331,LTV Backend (PTPM),Backend Developer,Hà Nội,Fresher,0.5,15.5,9.320636824742696,6.179363175257304
+v2-01347,"Trợ Lý Ứng Dụng AI (Domain ERP, EdTech)- Senior BA",AI / ML Engineer,Hà Nội,Senior,1.0,20.0,18.659144605571736,1.3408553944282637
+v2-01348,"AI Developer - Xây Hệ Thống ERP, Misa, CRM",AI / ML Engineer,Hà Nội,Junior,1.0,17.0,16.089590109276084,0.9104098907239155
+v2-01349,Trợ Lý Công Nghệ Thông Tin (BA),Business Analyst,Hà Nội,Junior,,21.5,15.60273797216565,5.8972620278343495
+v2-01360,Kỹ Sư IT Vận Hành Hệ Thống,Quản trị hệ thống / Mạng,Hà Nội,Junior,1.0,29.0,14.355018437302615,14.644981562697385
+v2-01362,Nhân Viên Quản Trị Hệ Thống,Quản trị hệ thống / Mạng,Tỉnh/thành khác,Junior,1.0,10.0,14.47548661348873,4.47548661348873
+v2-01367,Nhân Viên Lập Trình Ruby On Rails,Backend Developer,Hà Nội,Junior,2.0,20.0,22.312928558137113,2.312928558137113
+v2-01372,IT Comtor,BrSE / Cầu nối,TP. Hồ Chí Minh,Junior,1.0,17.5,16.902161096776915,0.5978389032230851
+v2-01380,Kỹ Sư Lập Trình PLC,Software Engineer (chung),Hà Nội,Junior,1.0,15.0,16.49368093699202,1.4936809369920212
+v2-01383,User Acquisition (Mobile App),Mobile Developer,Hà Nội,Junior,1.0,15.0,16.450687301957483,1.4506873019574833
+v2-01399,IT Comtor,BrSE / Cầu nối,Đà Nẵng,Fresher,0.5,22.5,12.216967547761591,10.283032452238409
+v2-01411,Project Manager,Quản lý dự án / sản phẩm,Hà Nội,Middle,3.0,67.5,32.950827861728456,34.549172138271544
+v2-01438,Fullstack Developer (Thành Thạo NodeJS & ReactJS),Fullstack Developer,Hà Nội,Junior,2.0,25.0,26.798786922249015,1.7987869222490147
+v2-01442,Android Fresher Mobile App (Kotlin),Mobile Developer,Hà Nội,Fresher,0.5,9.5,11.413271089555861,1.9132710895558613
+v2-01444,Flutter Developer,Mobile Developer,Hà Nội,Junior,1.0,15.0,17.09527659830384,2.0952765983038404
+v2-01445,Backend Developer (Python),Backend Developer,Hà Nội,Middle,3.0,22.5,30.539749108062047,8.039749108062047
+v2-01446,IOS Developer (Swift) / Từ 6 Tháng Kinh Nghiệm Code Swift Hoặc Objective-C | Thu Nhập Tới 30 Triệu,Mobile Developer,Hà Nội,Fresher,0.5,20.0,11.382439295690896,8.617560704309104
+v2-01450,Trợ Giảng Lập Trình Intern- Fresher,Software Engineer (chung),Hà Nội,Intern,,5.5,5.7881515097220015,0.28815150972200154
+v2-01453,Software Engineer (Java),Backend Developer,Hà Nội,Middle,4.0,38.25,27.22956738932354,11.020432610676458
+v2-01454,Software Engineer (Fullstack Java/Reactjs),Fullstack Developer,Hà Nội,Middle,3.0,25.5,29.57406065679825,4.074060656798249
+v2-01455,IT Helpdesk,IT Support / Helpdesk,Hà Nội,Junior,1.0,12.5,11.91285808709842,0.5871419129015791
+v2-01460,Kỹ Sư Phần Mềm Ứng Dụng Desktop,Software Engineer (chung),Hà Nội,Junior,1.0,19.125,16.49368093699202,2.631319063007979
+v2-01490,IT Infrastructure Admin Coordinator,Quản trị hệ thống / Mạng,TP. Hồ Chí Minh,Junior,2.0,30.0,21.133940213283008,8.866059786716992
+v2-01491,"Middle/Senior Frontend Engineer(ReactJS,Fullstack)",Fullstack Developer,TP. Hồ Chí Minh,Senior,4.0,51.0,30.751206703410457,20.248793296589543
+v2-01493,Developer Intern,Software Engineer (chung),Hà Nội,Intern,,4.0,5.461877876277857,1.4618778762778568
+v2-01495,Chuyên Viên Kiểm Thử Phần Mềm (Tester),Kiểm thử (QA/QC),Hà Nội,Middle,3.0,22.5,24.0732159875532,1.5732159875532012
+v2-01496,Senior QC Engineer (Manual),Kiểm thử (QA/QC),TP. Hồ Chí Minh,Senior,3.0,27.5,21.67702075874723,5.822979241252771
+v2-01497,"Middle/Senior Backend Engineer (Java, Fullstack)",Fullstack Developer,TP. Hồ Chí Minh,Senior,4.0,51.0,30.665145314512593,20.334854685487407
+v2-01501,Frontend Developer (Angular),Frontend Developer,Hà Nội,Middle,3.0,25.0,28.38168451007305,3.3816845100730504
+v2-01502,Senior .NET (C#) Developer (Factory Management System) - Từ 3 Năm Kinh Nghiệm - Upto 1.500 - Đi Làm Ngay,Backend Developer,Hà Nội,Senior,3.0,31.875,25.801584352569126,6.073415647430874
+v2-01508,Trưởng Nhóm IT,Tech Lead / Architect,Tỉnh/thành khác,Lead,2.0,13.0,26.447958837085334,13.447958837085334
+v2-01512,Nhân Viên IT Helpdesk Kho SPX,IT Support / Helpdesk,Đà Nẵng,Junior,1.0,14.5,12.135048669407759,2.364951330592241
+v2-01514,Senior Flutter Developer,Mobile Developer,Hà Nội,Senior,3.0,25.0,32.25649757270846,7.2564975727084615
+v2-01515,Senior Fullstack Web Developer,Fullstack Developer,Hà Nội,Senior,3.0,25.0,32.62156923230492,7.621569232304921
+v2-01516,Chuyên Viên Cấp Cao Kiểm Thử Phần Mềm (Senior Tester),Kiểm thử (QA/QC),Hà Nội,Senior,2.0,20.833,19.088949199698085,1.7440508003019133
+v2-01522,Chuyên Viên IT - Từ 2 Năm Kinh Nghiệm,IT Support / Helpdesk,TP. Hồ Chí Minh,Junior,2.0,11.5,14.929915381778581,3.4299153817785815
+v2-01533,Project Manager - Dự Án Khối Chính Phủ,Quản lý dự án / sản phẩm,Hà Nội,Middle,3.0,47.5,32.950827861728456,14.549172138271544
+v2-01534,Chuyên Viên IT,IT Support / Helpdesk,TP. Hồ Chí Minh,Junior,1.0,17.5,11.502669633180833,5.997330366819167
+v2-01535,System Administrator (Call Center),Quản trị hệ thống / Mạng,Hà Nội,Fresher,0.5,19.0,10.126919061735622,8.873080938264378
+v2-01539,IT Helpdesk (Phần Cứng & Mạng Máy Tính),IT Support / Helpdesk,TP. Hồ Chí Minh,Fresher,0.5,10.5,8.883255771512676,1.616744228487324
+v2-01551,Kỹ Thuật Phần Mềm Cửa Hàng Điện Thoại,Software Engineer (chung),TP. Hồ Chí Minh,Junior,,11.0,14.295285273306138,3.2952852733061384
+v2-01564,Lập Trình Viên Front-End Junior (Angular),Frontend Developer,Hà Nội,Junior,1.0,13.5,16.157210952956348,2.6572109529563477
+v2-01577,Kỹ Sư Phát Triển Web Full-Stack / Fullstack Developer (Mức Lương Upto 15 Triệu + Thưởng),Fullstack Developer,Hà Nội,Junior,1.0,11.5,17.76904604056726,6.269046040567261
+v2-01578,Frontend Team Lead (ReactJS/NextJS/React Native),Tech Lead / Architect,Hà Nội,Lead,6.0,76.5,48.36717150819025,28.132828491809747
+v2-01579,Nhân Viên IT - Ưu Tiên Đi Làm Ngay,IT Support / Helpdesk,Hà Nội,Junior,2.0,13.5,14.625410883802017,1.125410883802017
+v2-01590,Middle PHP,Backend Developer,Hà Nội,Middle,3.0,19.0,25.224443398886624,6.224443398886624
+v2-01604,Lập Trình Viên Mobile,Mobile Developer,Hà Nội,Middle,3.0,25.0,27.075627628856502,2.075627628856502
+v2-01609,Tester - Từ 2 Năm Kinh Nghiệm,Kiểm thử (QA/QC),Hà Nội,Junior,2.0,22.5,19.373231002630895,3.126768997369105
+v2-01610,IT Helpdesk - Quản Trị Và Hỗ Trợ Hệ Thống CNTT,IT Support / Helpdesk,Hà Nội,Junior,1.0,12.5,11.91285808709842,0.5871419129015791
+v2-01623,Junior Mobile Flutter Developer - Lĩnh Vực Edtech,Mobile Developer,Hà Nội,Junior,0.5,12.5,13.671659544264111,1.1716595442641111
+v2-01624,Product Owner Mobile APP,Quản lý dự án / sản phẩm,Hà Nội,Junior,1.0,20.0,19.317757767882966,0.6822422321170336
+v2-01648,SAP Consultant - Chuyên Viên Tư Vấn Hệ Thống ERP,ERP / SAP Consultant,Hà Nội,Junior,1.0,15.5,17.285001216872995,1.7850012168729954
+v2-01657,Project Manager,Quản lý dự án / sản phẩm,Hà Nội,Junior,2.0,47.5,27.108832009101576,20.391167990898424
+v2-01660,Phó Phòng Công Nghệ Thông Tin - Fullstack Developer - Thu Nhập Upto 40 Triệu,Fullstack Developer,Hà Nội,Senior,5.0,37.5,42.82029345203774,5.320293452037738
+v2-01661,Nhân Viên IT Phần Cứng,IT Support / Helpdesk,Tỉnh/thành khác,Junior,2.0,13.5,16.790845490611655,3.2908454906116553
+v2-01685,Senior Project Manager,Quản lý dự án / sản phẩm,Hà Nội,Senior,4.0,37.5,35.002869101495875,2.4971308985041247
+v2-01698,Junior Android Developer,Mobile Developer,TP. Hồ Chí Minh,Junior,2.0,23.1,23.851434172890187,0.7514341728901854
+v2-01700,Midle PHP Developer,Backend Developer,TP. Hồ Chí Minh,Middle,2.0,22.0,21.140791686098776,0.8592083139012239
+v2-01705,Senior PHP Software Engineer,Backend Developer,TP. Hồ Chí Minh,Senior,4.0,53.438,35.312231221025115,18.125768778974887
+v2-01714,Chuyên viên tư vấn Website - phần mềm tại Hà Nội ( Không yêu cầu kinh nghiệm ),Software Engineer (chung),Hà Nội,Junior,,15.0,13.043839391764013,1.9561606082359866
+v2-01715,HCM - Assistant IT Manager,Quản lý IT / CTO,TP. Hồ Chí Minh,Manager,8.0,28.5,48.02590466729093,19.52590466729093
+v2-01722,Lập trình viên Java - Java Developer (Senior/Leader),Backend Developer,Hà Nội,Lead,4.0,37.5,33.418214713182316,4.081785286817684
+v2-01724,TRƯỞNG PHÒNG CÔNG NGHỆ THÔNG TIN,Quản lý IT / CTO,Hà Nội,Manager,2.0,40.0,24.141674898614056,15.858325101385944

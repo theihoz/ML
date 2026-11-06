@@ -3,7 +3,7 @@ PORT ?= 8502
 export PYTHONPATH := src
 export MPLCONFIGDIR := $(CURDIR)/.cache/matplotlib
 
-.PHONY: check lint test run sources preview figures
+.PHONY: check lint test run figures
 check: lint test
 
 lint:
@@ -18,9 +18,3 @@ run:
 
 figures:
 	$(PYTHON) ../report/scripts/render_figures.py
-
-sources:
-	$(PYTHON) -m career_market sources
-
-preview:
-	$(PYTHON) -m career_market preview jobs-2023 --limit 5

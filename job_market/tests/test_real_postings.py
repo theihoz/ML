@@ -4,14 +4,9 @@ import json
 
 import pytest
 
-from career_market.salary_dataset import (
-    company_type,
-    dataset_path,
-    is_synthetic,
-    load_dataset,
-    normalize_work_mode,
-    parse_salary,
-)
+from career_market.data.dataset import load_dataset
+from career_market.data.rules import company_type, is_synthetic, normalize_work_mode, parse_salary
+from career_market.paths import dataset_path
 
 
 def test_synthetic_history_rows_are_recognised_by_their_url():

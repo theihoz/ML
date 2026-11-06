@@ -26,7 +26,7 @@ warnings.filterwarnings("ignore")
 import numpy as np
 import pandas as pd
 import matplotlib.pyplot as plt
-from career_market import salary_charts as charts  # thư viện biểu đồ chọn backend "Agg" (vẽ cho web)…
+from career_market.ui import charts  # thư viện biểu đồ chọn backend "Agg" (vẽ cho web)…
 %matplotlib inline
 # …nên bật lại chế độ inline để biểu đồ hiện trong notebook.
 pd.set_option("display.max_colwidth", 80)
@@ -71,7 +71,7 @@ Chi tiết đầy đủ về từng nhãn (vai trò, cấp bậc, kỹ năng) v�
     code("""
 import re
 import unicodedata
-from career_market.salary_dataset import data_root
+from career_market.paths import data_root
 
 RAW = data_root() / "raw"
 topcv = pd.read_csv(RAW / "topcv_jobs.csv")
@@ -102,7 +102,7 @@ pd.DataFrame({"Vấn đề": problems.keys(), "Số dòng": [int(m.sum()) for m 
 **Dấu hiệu đầu tiên:** ngày đăng ở ba nền tảng TopCV, VietnamWorks, CareerViet rải đều 2018–2025 – thị trường thật không bao giờ đều như vậy. Ban đầu nhóm chỉ coi đây là cột hỏng. Điều tra tiếp cho thấy cả nhóm tin đó có chung các dấu hiệu dưới đây.
 """),
     code("""
-from career_market.salary_dataset import is_synthetic
+from career_market.data.rules import is_synthetic
 
 synthetic = posts["source_url"].map(is_synthetic)
 print("Số tin có đường dẫn dạng …-hist…:", int(synthetic.sum()))
@@ -138,7 +138,8 @@ ax.set(xlabel="", ylabel="Số tin");
 """),
     code("""
 import json
-from career_market.salary_dataset import dataset_path, parse_salary
+from career_market.data.rules import parse_salary
+from career_market.paths import dataset_path
 
 summary = json.loads(dataset_path().with_suffix(".json").read_text(encoding="utf-8"))
 ratios = summary["one_sided_ratio"]
@@ -157,7 +158,7 @@ pd.DataFrame(rows)
 **Vì sao chia theo công ty?** Một công ty đăng hàng chục tin gần giống nhau. Chia ngẫu nhiên thì mô hình chỉ cần "nhớ" công ty là đoán đúng – như ôn đúng đề sẽ thi. Câu hỏi thật của người dùng là về **công ty mới**, nên tập test phải gồm công ty mô hình chưa từng gặp. Hàm băm SHA-256 trên tên công ty (seed 42) giúp kết quả chia luôn tái lập được.
 """),
     code("""
-from career_market.salary_dataset import load_dataset
+from career_market.data.dataset import load_dataset
 
 funnel = summary["funnel"]
 steps = pd.DataFrame({
@@ -203,8 +204,8 @@ Mã nguồn: `pages/overview.py`, `src/career_market/salary_charts.py`.
 """),
     code(SETUP),
     code("""
-from career_market.salary_dataset import load_dataset
-from career_market.salary_model import load_report
+from career_market.data.dataset import load_dataset
+from career_market.model.training import load_report
 
 frame = load_dataset()
 report = load_report()
@@ -296,73 +297,75 @@ notebook("tinh_nang_3_thi_truong_viec_lam.ipynb", [
     md("""
 # Tính năng 3 – Trang **Thị trường việc làm**
 
-Trang có ba chế độ: **Nhu cầu tuyển dụng** (lọc theo nguồn, nhóm nghề, địa điểm, hình thức), **Mức lương** và **Kinh nghiệm**.
+Trang lọc tin tuyển dụng có công bố lương theo **nguồn**, **vai trò** và **khu vực**, rồi cho thấy kỹ năng nào được yêu cầu nhiều nhất và kỹ năng nào đi kèm mức lương cao. Trang chỉ mô tả dữ liệu, không dùng mô hình.
 
-Khác với trang Tổng quan (1.735 tin salary-v2), trang này chạy trên **quy trình kiểm duyệt nghiêm ngặt ban đầu** của dự án (ADR 0005, 0007): chỉ những tin vượt qua cổng kiểm tra bằng chứng mới được dùng, và một nhãn lương chỉ được tính khi đã được duyệt tay. Vì vậy số tin ở đây nhỏ hơn nhiều – đây là cố ý, để thấy rõ khác biệt giữa "ít nhưng chắc chắn" và "nhiều nhưng có giả định".
+Dữ liệu là bộ salary-v2 (1.735 tin thật) giống trang Tổng quan; bộ lọc biến bức tranh chung thành câu trả lời riêng cho từng nghề, từng nơi.
 
-Mã nguồn: `pages/market.py`, `src/career_market/service.py`, `src/career_market/dashboard.py`.
+Mã nguồn: `pages/market.py`, `src/career_market/ui/cache.py` (`filter_postings`), `src/career_market/ui/charts.py`.
 """),
     code(SETUP),
     code("""
-from career_market.service import MarketService
+from career_market.data.dataset import load_dataset
 
-service = MarketService()
-report = service.prepare()
-pd.Series(report["summary"], name="Số dòng").to_frame()
+frame = load_dataset()
+
+
+def filter_postings(sources=(), roles=(), regions=()):
+    \"\"\"Giống trang web: danh sách rỗng nghĩa là không lọc.\"\"\"
+    mask = pd.Series(True, index=frame.index)
+    if sources:
+        mask &= frame["source"].isin(sources)
+    if roles:
+        mask &= frame["role"].isin(roles)
+    if regions:
+        mask &= frame["region"].isin(regions)
+    return frame[mask]
+
+
+print(f"{len(frame):,} tin · {frame['source'].nunique()} nguồn · {frame['role'].nunique()} vai trò")
 """),
     md("""
-Phễu ở trên: trong 3.606 dòng thô của hai nguồn (TopCV 2025–2026 và CareerBuilder 2023), phần lớn bị loại vì **ngoài phạm vi** (không phải nghề CNTT hoặc không đủ bằng chứng), một phần bị đưa sang **duyệt vai trò**; chỉ 320 tin vào phân tích (EDA) và chỉ vài tin có nhãn lương được duyệt.
-
-**Vì sao giữ quy trình nghiêm ngặt này cho trang Thị trường?** Đây là phiên bản "đoán ít nhưng đúng" – mỗi con số đều truy được về tin gốc. Bài học của dự án là cách này quá ít để dạy mô hình (14 nhãn), nhưng vẫn hữu ích để mô tả nhu cầu kỹ năng.
-
-## 1. Nhu cầu kỹ năng theo bộ lọc
-Quy ước: bộ lọc rỗng = không lọc; một tin chỉ tính một lần; tỉ lệ % tính trên số tin của phần đã lọc.
+## 1. Kỹ năng theo bộ lọc
+Quy ước: bộ lọc rỗng = không lọc; một tin chỉ tính một lần.
 """),
     code("""
-def demand(role=None, locations=(), work_mode=None, sources=("jobs-2026",)):
-    result = service.skill_demand(report["eda"], role=role, locations=list(locations), work_mode=work_mode, source_ids=list(sources))
-    return result, pd.DataFrame(result["table"])
-
 cases = {
-    "Toàn bộ (TopCV 2025–2026)": dict(),
-    "Backend": dict(role="Backend"),
-    "Data/ML": dict(role="Data/ML"),
-    "Remote": dict(work_mode="Remote"),
-    "Cả hai nguồn": dict(sources=("jobs-2026", "jobs-2023")),
+    "Toàn bộ": dict(),
+    "Backend": dict(roles=["Backend Developer"]),
+    "Data Engineer": dict(roles=["Data Engineer"]),
+    "TP. Hồ Chí Minh": dict(regions=["TP. Hồ Chí Minh"]),
+    "Chỉ ITviec": dict(sources=["IT Jobs 2026 (itviec)"]),
 }
 rows = []
 for name, kwargs in cases.items():
-    result, table = demand(**kwargs)
-    rows.append({"Bộ lọc": name, "Số tin": result["posting_count"], "Tin có kỹ năng": result["with_skill_count"],
-                 "Top 3 kỹ năng": ", ".join(table["skill"].head(3)) if len(table) else "—"})
+    view = filter_postings(**kwargs)
+    table = charts.skill_table(view).sort_values("postings", ascending=False)
+    rows.append({
+        "Bộ lọc": name,
+        "Số tin": len(view),
+        "Tin có kỹ năng": int((view["skill_count"] > 0).sum()),
+        "Trung vị lương": view["salary"].median(),
+        "Top 3 kỹ năng": ", ".join(table["skill"].head(3)) if len(table) else "—",
+    })
 pd.DataFrame(rows)
 """),
     code("""
-from IPython.display import Image, display
-
-result, table = demand()
-print(result["scope"])
-display(Image(result["png"]))
-table.head(10)
+view = filter_postings(roles=["Backend Developer"])
+charts.top_skill_demand(view, limit=20)
+"""),
+    md("""
+## 2. Kỹ năng đi kèm lương cao
+Thanh xám là kỹ năng có dưới 10 tin trong phần đã lọc: ít dữ liệu, không nên kết luận.
+"""),
+    code("""
+charts.top_skill_salary(view, limit=20, min_postings=10)
 """),
     md("""
 ⚠️ Nguồn TopCV 2026 **chỉ có chức danh**, không có mô tả công việc, nên kỹ năng được đoán từ tiêu đề: "tin có kỹ năng" thấp không có nghĩa là tin không đòi kỹ năng.
 
-## 2. Mức lương và kinh nghiệm – hai nhóm tách riêng
-Trang tách **lương chào tuyển 2026** khỏi **thu nhập tháng 2023** (ADR 0007), để không trộn hai đại lượng khác nhau.
-"""),
-    code("""
-for cohort in ["salary", "income"]:
-    analysis = service.salary_analysis(cohort, ("roles", "regions", "skills", "experience"))
-    print(f"== {cohort}: {analysis['posting_count']} tin · đại lượng: {analysis['quantity']}")
-    display(pd.DataFrame(analysis["roles"]).rename(columns={"name": "Nhóm nghề", "posting_count": "Số tin", "mean_vnd_month": "Trung điểm TB (VND/tháng)"}))
-"""),
-    md("""
-Chỉ 14 tin lương và 2 tin thu nhập: **quá ít để kết luận**. Trang ghi rõ "Hai tin chưa đủ để kết luận xu hướng". Đây chính là lý do dự án mở rộng sang bộ salary-v2 (1.735 tin) cho mô hình và trang Tổng quan.
-
 ## Kết luận
-- Trang Thị trường minh họa phiên bản "ít nhưng chắc chắn": mọi con số truy được về tin gốc đã kiểm duyệt.
 - Bộ lọc biến bức tranh chung thành câu trả lời riêng cho từng nghề, từng nơi.
+- Kỹ năng phổ biến chưa chắc là kỹ năng trả cao.
 - Mức lương gắn với kỹ năng chỉ là tương quan, không chứng minh kỹ năng gây tăng lương.
 """),
 ])
@@ -378,8 +381,10 @@ Mã nguồn: `src/career_market/salary_model.py`, `pages/evaluation.py`.
 """),
     code(SETUP),
     code("""
-from career_market.salary_dataset import load_dataset
-from career_market.salary_model import MODEL_LABELS, artifacts_dir, build_model, feature_frame, load_report, load_skill_value, scores
+from career_market.data.dataset import load_dataset
+from career_market.model.estimators import MODEL_LABELS, build_model, feature_frame
+from career_market.model.training import load_report, load_skill_value, scores
+from career_market.paths import artifacts_dir
 
 frame = load_dataset()
 report = load_report()
@@ -428,7 +433,7 @@ backend.groupby(bins, observed=False)["salary"].agg(["size", "median"]).rename(c
 **Lựa chọn:** bỏ đặc trưng "số kỹ năng"; Gradient Boosting có ràng buộc đơn điệu tăng cho kinh nghiệm và 69 cột kỹ năng; Ridge chặn hệ số kỹ năng ≥ 0; Random Forest được bọc "bao đơn điệu". Kiểm tra trên mô hình đã lưu:
 """),
     code("""
-from career_market.salary_model import predict_profile
+from career_market.model.advisor import predict_profile
 
 base = {"role": "Backend Developer", "region": "Hà Nội", "experience_years": 5}
 pd.DataFrame([{"Mô hình": MODEL_LABELS[n],
@@ -508,9 +513,10 @@ Mã nguồn: `salary_validation.py`, `production_standard.py`, `prediction_suppo
 """),
     code(SETUP),
     code("""
-from career_market.salary_dataset import load_dataset
-from career_market.salary_model import MODEL_LABELS, feature_frame, load_model, load_production
-from career_market.salary_validation import interval_ratios, load_validation
+from career_market.data.dataset import load_dataset
+from career_market.model.estimators import MODEL_LABELS, feature_frame
+from career_market.model.training import load_model, load_production
+from career_market.model.validation import interval_ratios, load_validation
 
 frame = load_dataset()
 validation = load_validation()
@@ -621,7 +627,8 @@ Huấn luyện mỗi lần bấm → kết quả có thể khác nhau, chờ lâ
 """),
     code("""
 import time
-from career_market.salary_model import MODEL_LABELS, advise, predict_profile
+from career_market.model.advisor import advise, predict_profile
+from career_market.model.estimators import MODEL_LABELS
 
 backend = {"role": "Backend Developer", "region": "Hà Nội", "experience_years": 3, "skills": ["Java", "Spring Boot", "SQL"]}
 start = time.perf_counter(); result = advise(backend); first = time.perf_counter() - start
@@ -684,7 +691,7 @@ Một người tư vấn trung thực sẽ nói "với vị trí này tôi chỉ
 ## 6. Bảo đảm "thêm kỹ năng không bao giờ làm giảm lương"
 """),
     code("""
-from career_market.salary_dataset import SKILLS
+from career_market.data.rules import SKILLS
 
 profiles = [
     {"role": "Backend Developer", "region": "Hà Nội", "experience_years": 5, "skills": []},
@@ -709,7 +716,7 @@ Kiểm thử tự động chạy đúng phép thử này trên mô hình đã l�
 """),
     code("""
 from urllib.parse import urlencode
-from career_market.salary_dataset import REGIONS, ROLE_ORDER
+from career_market.data.rules import REGIONS, ROLE_ORDER
 
 def parse_query(q):
     shared = {"role": q.get("role") if q.get("role") in ROLE_ORDER else None,

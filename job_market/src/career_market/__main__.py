@@ -1,149 +1,129 @@
-"""Local raw preview CLI, sharing the dashboard's business interface."""
+"""Dòng lệnh: python -m career_market <lệnh>.
+
+build-dataset   Bước 2: tạo lại datasets/processed/salary_dataset_v2.csv
+train           Bước 3: huấn luyện thành phiên bản mới, chỉ phục vụ khi qua cổng
+versions        Liệt kê phiên bản model, đánh dấu bản đang phục vụ
+rollback        Quay lại phiên bản đã phục vụ trước đó
+validate        Bước 5: kiểm định mô hình đã lưu (gồm chuẩn production)
+reality-check   Đối chiếu mô hình đã lưu với báo cáo lương và hồ sơ vàng
+advise          Bước 4: dự đoán + gợi ý kỹ năng cho một hồ sơ
+import-batch    Nhập lô tin tuyển dụng từ CSV
+refresh         Nhập lô → dựng dữ liệu → huấn luyện → cổng thay model, một lệnh
+"""
 
 import argparse
 import json
 import sys
-from dataclasses import asdict
 from pathlib import Path
 
-from . import MarketError, MarketService
-from .company_cli import company_arguments, run_company_report
-from .model_promotion import retrain
-from .salary_batches import BatchError, import_batch
-from .salary_dataset import ROLE_ORDER, write_dataset
-from .salary_model import advise, artifacts_dir
-from .salary_model import train as train_v2
-from .salary_validation import validate
+from .data.batches import BatchError, import_batch
+from .data.dataset import write_dataset
+from .data.rules import REGIONS, ROLE_ORDER
+from .model.advisor import advise
+from .model.reality import reality_check
+from .model.training import train
+from .model.validation import validate
+from .model.versions import list_versions, retrain_version, rollback
+from .refresh import refresh
 
 
 def main() -> int:
-    parser = argparse.ArgumentParser(description="Xem nguồn tin tuyển dụng gốc đã duyệt.")
+    parser = argparse.ArgumentParser(description="Dự đoán lương CNTT và tư vấn kỹ năng.")
     commands = parser.add_subparsers(dest="command", required=True)
-    commands.add_parser("sources", help="Danh mục nguồn và xuất xứ")
-    commands.add_parser("training-readiness", help="Kiểm nhãn và policy đã khóa, không fit")
-    commands.add_parser("train", help="Fit ngoại tuyến hai model trên cohort đã duyệt")
-    commands.add_parser("training-report", help="Nạp lại artifact và kiểm dự đoán, không fit")
-    company_arguments(commands.add_parser("companies", help="Đối chiếu công ty và nhóm tin"))
-    split = commands.add_parser("split-preview", help="Xem trước ba tập theo nhóm công ty")
-    split.add_argument("--basis", choices=["unknown", "gross", "net"], required=True)
-    split.add_argument("--scope", required=True)
-    split.add_argument(
-        "--output", type=Path, help="Lưu báo cáo preview JSON, không phải manifest train"
+    build = commands.add_parser("build-dataset", help="Gộp nguồn thô và lô thành bộ salary-v2")
+    build.add_argument(
+        "--single-salary-rule",
+        choices=["ratio", "expand30", "point"],
+        default="ratio",
+        help="Cách suy đầu còn lại của tin chỉ ghi một con số lương (#118)",
     )
-    prepare = commands.add_parser("prepare", help="Chuẩn hóa và xuất snapshot EDA có manifest")
-    prepare.add_argument("--output", type=Path, required=True)
-    prepare.add_argument(
-        "--review-dir", type=Path, help="Ledger đã duyệt có manifest/hash đối chiếu"
+    commands.add_parser(
+        "train", help="Huấn luyện thành phiên bản mới; chỉ phục vụ khi qua cổng thay model"
     )
-    preview = commands.add_parser("preview", help="Kiểm tra và xem raw dạng JSON")
-    preview.add_argument("source_id")
-    preview.add_argument("--limit", type=int, default=5)
-    skills = commands.add_parser("skills", help="Trích ngôn ngữ có bằng chứng (T07)")
-    skills.add_argument("--title", required=True)
-    skills.add_argument("--description", default="")
-    skills.add_argument("--requirements", default="")
-    download = commands.add_parser("download", help="Tải revision cố định hoặc kiểm tra cache")
-    download.add_argument("source_id")
-    download.add_argument("--raw-dir", type=Path)
-    download.add_argument("--cache-dir", type=Path)
-    download.add_argument(
-        "--check-only", action="store_true", help="Chỉ kiểm tra, không tải hoặc ghi"
+    commands.add_parser("versions", help="Liệt kê phiên bản model và bản đang phục vụ")
+    commands.add_parser("rollback", help="Quay lại phiên bản đã phục vụ trước đó")
+    commands.add_parser("validate", help="Hiệu chuẩn, bootstrap và công bằng của mô hình đã lưu")
+    reality = commands.add_parser(
+        "reality-check", help="Đối chiếu mô hình đã lưu với báo cáo lương"
     )
-    predict = commands.add_parser("predict", help="Dự đoán lương theo nghề và thành phố")
-    predict.add_argument("--model", choices=["Ridge", "LinearRegression"])
-    for field in ("role", "location"):
-        predict.add_argument(f"--{field}", default="")
+    reality.add_argument("--golden-path", help="CSV hồ sơ vàng ẩn danh; mặc định dùng mẫu đóng gói")
+    advice = commands.add_parser("advise", help="Dự đoán lương và gợi ý kỹ năng cho hồ sơ")
+    advice.add_argument("--role", choices=ROLE_ORDER, required=True)
+    advice.add_argument("--region", choices=REGIONS, default="Hà Nội")
+    advice.add_argument("--years", type=float, default=0)
+    advice.add_argument("--skills", default="", help="Danh sách kỹ năng, phân tách bằng dấu phẩy")
     batch = commands.add_parser("import-batch", help="Nhập lô tin tuyển dụng từ CSV (#105)")
     batch.add_argument("csv", type=Path)
     batch.add_argument("--source", help="Tên nguồn của lô, ghi đè cột source trong file")
     batch.add_argument(
         "--batches-dir", type=Path, help="Thư mục lưu lô (mặc định datasets/batches)"
     )
-    commands.add_parser("build-dataset", help="Gộp ba nguồn thô thành bộ salary-v2 có split")
-    commands.add_parser(
-        "train-v2",
-        help="Huấn luyện lại vào thư mục ứng viên; chỉ thay model đang phục vụ khi qua cổng",
-    )
-    commands.add_parser("validate", help="Hiệu chuẩn, bootstrap và công bằng của mô hình đã lưu")
-    advice = commands.add_parser("advise", help="Dự đoán lương và gợi ý kỹ năng cho hồ sơ")
-    advice.add_argument("--role", choices=ROLE_ORDER, required=True)
-    advice.add_argument("--region", default="Hà Nội")
-    advice.add_argument("--years", type=float, default=0)
-    advice.add_argument("--skills", default="", help="Danh sách kỹ năng, phân tách bằng dấu phẩy")
+    fresh = commands.add_parser("refresh", help="Chạy cả chuỗi huấn luyện lại (#109)")
+    fresh.add_argument("csv", nargs="*", type=Path, help="Các lô CSV cần nhập trước khi dựng")
+    fresh.add_argument("--source", help="Tên nguồn của các lô, ghi đè cột source")
+    fresh.add_argument("--crawl", help="Crawl trang (ví dụ topcv) trước khi dựng")
     args = parser.parse_args()
-    try:
-        service = MarketService(raw_dir=args.raw_dir if args.command == "download" else None)
-        if args.command == "sources":
-            result = [asdict(source) for source in service.sources()]
-        elif args.command == "training-readiness":
-            result = service.training_readiness()
-        elif args.command == "import-batch":
-            try:
-                result = import_batch(args.csv, args.source, directory=args.batches_dir)
-            except BatchError as error:
-                raise MarketError(str(error)) from error
-        elif args.command == "build-dataset":
-            result = write_dataset()
-        elif args.command == "train-v2":
-            serving = artifacts_dir()
-            result = retrain(
-                serving,
-                serving.with_name(serving.name + "-candidate"),
-                train=lambda output: train_v2(output),
+
+    if args.command == "build-dataset":
+        result = write_dataset(single_salary_rule=args.single_salary_rule)
+    elif args.command == "train":
+        result = retrain_version(
+            train=lambda output: train(output),
+            validate=lambda directory: validate(directory=directory),
+            rescore=lambda directory, output: validate(output=output, directory=directory),
+        )
+    elif args.command == "versions":
+        result = list_versions()
+    elif args.command == "rollback":
+        try:
+            result = rollback()
+        except ValueError as error:
+            print(str(error), file=sys.stderr)
+            return 2
+    elif args.command == "validate":
+        result = validate()
+        for difference in result["bootstrap"]["differences"].values():
+            difference.pop("samples")  # bỏ 1000 mẫu bootstrap cho gọn khi in
+    elif args.command == "reality-check":
+        result = reality_check(golden_path=args.golden_path)
+    elif args.command == "import-batch":
+        try:
+            result = import_batch(args.csv, args.source, directory=args.batches_dir)
+        except BatchError as error:
+            print(str(error), file=sys.stderr)
+            return 2
+    elif args.command == "refresh":
+        if args.crawl:
+            # Crawler TopCV (#110) chờ ticket điều khoản thu thập (#103).
+            print(f"Chưa có crawler cho {args.crawl!r} (#110 chờ #103).", file=sys.stderr)
+            return 2
+        result = refresh(
+            args.csv,
+            args.source,
+            build=write_dataset,
+            retrain=lambda batches: retrain_version(
+                train=lambda output: train(output),
                 validate=lambda directory: validate(directory=directory),
                 rescore=lambda directory, output: validate(output=output, directory=directory),
-            )
-        elif args.command == "validate":
-            result = validate()
-            for difference in result["bootstrap"]["differences"].values():
-                difference.pop("samples")
-        elif args.command == "advise":
-            result = advise(
-                {
-                    "role": args.role,
-                    "region": args.region,
-                    "experience_years": args.years,
-                    "skills": [s.strip() for s in args.skills.split(",") if s.strip()],
-                }
-            )
-        elif args.command == "train":
-            result = service.train_models()
-        elif args.command == "training-report":
-            result = service.audit_training_run()
-        elif args.command == "companies":
-            result = run_company_report(service, args)
-        elif args.command == "split-preview":
-            result = service.preview_split(
-                service.prepare()["rows"], basis=args.basis, scope=args.scope
-            )
-            if args.output:
-                try:
-                    args.output.write_text(
-                        json.dumps(result, ensure_ascii=False, indent=2), encoding="utf-8"
-                    )
-                except OSError as error:
-                    raise MarketError(f"Không lưu được preview: {error}") from error
-        elif args.command == "prepare":
-            result = service.snapshot(output_dir=args.output, review_dir=args.review_dir)[
-                "manifest"
-            ]
-        elif args.command == "predict":
-            result = service.estimate_salary(args.role, args.location, model_name=args.model)
-        elif args.command == "skills":
-            result = service.extract_skills(args.title, args.description, args.requirements)
-        elif args.command == "download":
-            result = service.download_source(
-                args.source_id, cache_dir=args.cache_dir, check_only=args.check_only
-            )
-        else:
-            result = asdict(service.preview(args.source_id, args.limit))
-    except MarketError as error:
-        print(str(error), file=sys.stderr)
-        return 2
+                batches=batches,
+            ),
+        )
+        print(json.dumps(result, ensure_ascii=False, indent=2))
+        return 0 if result["status"] == "ok" else 1
+    else:
+        skills = [s.strip() for s in args.skills.split(",") if s.strip()]
+        result = advise(
+            {
+                "role": args.role,
+                "region": args.region,
+                "experience_years": args.years,
+                "skills": skills,
+            }
+        )
     print(json.dumps(result, ensure_ascii=False, indent=2))
     if args.command == "import-batch":
         return 1 if result["status"] == "rejected" else 0
-    return 2 if args.command == "predict" and result["status"] == "invalid_input" else 0
+    return 0
 
 
 if __name__ == "__main__":

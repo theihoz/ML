@@ -2,7 +2,7 @@
 
 import json
 
-from career_market.model_promotion import retrain
+from career_market.model.promotion import retrain
 
 
 def _production(median, within, coverage, groups_passed=0, ready=False):

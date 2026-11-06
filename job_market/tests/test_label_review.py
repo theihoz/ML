@@ -5,7 +5,7 @@ from pathlib import Path
 import pandas as pd
 import pytest
 
-from career_market.label_review import REVIEW_COLUMNS, _skill_context, score_review
+from career_market.data.label_review import REVIEW_COLUMNS, _skill_context, score_review
 
 REVIEW = Path(__file__).parents[1] / "datasets/labels/2026-11-06/label_accuracy_review.csv"
 

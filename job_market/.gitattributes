@@ -1,3 +1,2 @@
 # Preserve source bytes and omit raw records from textual whitespace checks.
 datasets/raw/*.csv -text -diff
-datasets/provenance/*.json -text

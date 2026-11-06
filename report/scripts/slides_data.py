@@ -8,10 +8,11 @@ import sys
 
 import pandas as pd
 
-from career_market.salary_charts import EXPERIENCE_BINS, EXPERIENCE_LABELS, skill_table
-from career_market.salary_dataset import data_root, load_dataset
-from career_market.salary_model import load_report, load_skill_value
-from career_market.salary_validation import load_validation
+from career_market.ui.charts import EXPERIENCE_BINS, EXPERIENCE_LABELS, skill_table
+from career_market.data.dataset import load_dataset
+from career_market.paths import data_root
+from career_market.model.training import load_report, load_skill_value
+from career_market.model.validation import load_validation
 
 frame = load_dataset()
 report = load_report()

@@ -7,7 +7,7 @@ from pathlib import Path
 
 import pytest
 
-from career_market.salary_batches import BatchError, import_batch, load_batch, stored_batches
+from career_market.data.batches import BatchError, import_batch, load_batch, stored_batches
 
 HEADER = "source,title,company,location,salary_text,experience_text,description,url,posted_date"
 GOOD = [

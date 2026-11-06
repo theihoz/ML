@@ -1,16 +1,22 @@
-"""Bộ dữ liệu huấn luyện salary-v2: phễu làm sạch, nhãn train/valid/test và mẫu dữ liệu."""
+"""Trang Dữ liệu huấn luyện.
+
+Mục này làm gì: phễu làm sạch (tin thô → tin có nhãn), phân bố train/valid/test, bảng dữ liệu + tải CSV.
+"""
 
 import json
 
 import streamlit as st
 
-from career_market import salary_app
-from career_market.salary_dataset import dataset_path
+from career_market.model.versions import freshness_line
+from career_market.paths import dataset_path
+from career_market.ui import cache
 
 st.title("Dữ liệu huấn luyện")
-frame = salary_app.dataset()
+st.caption(freshness_line())
+frame = cache.dataset()
 summary = json.loads(dataset_path().with_suffix(".json").read_text(encoding="utf-8"))
 funnel = summary["funnel"]
+# Mục này: phễu làm sạch — mỗi bước loại bớt tin không dùng được.
 a, b, c, d = st.columns(4)
 a.metric("Tin thô đọc vào", f"{funnel['raw']:,}")
 b.metric("Có lương đọc được", f"{funnel['has_salary']:,}")
@@ -24,11 +30,12 @@ left, right = st.columns(2, gap="medium")
 with left, st.container(border=True):
     st.subheader("Nhãn train / valid / test theo vai trò")
     st.caption("Chia 70/15/15 theo công ty bằng hash cố định (seed 42)")
-    st.image(salary_app.chart("split"), width="stretch")
+    st.image(cache.chart("split"), width="stretch")
 with right, st.container(border=True):
     st.subheader("Phân bố lương")
     st.caption("Đường đứt: trung vị")
-    st.image(salary_app.chart("distribution"), width="stretch")
+    st.image(cache.chart("distribution"), width="stretch")
+# Mục này: xem và tải bảng dữ liệu theo tập.
 split = st.segmented_control(
     "Tập dữ liệu",
     ["train", "valid", "test"],
