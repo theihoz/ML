@@ -92,7 +92,7 @@ ROLE_RULES = [
         "Mobile Developer",
         r"\b(?:mobile|android|ios|flutter|react native|kotlin|swift)\b",
     ),
-    ("Fullstack Developer", r"\bfull[ -]?stack\b"),
+    ("Fullstack Developer", r"\b(?:full[ -]?stack|mern|mean stack)\b"),
     (
         "Frontend Developer",
         r"\b(?:front[ -]?end|reactjs|react\.js|react|vue(?:\.?js)?|angular(?:js)?)\b",
@@ -124,10 +124,15 @@ ROLE_RULES = [
     ),
 ]
 ROLE_ORDER = [name for name, _ in ROLE_RULES]
+# Quy tắc ưu tiên xét trước ROLE_RULES (không đổi thứ tự hiển thị của ROLE_ORDER):
+# "Quality Control (Data Platform)" là kiểm thử dù có chữ data platform (#98).
+PRIORITY_RULES = [("Kiểm thử (QA/QC)", r"\b(?:quality control|quality assurance)\b")]
 EXCLUDED_TITLE = (
-    r"\b(?:sales|presales|kinh doanh|bán hàng|telesales?|marketing|kế toán|accountant|"
-    r"tuyển dụng|recruit\w*|nhân sự|hr|chăm sóc khách hàng|customer service|giáo viên|"
-    r"teacher|giảng viên|trainer|tuyển sinh|content|biên tập|copywriter|cơ khí|xây dựng)\b"
+    r"\b(?:sales?|presales|kinh doanh|bán hàng|telesales?|marketing|kế toán|accountant|"
+    r"tuyển dụng|recruit\w*|nhân sự|hr|chăm sóc khách hàng|cham soc khach hang|"
+    r"customer service|giáo viên|teacher|giảng viên|trainer|tuyển sinh|content|biên tập|"
+    r"copywriter|cơ khí|xây dựng|pháp chế|pháp lý|chỉ huy trưởng|cnc|phay|"
+    r"artist|họa sĩ|hoạ sĩ|animator)\b"
 )
 
 # Từ vựng kỹ năng dùng chung cho dashboard, mô hình và tư vấn.
@@ -176,7 +181,8 @@ SKILLS = {
     "Git": r"\bgit\b|github|gitlab",
     "CI/CD": r"ci\s*/\s*cd|jenkins|github actions",
     "Microservices": r"micro-?services?",
-    "REST API": r"rest(?:ful)?\s*api|\bapi\b",
+    # "API Testing", "OpenAI API", "LLM API" không phải xây dựng REST API (#98).
+    "REST API": r"rest(?:ful)?\s*api|(?<!openai\s)(?<!llm\s)\bapi\b(?!\s*(?:test|automation))",
     "Kafka": r"kafka",
     "Spark": r"\bspark\b|pyspark",
     "Airflow": r"airflow",
@@ -203,7 +209,9 @@ SKILLS = {
     "Tiếng Nhật": r"tiếng nhật|japanese|\bjlpt\b|\bn[1-3]\b",
 }
 _SKILL_PATTERNS = {name: re.compile(rf"(?:{alias})", re.I) for name, alias in SKILLS.items()}
-_ROLE_PATTERNS = [(name, re.compile(pattern, re.I)) for name, pattern in ROLE_RULES]
+_ROLE_PATTERNS = [
+    (name, re.compile(pattern, re.I)) for name, pattern in PRIORITY_RULES + ROLE_RULES
+]
 _EXCLUDED = re.compile(EXCLUDED_TITLE, re.I)
 LEVELS = ["Intern", "Fresher", "Junior", "Middle", "Senior", "Lead", "Manager"]
 REGIONS = ["Hà Nội", "TP. Hồ Chí Minh", "Đà Nẵng", "Tỉnh/thành khác", "Remote"]
@@ -295,22 +303,35 @@ def parse_experience(text, title=""):
 
 
 def derive_level(title, years, source_level=""):
+    """Cấp bậc: chức danh trước, rồi cấp bậc của nguồn, cuối cùng suy từ số năm (#98).
+
+    "Product/Project/Delivery Manager" là tên vai trò, không phải cấp quản lý. Cấp Intern
+    hoặc Mới tốt nghiệp của nguồn bị bỏ qua khi tin yêu cầu hơn một năm kinh nghiệm.
+    """
     title = str(title or "").lower()
     source_level = str(source_level or "").lower()
-    if re.search(r"intern|thực tập", title + " " + source_level):
+    manager = r"giám đốc|director|trưởng phòng|(?<!product )(?<!project )(?<!delivery )\bmanager\b|head of"
+    title_rules = [
+        ("Intern", r"intern|thực tập"),
+        ("Manager", manager),
+        ("Lead", r"\blead|trưởng nhóm|principal|architect"),
+        ("Fresher", r"fresher|mới tốt nghiệp|graduate"),
+        ("Senior", r"\bsenior\b|\bsr\.?\b|cao cấp"),
+        ("Junior", r"\bjunior\b|\bjr\.?\b"),
+        ("Middle", r"\bmiddle\b|\bmid\b"),
+    ]
+    for level, pattern in title_rules:
+        if re.search(pattern, title):
+            return level
+    junior_source = pd.isna(years) or years <= 1
+    if re.search(r"intern|thực tập", source_level) and junior_source:
         return "Intern"
-    if re.search(r"giám đốc|director|trưởng phòng|\bmanager\b|head of", title + " " + source_level):
+    if re.search(manager, source_level):
         return "Manager"
-    if re.search(r"\blead|trưởng nhóm|principal|architect", title + " " + source_level):
+    if re.search(r"\blead|trưởng nhóm|principal|architect", source_level):
         return "Lead"
-    if re.search(r"fresher|mới tốt nghiệp|graduate", title + " " + source_level):
+    if re.search(r"fresher|mới tốt nghiệp|graduate", source_level) and junior_source:
         return "Fresher"
-    if re.search(r"\bsenior\b|\bsr\.?\b|cao cấp", title):
-        return "Senior"
-    if re.search(r"\bjunior\b|\bjr\.?\b", title):
-        return "Junior"
-    if re.search(r"\bmiddle\b|\bmid\b", title):
-        return "Middle"
     if pd.isna(years):
         return "Junior"
     if years < 1:
@@ -335,10 +356,25 @@ def normalize_region(text):
     return "Tỉnh/thành khác"
 
 
+# Ngoại ngữ chỉ được nhắc ở phần phúc lợi ("trợ cấp ngoại ngữ … tiếng Nhật N3") không phải
+# yêu cầu công việc (#98).
+_LANGUAGES = {"Tiếng Anh", "Tiếng Nhật"}
+_BENEFIT = re.compile(r"trợ cấp|phụ cấp|phúc lợi|allowance", re.I)
+
+
+def _required(name, pattern, text):
+    for match in pattern.finditer(text):
+        if name not in _LANGUAGES or not _BENEFIT.search(
+            text[max(0, match.start() - 60) : match.start()]
+        ):
+            return True
+    return False
+
+
 def extract_skills(*texts):
     text = " \n ".join(str(t) for t in texts if isinstance(t, str))
     text = re.sub(r"<[^>]+>", " ", text)
-    return [name for name, pattern in _SKILL_PATTERNS.items() if pattern.search(text)]
+    return [name for name, pattern in _SKILL_PATTERNS.items() if _required(name, pattern, text)]
 
 
 # Điều kiện giới tính ghi trong tin. Chỉ xét chữ có dấu để "Tu 4 Nam Kinh Nghiem"
