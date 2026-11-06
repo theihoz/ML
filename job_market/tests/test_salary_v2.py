@@ -113,3 +113,49 @@ def test_evaluation_and_dataset_pages_render(page):
     app.switch_page(page).run(timeout=60)
     assert not app.exception
     assert app.metric
+
+
+def test_validation_reports_calibration_bootstrap_and_fairness():
+    from career_market.salary_dataset import gender_requirement
+    from career_market.salary_validation import load_validation
+
+    result = load_validation()
+    eighty = next(row for row in result["calibration"]["levels"] if row["level"] == 0.8)
+    assert 0.7 < eighty["coverage"] < 0.9
+    gb = result["bootstrap"]["models"]["GradientBoosting"]["MAE"]
+    assert gb["ci95"][0] <= gb["point"] <= gb["ci95"][1]
+    assert {"region", "level", "role"} <= set(result["fairness"])
+    assert result["gender"]["used_as_feature"] is False
+    assert gender_requirement("Tester Game Chỉ Tuyển Nữ") == "Chỉ nữ"
+    assert gender_requirement("Lap Trinh Vien Tu 3 Nam Kinh Nghiem") == "Không đề cập"
+    assert gender_requirement("Giới tính: Nam/Nữ") == "Nam/Nữ"
+
+
+MONOTONE_PROFILES = [
+    ("Backend Developer", years, base)
+    for years in (0, 2, 5)
+    for base in ([], ["Java"], ["Java", "Spring Boot", "SQL"], ["Python", "Django", "Docker"])
+] + [("Frontend Developer", 3, ["JavaScript", "React"]), ("Kiểm thử (QA/QC)", 1, [])]
+EXTRA_SKILLS = ["Java", "Python", "Docker", "AWS", "Kubernetes", "MySQL", "Redis", "PHP", "C#"]
+
+
+@pytest.mark.parametrize("model_name", ["Ridge", "RandomForest", "GradientBoosting"])
+def test_adding_a_skill_never_lowers_predicted_salary(model_name):
+    from career_market.salary_model import predict_profile
+
+    for role, years, base in MONOTONE_PROFILES:
+        profile = {"role": role, "region": "Hà Nội", "experience_years": years, "skills": base}
+        before = predict_profile(profile, model_name)["salary"]
+        for skill in EXTRA_SKILLS:
+            if skill in base:
+                continue
+            after = predict_profile({**profile, "skills": [*base, skill]}, model_name)["salary"]
+            assert after >= before - 1e-6, (model_name, role, years, base, skill, before, after)
+
+
+def test_selected_model_stays_within_accepted_error_budget():
+    # Quyết định 06/11/2026: ràng buộc đơn điệu theo kỹ năng làm test MAE tăng từ 5.38 lên
+    # khoảng 5.82; ngân sách ban đầu 5.65 (+5%) được nới lên 5.85 (~+9%) sau khi chỉnh siêu
+    # tham số trên valid không kéo MAE về trong ngân sách cũ.
+    report = load_report()
+    assert report["models"][report["selected"]]["test"]["MAE"] <= 5.85

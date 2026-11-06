@@ -341,6 +341,28 @@ def extract_skills(*texts):
     return [name for name, pattern in _SKILL_PATTERNS.items() if pattern.search(text)]
 
 
+# Điều kiện giới tính ghi trong tin. Chỉ xét chữ có dấu để "Tu 4 Nam Kinh Nghiem"
+# (năm kinh nghiệm, không dấu) hay "Việt Nam" không bị nhận nhầm.
+GENDER_RULES = [
+    ("Nam/Nữ", r"nam\s*(?:/|,|hoặc|và)\s*nữ|nữ\s*(?:/|,|hoặc|và)\s*nam|không phân biệt giới tính"),
+    ("Chỉ nam", r"chỉ tuyển nam\b|giới tính\s*[:：-]?\s*nam\b|tuyển nam\b|\bnam giới\b"),
+    ("Chỉ nữ", r"chỉ tuyển nữ\b|giới tính\s*[:：-]?\s*nữ\b|tuyển nữ\b|\bnữ giới\b"),
+    ("Ưu tiên nam", r"ưu tiên (?:ứng viên )?nam\b"),
+    ("Ưu tiên nữ", r"ưu tiên (?:ứng viên )?nữ\b"),
+]
+_GENDER_PATTERNS = [(name, re.compile(pattern)) for name, pattern in GENDER_RULES]
+
+
+def gender_requirement(*texts):
+    """Nhãn điều kiện giới tính trong tin; mô hình không dùng cột này làm đặc trưng."""
+    text = re.sub(r"<[^>]+>", " ", " \n ".join(str(t) for t in texts if isinstance(t, str)))
+    text = text.lower()
+    for name, pattern in _GENDER_PATTERNS:
+        if pattern.search(text):
+            return name
+    return "Không đề cập"
+
+
 def _year(value, default):
     match = re.search(r"(20\d\d)", str(value or ""))
     return int(match[1]) if match else default
@@ -452,6 +474,7 @@ def build_dataset(raw_dir=None):
                     "year": year,
                     "skills": "|".join(skills),
                     "skill_count": len(skills),
+                    "gender_requirement": gender_requirement(*item["skill_text"]),
                     "salary_text": item["salary_text"],
                     "salary_min": salary[0],
                     "salary_max": salary[1],

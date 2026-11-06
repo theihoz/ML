@@ -17,13 +17,33 @@ Mở http://127.0.0.1:8502. Kiểm tra mã và kiểm thử bằng `make check` 
 
 ## Chạy bằng Docker
 
-Yêu cầu Docker Engine và Docker Compose plugin:
+Yêu cầu Docker Desktop đang chạy (Windows/macOS), hoặc Docker Engine và Docker Compose plugin (Linux). Không cần cài Python riêng.
+
+Từ thư mục gốc repository, chuẩn bị và chạy thử **trước ngày demo**, khi có Internet:
 
 ```sh
-docker compose up --build
+docker compose up --build -d --wait
 ```
 
-Mở http://127.0.0.1:8502. Nhấn `Ctrl+C` để dừng; nếu chạy ở chế độ nền bằng `docker compose up --build -d`, dùng `docker compose down` để dừng.
+Mở http://localhost:8502. Image chứa mã ứng dụng, ba nguồn dữ liệu, bộ salary-v2, toàn bộ model đã huấn luyện, metric và dữ liệu biểu đồ. Khi build và khởi động, hệ thống kiểm tra dự đoán thật với cả 4 model salary-v2 và 2 model thăm dò, kiểm tra tư vấn kỹ năng và dữ liệu thị trường. Không cần tải dữ liệu hay huấn luyện lại khi demo.
+
+**Ngày demo**, trên máy đã build thành công và còn giữ image, bật Docker rồi chạy đúng một lệnh (dùng được khi không có mạng):
+
+```sh
+docker compose up -d --wait --no-build --pull never
+```
+
+Hoặc trong Docker Desktop → Containers, bấm Start cho nhóm Compose của dự án nếu nhóm đã được tạo trước đó. Đợi container báo healthy rồi mở http://localhost:8502.
+
+- Kiểm tra trạng thái: `docker compose ps`.
+- Xem lỗi khởi động: `docker compose logs --tail=100 app`.
+- Kiểm tra lại model: `docker compose exec app python /opt/demo/check_demo.py`.
+- Dừng và giữ container để lần sau bấm Start: `docker compose stop`.
+- Xóa container, giữ image: `docker compose down`.
+
+Nếu cổng 8502 đang bận, chạy `DEMO_PORT=8503 docker compose up -d --wait --no-build --pull never` rồi mở http://localhost:8503 (PowerShell: đặt `$env:DEMO_PORT=8503` trước khi chạy Compose).
+
+Để mang sang máy khác cùng kiến trúc CPU mà không build qua mạng, xem [hướng dẫn demo](docs/DEMO.md#demo-bằng-docker-compose).
 
 ## Dữ liệu và mô hình
 
