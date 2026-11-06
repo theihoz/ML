@@ -5,7 +5,7 @@ import streamlit as st
 
 from career_market import salary_app
 from career_market import salary_charts as charts
-from career_market.salary_model import artifacts_dir
+from career_market.salary_model import MODEL_LABELS, artifacts_dir
 from career_market.salary_visuals import png
 
 st.title("Đánh giá mô hình")

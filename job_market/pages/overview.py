@@ -42,12 +42,15 @@ with cards[3], st.container(border=True, height=175, key="overview_kpi_postings"
 
 left, right = st.columns(2, gap="medium")
 with left, st.container(border=True, key="overview_chart_tech"):
-    st.subheader("Top 15 ngôn ngữ & công nghệ có nhu cầu")
-    st.caption("Xếp theo số tin nhắc đến")
+    st.subheader("Ngôn ngữ & công nghệ có nhu cầu")
+    st.caption("Toàn bộ kỹ năng, xếp theo số tin nhắc đến")
     st.image(salary_app.chart("skill_demand"), width="stretch")
 with right, st.container(border=True, key="overview_chart_skill_salary"):
-    st.subheader("Top 15 công nghệ lương cao nhất")
-    st.caption("Trung vị lương của tin nhắc đến kỹ năng (≥ 30 tin) · đường đứt: trung vị chung")
+    st.subheader("Lương theo công nghệ")
+    st.caption(
+        "Toàn bộ kỹ năng, trung vị lương của tin nhắc đến · thanh xám: dưới 30 tin (ít dữ liệu)"
+        " · đường đứt: trung vị chung"
+    )
     st.image(salary_app.chart("skill_salary"), width="stretch")
 left, right = st.columns(2, gap="medium")
 with left, st.container(border=True, key="overview_chart_experience"):
