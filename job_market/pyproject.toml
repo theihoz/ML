@@ -19,6 +19,7 @@ career-market = "career_market.__main__:main"
 packages = ["src/career_market"]
 
 [tool.hatch.build.targets.wheel.force-include]
+"datasets/reference" = "career_market/datasets/reference"
 "datasets/raw" = "career_market/datasets/raw"
 "datasets/processed/salary_dataset_v2.csv" = "career_market/datasets/processed/salary_dataset_v2.csv"
 "datasets/processed/salary_dataset_v2.json" = "career_market/datasets/processed/salary_dataset_v2.json"
