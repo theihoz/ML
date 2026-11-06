@@ -236,8 +236,12 @@ def classify_role(title):
     return None
 
 
-def parse_salary(text, year=2026):
-    """Chuẩn hóa chuỗi lương về (thấp, cao, trung điểm) triệu VND/tháng."""
+def parse_salary(text, year=2026, ratio=None):
+    """Chuẩn hóa chuỗi lương về (thấp, cao, trung điểm) triệu VND/tháng.
+
+    Tin chỉ ghi một đầu ("Tới X", "Từ X") được suy đầu còn lại bằng ``ratio`` (cao/thấp) ước
+    lượng từ tin ghi đủ hai đầu (#81); không truyền thì giữ luật cũ ×0.7 / ×1.3.
+    """
     if not isinstance(text, str):
         return None
     raw = text.lower().replace("triẹu", "triệu").replace("lương:", "").strip()
@@ -269,10 +273,10 @@ def parse_salary(text, year=2026):
         low, high = sorted(numbers)
     elif re.search(r"tới|đến|up to|dưới|max", raw):
         high = numbers[0]
-        low = high * 0.7
+        low = high / ratio if ratio else high * 0.7
     elif re.search(r"từ|trên|from|min", raw):
         low = numbers[0]
-        high = low * 1.3
+        high = low * ratio if ratio else low * 1.3
     else:
         low = high = numbers[0]
     if low <= 0 or high / low > 3:
@@ -281,6 +285,64 @@ def parse_salary(text, year=2026):
     if not SALARY_RANGE[0] <= middle <= SALARY_RANGE[1]:
         return None
     return round(low, 3), round(high, 3), round(middle, 3)
+
+
+def one_sided(text):
+    """True nếu chuỗi lương chỉ ghi một đầu (cùng điều kiện parse_salary dùng để suy đầu kia)."""
+    raw = str(text or "").lower()
+    numbers = re.findall(r"\d+(?:[.,]\d+)*", raw)
+    return len(numbers) == 1 and bool(re.search(r"tới|đến|up to|dưới|max|từ|trên|from|min", raw))
+
+
+def is_synthetic(url):
+    """Tin "lịch sử" sinh tự động của bộ IT Jobs 2026: URL dạng ``…-hist2018000xx`` (#81).
+
+    Đúng 800 tin mỗi nền tảng, rải đều 2018–2025, chức danh chung chung, danh sách kỹ năng
+    ngẫu nhiên và không có mô tả: không phản ánh thị trường thật nên bị loại.
+    """
+    return bool(re.search(r"-hist\d{9}", str(url or "")))
+
+
+WORK_MODES = [
+    ("Từ xa", r"từ xa|remote"),
+    ("Thực tập", r"thực tập|intern"),
+    ("Bán thời gian", r"bán thời gian|part-time"),
+    ("Toàn thời gian", r"toàn thời gian|full-time"),
+]
+
+
+def normalize_work_mode(text):
+    raw = str(text or "").lower()
+    return next((name for name, pattern in WORK_MODES if re.search(pattern, raw)), "Không rõ")
+
+
+COMPANY_TYPES = [
+    (
+        "Ngân hàng / Tài chính",
+        r"ngân hàng|\bbank|tài chính|finance|chứng khoán|securities|bảo hiểm|insurance|"
+        r"techcombank|vietinbank|vietcombank|bidv|vpbank|tpbank|mbbank|acb|sacombank|"
+        r"agribank|hdbank|shb|vib|ocb|msb|seabank|lpbank|momo|vnpay|zalopay",
+    ),
+    (
+        "Outsourcing / Gia công",
+        r"fpt software|nashtech|kms|\btma\b|rikkei|cmc global|harvey nash|outsourc|"
+        r"luvina|fujinet|fpt is|global cybersoft|savvycom|sotatek",
+    ),
+    ("Công ty nước ngoài", r"\bvietnam\b|\bviet nam\b|co\.,? ?ltd|\binc\b|corporation\b|\bpte\b"),
+]
+
+
+def company_type(company, field=""):
+    """Loại công ty suy từ tên và ngành của tin; dùng được cho công ty chưa gặp (#81)."""
+    text = f"{company or ''} {field or ''}".lower()
+    return next((name for name, pattern in COMPANY_TYPES if re.search(pattern, text)), "Khác")
+
+
+def platform(source):
+    """Nền tảng đăng tin; TopCV 2026 (chỉ có chức danh) tách khỏi TopCV của IT Jobs 2026."""
+    if "(" in source:
+        return source.split("(")[-1].rstrip(")").capitalize()
+    return source
 
 
 def parse_experience(text, title=""):
@@ -417,6 +479,9 @@ def _topcv(raw):
             "level_text": "",
             "year": _year(row.date_posted, 2026),
             "skill_text": (row.title,),
+            "source_url": row.url,
+            "work_mode": None,
+            "field": "",
         }
 
 
@@ -439,6 +504,9 @@ def _it_posts(raw):
             # phản ánh ngày đăng thật; dùng năm thu thập (created_at) thay thế.
             "year": _year(row.created_at, 2026),
             "skill_text": (row.title, listed, row.requirements),
+            "source_url": row.source_url,
+            "work_mode": row.mode,
+            "field": row.field if isinstance(row.field, str) else "",
         }
 
 
@@ -456,6 +524,9 @@ def _careerbuilder(raw):
             "level_text": "",
             "year": 2023,
             "skill_text": (row.job_title, row.job_requirements, row.job_description, row.job_tags),
+            "source_url": row.job_url,
+            "work_mode": None,
+            "field": "",
         }
 
 
@@ -477,13 +548,20 @@ def _split_for(company_key):
 
 
 def build_dataset(raw_dir=None):
-    """Đọc ba nguồn thô và trả về DataFrame đã làm sạch kèm cột split."""
+    """Đọc ba nguồn thô và trả về DataFrame đã làm sạch kèm cột split.
+
+    Tin sinh tự động bị loại trước khi đọc lương (#81). Tin chỉ ghi một đầu lương được tính
+    lại bằng tỉ lệ cao/thấp trung vị của tin ghi đủ hai đầu trong tập train cùng nguồn.
+    """
     raw = Path(raw_dir) if raw_dir else data_root() / "raw"
-    funnel = {"raw": 0, "has_salary": 0, "it_role": 0, "deduplicated": 0}
+    funnel = {"raw": 0, "synthetic_removed": 0, "has_salary": 0, "it_role": 0, "deduplicated": 0}
     records = []
     for reader in (_it_posts, _topcv, _careerbuilder):
         for item in reader(raw):
             funnel["raw"] += 1
+            if is_synthetic(item["source_url"]):
+                funnel["synthetic_removed"] += 1
+                continue
             year = min(max(item["year"], 2023), 2026)
             salary = parse_salary(item["salary_text"], year)
             if salary is None:
@@ -496,15 +574,19 @@ def build_dataset(raw_dir=None):
             funnel["it_role"] += 1
             years = parse_experience(item["experience_text"], title)
             skills = extract_skills(*item["skill_text"])
+            company = re.sub(r"\s+", " ", str(item["company"])).strip()
             records.append(
                 {
                     "source": item["source"],
+                    "platform": platform(item["source"]),
                     "title": title,
-                    "company": re.sub(r"\s+", " ", str(item["company"])).strip(),
+                    "company": company,
                     "company_key": _company_key(item["company"]),
+                    "company_type": company_type(company, item["field"]),
                     "role": role,
                     "region": normalize_region(item["location"]),
                     "location_text": item["location"],
+                    "work_mode": normalize_work_mode(item["work_mode"]),
                     "experience_years": years,
                     "level": derive_level(title, years, item["level_text"]),
                     "year": year,
@@ -512,19 +594,46 @@ def build_dataset(raw_dir=None):
                     "skill_count": len(skills),
                     "gender_requirement": gender_requirement(*item["skill_text"]),
                     "salary_text": item["salary_text"],
+                    "one_sided": one_sided(item["salary_text"]),
                     "salary_min": salary[0],
                     "salary_max": salary[1],
                     "salary": salary[2],
+                    "source_url": item["source_url"],
                 }
             )
     frame = pd.DataFrame(records)
+    frame["split"] = frame["company_key"].map(_split_for)
+    ratios = _one_sided_ratios(frame)
+    for index in frame.index[frame["one_sided"]]:
+        row = frame.loc[index]
+        salary = parse_salary(row["salary_text"], row["year"], ratios.get(row["source"]))
+        if salary is None:
+            frame = frame.drop(index)
+            continue
+        frame.loc[index, ["salary_min", "salary_max", "salary"]] = salary
     frame["title_key"] = frame["title"].str.lower().str.replace(r"[^\w]", "", regex=True)
     frame = frame.drop_duplicates(["title_key", "company_key", "salary"], keep="first")
     frame = frame.drop(columns="title_key").reset_index(drop=True)
     funnel["deduplicated"] = len(frame)
-    frame["split"] = frame["company_key"].map(_split_for)
     frame.insert(0, "row_id", [f"v2-{i:05d}" for i in range(len(frame))])
+    frame.attrs["one_sided_ratio"] = ratios
     return frame, funnel
+
+
+def _one_sided_ratios(frame):
+    """Tỉ lệ cao/thấp trung vị theo nguồn, chỉ trên tin train ghi đủ hai đầu khác nhau."""
+    two_sided = frame[
+        (frame["split"] == "train")
+        & ~frame["one_sided"]
+        & (frame["salary_max"] > frame["salary_min"])
+    ]
+    ratio = two_sided["salary_max"] / two_sided["salary_min"]
+    overall = float(ratio.median())
+    by_source = ratio.groupby(two_sided["source"]).agg(["median", "size"])
+    return {
+        source: round(float(row["median"]) if row["size"] >= 30 else overall, 4)
+        for source, row in by_source.iterrows()
+    } | {source: round(overall, 4) for source in set(frame["source"]) - set(by_source.index)}
 
 
 def write_dataset(raw_dir=None, output=None):
@@ -537,6 +646,7 @@ def write_dataset(raw_dir=None, output=None):
         "rows": len(frame),
         "companies": int(frame["company_key"].nunique()),
         "funnel": funnel,
+        "one_sided_ratio": frame.attrs.get("one_sided_ratio", {}),
         "split": frame["split"].value_counts().to_dict(),
         "roles": frame["role"].value_counts().to_dict(),
         "sources": frame["source"].value_counts().to_dict(),

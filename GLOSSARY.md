@@ -59,3 +59,7 @@ _Tránh dùng_: Khoảng lương chào tuyển của một tin, sai số tuyệt
 **Nhóm đủ dữ liệu**:
 Tổ hợp vai trò nghề nghiệp × cấp bậc có ít nhất 20 tin tuyển dụng trong tập huấn luyện; chỉ nhóm này được hiển thị con số lương dự đoán, nhóm còn lại chỉ hiển thị khoảng lương dự đoán mở rộng kèm cảnh báo ít dữ liệu.
 _Tránh dùng_: Vai trò phổ biến, nhóm có trong dữ liệu.
+
+**Tin sinh tự động**:
+Bản ghi trong nguồn dữ liệu trông như tin tuyển dụng nhưng do bên phát hành sinh ra (ví dụ các tin "lịch sử" có URL dạng `-hist2018000xx` của bộ IT Jobs 2026); bị loại khỏi huấn luyện và đánh giá vì không phản ánh thị trường thật.
+_Tránh dùng_: Tin lịch sử, tin cũ.

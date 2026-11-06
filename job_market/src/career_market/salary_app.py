@@ -54,8 +54,18 @@ def chart(name, *args):
 
 
 @st.cache_data(show_spinner=False, max_entries=128)
-def advice(role, region, years, skills, model_name):
+def advice(
+    role, region, years, skills, model_name, title="", company_type="Khác", work_mode="Không rõ"
+):
     return advise(
-        {"role": role, "region": region, "experience_years": years, "skills": list(skills)},
+        {
+            "role": role,
+            "region": region,
+            "experience_years": years,
+            "skills": list(skills),
+            "title": title,
+            "company_type": company_type,
+            "work_mode": work_mode,
+        },
         model_name=model_name,
     )

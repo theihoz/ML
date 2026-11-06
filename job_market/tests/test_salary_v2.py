@@ -65,7 +65,8 @@ def test_title_maps_to_one_it_role(title, role):
 
 def test_dataset_has_every_role_and_company_disjoint_splits():
     frame = load_dataset()
-    assert len(frame) > 3000
+    # Chỉ tin thật sau khi loại 2.400 tin sinh tự động (#81).
+    assert len(frame) > 1500
     assert set(frame["role"]) == set(ROLE_ORDER)
     assert set(frame["split"]) == {"train", "valid", "test"}
     companies = frame.groupby("split")["company_key"].apply(set)
@@ -146,20 +147,27 @@ def test_adding_a_skill_never_lowers_predicted_salary(model_name):
 
     for role, years, base in MONOTONE_PROFILES:
         profile = {"role": role, "region": "Hà Nội", "experience_years": years, "skills": base}
-        before = predict_profile(profile, model_name)["salary"]
+        before = predict_profile(profile, model_name)["predicted"]
         for skill in EXTRA_SKILLS:
             if skill in base:
                 continue
-            after = predict_profile({**profile, "skills": [*base, skill]}, model_name)["salary"]
+            after = predict_profile({**profile, "skills": [*base, skill]}, model_name)["predicted"]
             assert after >= before - 1e-6, (model_name, role, years, base, skill, before, after)
 
 
-def test_selected_model_stays_within_accepted_error_budget():
-    # Quyết định 06/11/2026: ràng buộc đơn điệu theo kỹ năng làm test MAE tăng từ 5.38 lên
-    # khoảng 5.82; ngân sách ban đầu 5.65 (+5%) được nới lên 5.85 (~+9%) sau khi chỉnh siêu
-    # tham số trên valid không kéo MAE về trong ngân sách cũ.
+def test_saved_model_drops_skill_count_and_is_gated_by_the_production_standard():
+    # Ngân sách MAE ≤ 5.85 của ADR 0013 được đo trên bộ dữ liệu còn 54% tin sinh tự động (dễ
+    # đoán hơn). Từ #81 mô hình chỉ học tin thật nên MAE không so được với mốc cũ; chất lượng
+    # được kiểm bằng chuẩn production (ADR 0014) và cổng thay model khi huấn luyện lại.
+    from career_market.salary_validation import load_validation
+
     report = load_report()
-    assert report["models"][report["selected"]]["test"]["MAE"] <= 5.85
+    assert "skill_count" not in report["permutation_importance"]
+    assert (
+        report["models"][report["selected"]]["test"]["MAE"]
+        < report["models"]["Baseline"]["test"]["MAE"]
+    )
+    assert "production" in load_validation()
 
 
 ADVICE_PROFILES = [
@@ -219,10 +227,10 @@ def test_dropping_any_skill_from_a_twelve_skill_profile_never_raises_salary(mode
         "experience_years": 5,
         "skills": FULL_PROFILE_SKILLS,
     }
-    full = predict_profile(profile, model_name)["salary"]
+    full = predict_profile(profile, model_name)["predicted"]
     for skill in FULL_PROFILE_SKILLS:
         fewer = [name for name in FULL_PROFILE_SKILLS if name != skill]
-        dropped = predict_profile({**profile, "skills": fewer}, model_name)["salary"]
+        dropped = predict_profile({**profile, "skills": fewer}, model_name)["predicted"]
         assert dropped <= full + 1e-6, (model_name, skill, dropped, full)
 
 

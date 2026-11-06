@@ -9,8 +9,16 @@ import json
 import shutil
 from pathlib import Path
 
-# Hướng "tốt hơn" của từng chỉ số chung; độ phủ tốt hơn khi gần mức danh nghĩa 80%.
-NOMINAL_COVERAGE = 80
+from .production_standard import THRESHOLDS
+
+# Độ phủ chỉ "tệ hơn" khi ra ngoài khoảng chuẩn hoặc bị đẩy xa thêm khỏi khoảng đó; trong khoảng
+# 75–85% thì mọi giá trị đều chấp nhận được (chủ dự án chốt ngày 06/11/2026, #81).
+COVERAGE_BAND = THRESHOLDS["overall"]["coverage_pct"]
+
+
+def _outside(coverage):
+    low, high = COVERAGE_BAND
+    return max(low - coverage, coverage - high, 0.0)
 
 
 def _production(directory):
@@ -38,7 +46,7 @@ def _worse_metrics(current, candidate):
         worse.append("median_error_pct")
     if new["within_20_pct"] < now["within_20_pct"]:
         worse.append("within_20_pct")
-    if abs(new["coverage_pct"] - NOMINAL_COVERAGE) > abs(now["coverage_pct"] - NOMINAL_COVERAGE):
+    if _outside(new["coverage_pct"]) > _outside(now["coverage_pct"]):
         worse.append("coverage_pct")
     return worse
 
@@ -57,36 +65,69 @@ def decide(current, candidate):
             "Cả hai chưa đạt chuẩn và ứng viên tệ hơn ở chỉ số chung: " + ", ".join(worse) + "."
         )
     now, new = _passed_scopes(current), _passed_scopes(candidate)
-    if new <= now:
-        return False, (
-            f"Cả hai chưa đạt chuẩn và ứng viên không qua thêm phạm vi nào ({new} so với {now})."
+    if new > now:
+        return True, (
+            f"Cả hai chưa đạt chuẩn; ứng viên không tệ hơn chỉ số chung nào và qua {new} phạm vi "
+            f"so với {now}."
         )
-    return True, (
-        f"Cả hai chưa đạt chuẩn; ứng viên không tệ hơn chỉ số chung nào và qua {new} phạm vi "
-        f"so với {now}."
+    better = _better_metrics(current, candidate)
+    if new == now and better:
+        return True, (
+            f"Cả hai chưa đạt chuẩn và cùng qua {new} phạm vi; ứng viên tốt hơn ở "
+            + ", ".join(better)
+            + " và không tệ hơn chỉ số chung nào."
+        )
+    return False, (
+        f"Cả hai chưa đạt chuẩn và ứng viên không tốt hơn: {new} phạm vi so với {now}, "
+        "không chỉ số chung nào tốt hơn."
     )
+
+
+def _better_metrics(current, candidate):
+    """Chỉ số chung ứng viên tốt hơn hẳn (bằng số phạm vi vẫn được thay, chốt ở #81)."""
+    now, new = _points(current), _points(candidate)
+    better = []
+    if new["median_error_pct"] < now["median_error_pct"]:
+        better.append("median_error_pct")
+    if new["within_20_pct"] > now["within_20_pct"]:
+        better.append("within_20_pct")
+    if _outside(new["coverage_pct"]) < _outside(now["coverage_pct"]):
+        better.append("coverage_pct")
+    return better
 
 
 def _promote(candidate, serving):
     serving.mkdir(parents=True, exist_ok=True)
     for path in candidate.iterdir():
-        if path.is_file():
+        if path.is_file() and path.name != "serving_rescored_validation.json":
             shutil.copy2(path, serving / path.name)
 
 
-def retrain(serving, candidate, *, train, validate):
-    """Huấn luyện vào ``candidate``, kiểm chuẩn, chỉ chép sang ``serving`` khi qua cổng."""
+def retrain(serving, candidate, *, train, validate, rescore=None):
+    """Huấn luyện vào ``candidate``, kiểm chuẩn, chỉ chép sang ``serving`` khi qua cổng.
+
+    ``rescore(serving, output)`` chấm lại model đang phục vụ trên dữ liệu hiện tại (cùng tập
+    test với ứng viên) và ghi ra ``output``; nhờ vậy hai bên được so trên cùng tập test kể cả
+    khi bộ dữ liệu đã đổi (#81). Không truyền thì dùng bản chấm đã lưu của model đang phục vụ.
+    """
     serving, candidate = Path(serving), Path(candidate)
     if candidate.exists():
         shutil.rmtree(candidate)
     train(candidate)
     validate(candidate)
-    promoted, reason = decide(_production(serving), _production(candidate))
+    current = _production(serving)
+    rescored = current is not None and rescore is not None
+    if rescored:
+        output = candidate / "serving_rescored_validation.json"
+        rescore(serving, output)
+        current = json.loads(output.read_text(encoding="utf-8")).get("production")
+    promoted, reason = decide(current, _production(candidate))
     if promoted:
         _promote(candidate, serving)
     return {
         "promoted": promoted,
         "reason": reason,
+        "serving_rescored": rescored,
         "serving": str(serving),
         "candidate": str(candidate),
     }

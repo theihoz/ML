@@ -1,35 +1,35 @@
 {
-  "dataset_rows": 3809,
+  "dataset_rows": 1735,
   "split": {
-    "train": 2461,
-    "valid": 652,
-    "test": 696
+    "train": 1169,
+    "valid": 278,
+    "test": 288
   },
   "models": {
     "Baseline": {
       "label": "Mốc trung vị",
       "params": {},
-      "fit_seconds": 0.006258207999053411,
+      "fit_seconds": 0.007734250000794418,
       "train": {
-        "MAE": 11.934332791548151,
-        "RMSE": 16.855788613078687,
-        "R2": -0.04364788349197557,
-        "MAPE": 49.671416083819075,
-        "n": 2461
+        "MAE": 11.273648417450813,
+        "RMSE": 16.537580137573705,
+        "R2": -0.03855364127740657,
+        "MAPE": 50.653796737150934,
+        "n": 1169
       },
       "valid": {
-        "MAE": 12.344263803680981,
-        "RMSE": 17.172505025020545,
-        "R2": -0.04600247505966304,
-        "MAPE": 50.388283932218435,
-        "n": 652
+        "MAE": 11.150485611510792,
+        "RMSE": 15.650625085201995,
+        "R2": -0.0363798847182224,
+        "MAPE": 49.540350641625665,
+        "n": 278
       },
       "test": {
-        "MAE": 12.150061781609194,
-        "RMSE": 17.169697186149804,
-        "R2": -0.04142629636051676,
-        "MAPE": 48.28149985554564,
-        "n": 696
+        "MAE": 11.254010416666667,
+        "RMSE": 15.911311271497148,
+        "R2": -0.039407655799922114,
+        "MAPE": 46.35461350362628,
+        "n": 288
       }
     },
     "Ridge": {
@@ -37,27 +37,27 @@
       "params": {
         "alpha": 10.0
       },
-      "fit_seconds": 0.032616917000268586,
+      "fit_seconds": 0.028106041994760744,
       "train": {
-        "MAE": 6.545259775582858,
-        "RMSE": 9.587848114276,
-        "R2": 0.6623256011130148,
-        "MAPE": 24.31725496648602,
-        "n": 2461
+        "MAE": 6.982053870158305,
+        "RMSE": 10.749568127082448,
+        "R2": 0.5611995722410945,
+        "MAPE": 26.56443877048293,
+        "n": 1169
       },
       "valid": {
-        "MAE": 6.235676787014931,
-        "RMSE": 9.099602763780776,
-        "R2": 0.7062957196861455,
-        "MAPE": 22.57724698070789,
-        "n": 652
+        "MAE": 6.804493691496574,
+        "RMSE": 10.158095762762775,
+        "R2": 0.5634035454261448,
+        "MAPE": 26.32191221284672,
+        "n": 278
       },
       "test": {
-        "MAE": 6.367936274328727,
-        "RMSE": 9.027199586823611,
-        "R2": 0.7121214164299469,
-        "MAPE": 23.404734681235887,
-        "n": 696
+        "MAE": 6.68106827900673,
+        "RMSE": 9.396045855160427,
+        "R2": 0.6375365476040444,
+        "MAPE": 25.173540483935714,
+        "n": 288
       }
     },
     "RandomForest": {
@@ -65,27 +65,27 @@
       "params": {
         "min_samples_leaf": 5
       },
-      "fit_seconds": 0.43182504101423547,
+      "fit_seconds": 0.2605675000086194,
       "train": {
-        "MAE": 6.18314662510685,
-        "RMSE": 8.882316873966209,
-        "R2": 0.7101933349921828,
-        "MAPE": 24.872359812679818,
-        "n": 2461
+        "MAE": 6.292842548662918,
+        "RMSE": 9.88287359693013,
+        "R2": 0.6291045626408656,
+        "MAPE": 23.603715464511083,
+        "n": 1169
       },
       "valid": {
-        "MAE": 6.569813196119281,
-        "RMSE": 9.119567922385235,
-        "R2": 0.7050054907517773,
-        "MAPE": 26.51925467887618,
-        "n": 652
+        "MAE": 6.8639603313173385,
+        "RMSE": 10.069577256856101,
+        "R2": 0.5709794692434287,
+        "MAPE": 27.925443659739695,
+        "n": 278
       },
       "test": {
-        "MAE": 6.472822428052251,
-        "RMSE": 9.135911605261757,
-        "R2": 0.7051459850791877,
-        "MAPE": 25.503774082087084,
-        "n": 696
+        "MAE": 6.73419291951537,
+        "RMSE": 9.742365889173916,
+        "R2": 0.6103247346697112,
+        "MAPE": 25.028535005900014,
+        "n": 288
       }
     },
     "GradientBoosting": {
@@ -94,27 +94,27 @@
         "learning_rate": 0.05,
         "max_leaf_nodes": 15
       },
-      "fit_seconds": 1.8794895830069436,
+      "fit_seconds": 2.9697794579988113,
       "train": {
-        "MAE": 5.5819088624422974,
-        "RMSE": 8.31742806444913,
-        "R2": 0.7458828644722204,
-        "MAPE": 20.660190522786746,
-        "n": 2461
+        "MAE": 5.457496733953608,
+        "RMSE": 8.547408718943977,
+        "R2": 0.722569661132549,
+        "MAPE": 19.855409856370407,
+        "n": 1169
       },
       "valid": {
-        "MAE": 5.69657996629609,
-        "RMSE": 8.601126592397561,
-        "R2": 0.7375925944675048,
-        "MAPE": 20.809482239752537,
-        "n": 652
+        "MAE": 6.681747953518991,
+        "RMSE": 9.839417153645035,
+        "R2": 0.5903675565862406,
+        "MAPE": 26.61835020841354,
+        "n": 278
       },
       "test": {
-        "MAE": 5.821186430022001,
-        "RMSE": 8.58020195173445,
-        "R2": 0.7399251912090803,
-        "MAPE": 20.728449056888625,
-        "n": 696
+        "MAE": 6.492520528449061,
+        "RMSE": 9.709192334601065,
+        "R2": 0.6129739689987201,
+        "MAPE": 22.92823659775217,
+        "n": 288
       }
     }
   },
@@ -122,7 +122,7 @@
     "Baseline": [
       {
         "params": {},
-        "valid_MAE": 12.344263803680981
+        "valid_MAE": 11.150485611510792
       }
     ],
     "Ridge": [
@@ -130,25 +130,25 @@
         "params": {
           "alpha": 0.3
         },
-        "valid_MAE": 6.295685118086185
+        "valid_MAE": 7.04196153828009
       },
       {
         "params": {
           "alpha": 1.0
         },
-        "valid_MAE": 6.280833129492829
+        "valid_MAE": 6.972331054276058
       },
       {
         "params": {
           "alpha": 3.0
         },
-        "valid_MAE": 6.254645840339722
+        "valid_MAE": 6.879293048090055
       },
       {
         "params": {
           "alpha": 10.0
         },
-        "valid_MAE": 6.235676787014931
+        "valid_MAE": 6.804493691496574
       }
     ],
     "RandomForest": [
@@ -156,19 +156,19 @@
         "params": {
           "min_samples_leaf": 1
         },
-        "valid_MAE": 7.1421463634247555
+        "valid_MAE": 7.093743305275866
       },
       {
         "params": {
           "min_samples_leaf": 3
         },
-        "valid_MAE": 6.646808373978651
+        "valid_MAE": 7.004471024318598
       },
       {
         "params": {
           "min_samples_leaf": 5
         },
-        "valid_MAE": 6.56981319611928
+        "valid_MAE": 6.8639603313173385
       }
     ],
     "GradientBoosting": [
@@ -177,113 +177,103 @@
           "learning_rate": 0.05,
           "max_leaf_nodes": 15
         },
-        "valid_MAE": 5.69657996629609
+        "valid_MAE": 6.681747953518991
       },
       {
         "params": {
           "learning_rate": 0.05,
           "max_leaf_nodes": 31
         },
-        "valid_MAE": 5.773447727396824
+        "valid_MAE": 6.93764297976365
       },
       {
         "params": {
           "learning_rate": 0.1,
           "max_leaf_nodes": 15
         },
-        "valid_MAE": 5.8069982332967
+        "valid_MAE": 7.008741204608717
       },
       {
         "params": {
           "learning_rate": 0.1,
           "max_leaf_nodes": 31
         },
-        "valid_MAE": 5.8866688955207565
+        "valid_MAE": 7.402361115732764
       }
     ]
   },
   "selected": "GradientBoosting",
   "interval_ratio": {
-    "p10": 0.7280338898927895,
-    "p90": 1.3610382446534588
+    "p10": 0.6605707065288718,
+    "p90": 1.4787554239927125
   },
   "support": {
     "cohort_train_rows": {
-      "AI / ML Engineer|Fresher": 3,
-      "AI / ML Engineer|Intern": 4,
-      "AI / ML Engineer|Junior": 44,
-      "AI / ML Engineer|Lead": 5,
-      "AI / ML Engineer|Manager": 3,
-      "AI / ML Engineer|Middle": 25,
-      "AI / ML Engineer|Senior": 13,
-      "Backend Developer|Fresher": 33,
-      "Backend Developer|Intern": 27,
-      "Backend Developer|Junior": 132,
-      "Backend Developer|Lead": 33,
-      "Backend Developer|Middle": 162,
-      "Backend Developer|Senior": 75,
+      "AI / ML Engineer|Fresher": 2,
+      "AI / ML Engineer|Junior": 31,
+      "AI / ML Engineer|Manager": 1,
+      "AI / ML Engineer|Middle": 10,
+      "AI / ML Engineer|Senior": 10,
+      "Backend Developer|Fresher": 14,
+      "Backend Developer|Intern": 12,
+      "Backend Developer|Junior": 61,
+      "Backend Developer|Lead": 8,
+      "Backend Developer|Middle": 58,
+      "Backend Developer|Senior": 35,
       "BrSE / Cầu nối|Junior": 8,
-      "BrSE / Cầu nối|Manager": 1,
       "BrSE / Cầu nối|Middle": 7,
-      "Business Analyst|Fresher": 3,
-      "Business Analyst|Intern": 7,
-      "Business Analyst|Junior": 47,
+      "BrSE / Cầu nối|Senior": 1,
+      "Business Analyst|Fresher": 2,
+      "Business Analyst|Intern": 3,
+      "Business Analyst|Junior": 36,
       "Business Analyst|Lead": 8,
-      "Business Analyst|Manager": 6,
-      "Business Analyst|Middle": 35,
-      "Business Analyst|Senior": 24,
-      "Bảo mật|Fresher": 10,
-      "Bảo mật|Intern": 7,
-      "Bảo mật|Junior": 35,
-      "Bảo mật|Lead": 4,
-      "Bảo mật|Manager": 5,
-      "Bảo mật|Middle": 36,
-      "Bảo mật|Senior": 7,
-      "Data Analyst / BI|Fresher": 2,
-      "Data Analyst / BI|Intern": 9,
-      "Data Analyst / BI|Junior": 11,
-      "Data Analyst / BI|Lead": 1,
-      "Data Analyst / BI|Manager": 1,
-      "Data Analyst / BI|Middle": 8,
-      "Data Analyst / BI|Senior": 4,
-      "Data Engineer|Intern": 3,
-      "Data Engineer|Junior": 20,
-      "Data Engineer|Lead": 1,
-      "Data Engineer|Middle": 15,
-      "Data Engineer|Senior": 13,
-      "DevOps / Cloud|Fresher": 6,
-      "DevOps / Cloud|Intern": 3,
-      "DevOps / Cloud|Junior": 44,
-      "DevOps / Cloud|Lead": 9,
-      "DevOps / Cloud|Manager": 2,
-      "DevOps / Cloud|Middle": 63,
-      "DevOps / Cloud|Senior": 16,
+      "Business Analyst|Manager": 4,
+      "Business Analyst|Middle": 26,
+      "Business Analyst|Senior": 18,
+      "Bảo mật|Fresher": 3,
+      "Bảo mật|Junior": 17,
+      "Bảo mật|Lead": 2,
+      "Bảo mật|Manager": 3,
+      "Bảo mật|Middle": 13,
+      "Bảo mật|Senior": 2,
+      "Data Analyst / BI|Fresher": 1,
+      "Data Analyst / BI|Intern": 3,
+      "Data Analyst / BI|Junior": 5,
+      "Data Analyst / BI|Middle": 2,
+      "Data Analyst / BI|Senior": 3,
+      "Data Engineer|Junior": 4,
+      "Data Engineer|Middle": 7,
+      "Data Engineer|Senior": 8,
+      "DevOps / Cloud|Fresher": 2,
+      "DevOps / Cloud|Intern": 1,
+      "DevOps / Cloud|Junior": 19,
+      "DevOps / Cloud|Lead": 2,
+      "DevOps / Cloud|Middle": 18,
+      "DevOps / Cloud|Senior": 5,
       "ERP / SAP Consultant|Fresher": 5,
       "ERP / SAP Consultant|Junior": 11,
       "ERP / SAP Consultant|Middle": 8,
       "ERP / SAP Consultant|Senior": 2,
-      "Embedded / IoT|Fresher": 5,
-      "Embedded / IoT|Intern": 7,
-      "Embedded / IoT|Junior": 46,
-      "Embedded / IoT|Lead": 10,
-      "Embedded / IoT|Middle": 33,
-      "Embedded / IoT|Senior": 11,
-      "Frontend Developer|Fresher": 16,
-      "Frontend Developer|Intern": 14,
-      "Frontend Developer|Junior": 65,
-      "Frontend Developer|Lead": 11,
-      "Frontend Developer|Middle": 83,
-      "Frontend Developer|Senior": 21,
-      "Fullstack Developer|Fresher": 7,
-      "Fullstack Developer|Intern": 14,
-      "Fullstack Developer|Junior": 38,
-      "Fullstack Developer|Lead": 15,
-      "Fullstack Developer|Manager": 1,
-      "Fullstack Developer|Middle": 65,
-      "Fullstack Developer|Senior": 20,
-      "Game Developer|Fresher": 3,
+      "Embedded / IoT|Fresher": 1,
+      "Embedded / IoT|Intern": 2,
+      "Embedded / IoT|Junior": 15,
+      "Embedded / IoT|Middle": 10,
+      "Embedded / IoT|Senior": 4,
+      "Frontend Developer|Fresher": 4,
+      "Frontend Developer|Intern": 2,
+      "Frontend Developer|Junior": 29,
+      "Frontend Developer|Lead": 2,
+      "Frontend Developer|Middle": 31,
+      "Frontend Developer|Senior": 8,
+      "Fullstack Developer|Fresher": 4,
+      "Fullstack Developer|Intern": 3,
+      "Fullstack Developer|Junior": 26,
+      "Fullstack Developer|Lead": 3,
+      "Fullstack Developer|Middle": 32,
+      "Fullstack Developer|Senior": 8,
+      "Game Developer|Fresher": 2,
       "Game Developer|Intern": 6,
-      "Game Developer|Junior": 6,
+      "Game Developer|Junior": 5,
       "Game Developer|Middle": 4,
       "Game Developer|Senior": 1,
       "IT Support / Helpdesk|Fresher": 6,
@@ -291,43 +281,40 @@
       "IT Support / Helpdesk|Manager": 1,
       "IT Support / Helpdesk|Middle": 3,
       "IT Support / Helpdesk|Senior": 1,
-      "Kiểm thử (QA/QC)|Fresher": 26,
-      "Kiểm thử (QA/QC)|Intern": 15,
-      "Kiểm thử (QA/QC)|Junior": 125,
-      "Kiểm thử (QA/QC)|Lead": 10,
-      "Kiểm thử (QA/QC)|Manager": 11,
-      "Kiểm thử (QA/QC)|Middle": 85,
-      "Kiểm thử (QA/QC)|Senior": 10,
-      "Mobile Developer|Fresher": 8,
-      "Mobile Developer|Intern": 7,
-      "Mobile Developer|Junior": 72,
-      "Mobile Developer|Lead": 19,
+      "Kiểm thử (QA/QC)|Fresher": 13,
+      "Kiểm thử (QA/QC)|Intern": 2,
+      "Kiểm thử (QA/QC)|Junior": 75,
+      "Kiểm thử (QA/QC)|Lead": 3,
+      "Kiểm thử (QA/QC)|Manager": 2,
+      "Kiểm thử (QA/QC)|Middle": 34,
+      "Kiểm thử (QA/QC)|Senior": 2,
+      "Mobile Developer|Fresher": 2,
+      "Mobile Developer|Intern": 1,
+      "Mobile Developer|Junior": 35,
+      "Mobile Developer|Lead": 1,
       "Mobile Developer|Manager": 2,
-      "Mobile Developer|Middle": 56,
-      "Mobile Developer|Senior": 25,
-      "Quản lý IT / CTO|Manager": 15,
+      "Mobile Developer|Middle": 29,
+      "Mobile Developer|Senior": 13,
+      "Quản lý IT / CTO|Manager": 9,
       "Quản lý dự án / sản phẩm|Fresher": 1,
       "Quản lý dự án / sản phẩm|Intern": 1,
-      "Quản lý dự án / sản phẩm|Junior": 12,
-      "Quản lý dự án / sản phẩm|Manager": 42,
-      "Quản lý dự án / sản phẩm|Middle": 19,
-      "Quản lý dự án / sản phẩm|Senior": 3,
+      "Quản lý dự án / sản phẩm|Junior": 9,
+      "Quản lý dự án / sản phẩm|Manager": 4,
+      "Quản lý dự án / sản phẩm|Middle": 14,
+      "Quản lý dự án / sản phẩm|Senior": 10,
       "Quản trị CSDL (DBA)|Junior": 5,
-      "Quản trị CSDL (DBA)|Middle": 2,
-      "Quản trị hệ thống / Mạng|Fresher": 12,
-      "Quản trị hệ thống / Mạng|Intern": 5,
-      "Quản trị hệ thống / Mạng|Junior": 23,
+      "Quản trị hệ thống / Mạng|Fresher": 6,
+      "Quản trị hệ thống / Mạng|Intern": 1,
+      "Quản trị hệ thống / Mạng|Junior": 20,
       "Quản trị hệ thống / Mạng|Middle": 10,
       "Quản trị hệ thống / Mạng|Senior": 3,
-      "Software Engineer (chung)|Fresher": 13,
-      "Software Engineer (chung)|Intern": 9,
-      "Software Engineer (chung)|Junior": 47,
-      "Software Engineer (chung)|Lead": 3,
-      "Software Engineer (chung)|Middle": 38,
-      "Software Engineer (chung)|Senior": 28,
+      "Software Engineer (chung)|Fresher": 4,
+      "Software Engineer (chung)|Intern": 5,
+      "Software Engineer (chung)|Junior": 23,
+      "Software Engineer (chung)|Middle": 8,
+      "Software Engineer (chung)|Senior": 17,
       "Tech Lead / Architect|Junior": 2,
-      "Tech Lead / Architect|Lead": 69,
-      "Tech Lead / Architect|Manager": 6,
+      "Tech Lead / Architect|Lead": 46,
       "Tech Lead / Architect|Middle": 1,
       "UI/UX Designer|Junior": 4,
       "UI/UX Designer|Middle": 1,
@@ -336,82 +323,82 @@
     "bands": {
       "role": {
         "AI / ML Engineer": {
-          "kind": "ratio",
-          "p10": 0.733565875943842,
-          "p90": 1.5648637770168705,
-          "n_valid": 25
+          "kind": "market",
+          "low": 17.0,
+          "high": 60.7,
+          "n_train": 54
         },
         "Backend Developer": {
           "kind": "ratio",
-          "p10": 0.7788296010685354,
-          "p90": 1.2791421575602164,
-          "n_valid": 130
+          "p10": 0.7106231291884774,
+          "p90": 1.475675943648985,
+          "n_valid": 50
         },
         "BrSE / Cầu nối": {
           "kind": "market",
-          "low": 20.875,
-          "high": 50.5,
+          "low": 20.6665,
+          "high": 50.0,
           "n_train": 16
         },
         "Business Analyst": {
-          "kind": "ratio",
-          "p10": 0.6121890145179527,
-          "p90": 1.3750119741429259,
-          "n_valid": 38
+          "kind": "market",
+          "low": 12.5,
+          "high": 41.6268,
+          "n_train": 97
         },
         "Bảo mật": {
-          "kind": "ratio",
-          "p10": 0.6489887057775267,
-          "p90": 1.5354544482688122,
-          "n_valid": 21
+          "kind": "market",
+          "low": 17.3,
+          "high": 53.30090000000001,
+          "n_train": 40
         },
         "Data Analyst / BI": {
           "kind": "market",
-          "low": 11.75,
-          "high": 37.5,
-          "n_train": 36
+          "low": 12.3,
+          "high": 36.78,
+          "n_train": 14
         },
         "Data Engineer": {
           "kind": "market",
-          "low": 17.6,
-          "high": 69.29999999999998,
-          "n_train": 52
+          "low": 31.4,
+          "high": 61.099999999999994,
+          "n_train": 19
         },
         "DevOps / Cloud": {
-          "kind": "ratio",
-          "p10": 0.7317618206464751,
-          "p90": 1.3703597751104708,
-          "n_valid": 39
+          "kind": "market",
+          "low": 24.62,
+          "high": 50.0,
+          "n_train": 47
         },
         "ERP / SAP Consultant": {
           "kind": "market",
           "low": 12.0,
-          "high": 52.275,
+          "high": 49.95,
           "n_train": 26
         },
         "Embedded / IoT": {
-          "kind": "ratio",
-          "p10": 0.7606543571264355,
-          "p90": 1.3866576614189015,
-          "n_valid": 37
+          "kind": "market",
+          "low": 11.6,
+          "high": 44.45,
+          "n_train": 32
         },
         "Frontend Developer": {
-          "kind": "ratio",
-          "p10": 0.8211456706098016,
-          "p90": 1.2501860740232562,
-          "n_valid": 57
+          "kind": "market",
+          "low": 11.75,
+          "high": 46.4165,
+          "n_train": 76
         },
         "Fullstack Developer": {
-          "kind": "ratio",
-          "p10": 0.8043439926842861,
-          "p90": 1.3863134711525988,
-          "n_valid": 47
+          "kind": "market",
+          "low": 13.5,
+          "high": 46.0,
+          "n_train": 76
         },
         "Game Developer": {
           "kind": "market",
           "low": 4.5,
-          "high": 34.85000000000001,
-          "n_train": 20
+          "high": 35.833200000000005,
+          "n_train": 18
         },
         "IT Support / Helpdesk": {
           "kind": "market",
@@ -421,51 +408,51 @@
         },
         "Kiểm thử (QA/QC)": {
           "kind": "ratio",
-          "p10": 0.71135270281767,
-          "p90": 1.3377299490040773,
-          "n_valid": 73
+          "p10": 0.5779977676678772,
+          "p90": 1.8120102415402872,
+          "n_valid": 31
         },
         "Mobile Developer": {
-          "kind": "ratio",
-          "p10": 0.7342005536284116,
-          "p90": 1.2403344094491353,
-          "n_valid": 39
+          "kind": "market",
+          "low": 17.5,
+          "high": 46.699999999999996,
+          "n_train": 83
         },
         "Quản lý IT / CTO": {
           "kind": "market",
-          "low": 27.6,
-          "high": 93.19999999999999,
-          "n_train": 15
+          "low": 25.8,
+          "high": 96.5336,
+          "n_train": 9
         },
         "Quản lý dự án / sản phẩm": {
           "kind": "market",
-          "low": 19.85,
+          "low": 20.4,
           "high": 65.0,
-          "n_train": 78
+          "n_train": 39
         },
         "Quản trị CSDL (DBA)": {
           "kind": "market",
-          "low": 21.8,
-          "high": 37.0,
-          "n_train": 7
+          "low": 21.7,
+          "high": 38.0,
+          "n_train": 5
         },
         "Quản trị hệ thống / Mạng": {
           "kind": "market",
-          "low": 14.0,
-          "high": 29.98,
-          "n_train": 53
+          "low": 13.4,
+          "high": 32.5,
+          "n_train": 40
         },
         "Software Engineer (chung)": {
           "kind": "ratio",
-          "p10": 0.7888612113989992,
-          "p90": 1.4046996720284106,
-          "n_valid": 40
+          "p10": 0.7241364919483999,
+          "p90": 1.4652184493573344,
+          "n_valid": 20
         },
         "Tech Lead / Architect": {
-          "kind": "ratio",
-          "p10": 0.6475052297578524,
-          "p90": 1.6097348883670077,
-          "n_valid": 24
+          "kind": "market",
+          "low": 19.9,
+          "high": 80.90000000000003,
+          "n_train": 49
         },
         "UI/UX Designer": {
           "kind": "market",
@@ -476,166 +463,166 @@
       },
       "level": {
         "Fresher": {
-          "kind": "ratio",
-          "p10": 0.8667510332356342,
-          "p90": 1.3583122538386911,
-          "n_valid": 49
+          "kind": "market",
+          "low": 7.0,
+          "high": 22.0234,
+          "n_train": 72
         },
         "Intern": {
-          "kind": "ratio",
-          "p10": 0.6670839687506276,
-          "p90": 1.2878549215220074,
-          "n_valid": 36
+          "kind": "market",
+          "low": 4.167,
+          "high": 19.749999999999996,
+          "n_train": 42
         },
         "Junior": {
           "kind": "ratio",
-          "p10": 0.7184434317867321,
-          "p90": 1.398598688562138,
-          "n_valid": 211
+          "p10": 0.5930232219337922,
+          "p90": 1.5533025747997813,
+          "n_valid": 110
         },
         "Lead": {
           "kind": "ratio",
-          "p10": 0.6806558524305663,
-          "p90": 1.3329704669353257,
-          "n_valid": 54
+          "p10": 0.6555076751757262,
+          "p90": 1.2974459300823429,
+          "n_valid": 20
         },
         "Manager": {
           "kind": "market",
-          "low": 22.5,
-          "high": 90.0,
-          "n_train": 96
+          "low": 25.5,
+          "high": 88.5,
+          "n_train": 26
         },
         "Middle": {
           "kind": "ratio",
-          "p10": 0.7309012829781061,
-          "p90": 1.2844047898507722,
-          "n_valid": 205
+          "p10": 0.7433997600529555,
+          "p90": 1.3748161545932274,
+          "n_valid": 80
         },
         "Senior": {
           "kind": "ratio",
-          "p10": 0.820655363251122,
-          "p90": 1.5721134448095766,
-          "n_valid": 79
+          "p10": 0.7261453649184771,
+          "p90": 1.6048225205023368,
+          "n_valid": 36
         }
       }
     },
     "market": {
       "kind": "market",
       "low": 12.0,
-      "high": 50.0,
-      "n_train": 2461
+      "high": 47.5,
+      "n_train": 1169
     }
   },
   "test_by_role": {
     "AI / ML Engineer": {
-      "mean": 6.194,
-      "count": 29
+      "mean": 6.396,
+      "count": 15
     },
     "Backend Developer": {
-      "mean": 4.598,
-      "count": 126
+      "mean": 5.902,
+      "count": 40
     },
     "BrSE / Cầu nối": {
-      "mean": 5.185,
+      "mean": 5.184,
       "count": 3
     },
     "Business Analyst": {
-      "mean": 4.663,
-      "count": 28
+      "mean": 4.612,
+      "count": 14
     },
     "Bảo mật": {
-      "mean": 6.737,
-      "count": 31
+      "mean": 5.704,
+      "count": 8
     },
     "Data Analyst / BI": {
-      "mean": 2.855,
-      "count": 9
+      "mean": 5.793,
+      "count": 4
     },
     "Data Engineer": {
-      "mean": 8.944,
-      "count": 11
+      "mean": 14.87,
+      "count": 2
     },
     "DevOps / Cloud": {
-      "mean": 9.864,
-      "count": 39
+      "mean": 9.544,
+      "count": 10
     },
     "ERP / SAP Consultant": {
-      "mean": 1.478,
+      "mean": 1.786,
       "count": 1
     },
     "Embedded / IoT": {
-      "mean": 6.405,
-      "count": 40
+      "mean": 6.333,
+      "count": 5
     },
     "Frontend Developer": {
-      "mean": 4.632,
-      "count": 51
+      "mean": 3.714,
+      "count": 19
     },
     "Fullstack Developer": {
-      "mean": 6.013,
-      "count": 58
+      "mean": 8.461,
+      "count": 25
     },
     "Game Developer": {
-      "mean": 6.498,
-      "count": 4
+      "mean": 3.259,
+      "count": 2
     },
     "IT Support / Helpdesk": {
-      "mean": 3.507,
+      "mean": 2.89,
       "count": 15
     },
     "Kiểm thử (QA/QC)": {
-      "mean": 3.865,
-      "count": 90
+      "mean": 4.578,
+      "count": 36
     },
     "Mobile Developer": {
-      "mean": 4.404,
-      "count": 56
+      "mean": 4.822,
+      "count": 27
     },
     "Quản lý IT / CTO": {
-      "mean": 13.934,
-      "count": 4
+      "mean": 11.999,
+      "count": 3
     },
     "Quản lý dự án / sản phẩm": {
-      "mean": 8.591,
-      "count": 26
+      "mean": 10.568,
+      "count": 15
     },
     "Quản trị hệ thống / Mạng": {
-      "mean": 4.344,
-      "count": 15
+      "mean": 5.408,
+      "count": 11
     },
     "Software Engineer (chung)": {
-      "mean": 5.936,
-      "count": 41
+      "mean": 5.42,
+      "count": 19
     },
     "Tech Lead / Architect": {
-      "mean": 20.531,
-      "count": 15
+      "mean": 21.665,
+      "count": 10
     },
     "UI/UX Designer": {
-      "mean": 4.391,
+      "mean": 7.416,
       "count": 4
     }
   },
   "permutation_importance": {
-    "experience_years": 0.9502,
-    "role": 0.0705,
-    "level": 0.0411,
-    "skill::Next.js": 0.0178,
-    "skill::Flutter": 0.0099,
-    "region": 0.0094,
-    "skill::AWS": 0.0082,
-    "year": 0.0069,
-    "skill::Rust": 0.0064,
-    "skill::Tiếng Anh": 0.0048,
-    "skill::LLM / GenAI": 0.0045,
-    "skill::GCP": 0.0033,
-    "skill::TensorFlow/PyTorch": 0.0032,
-    "skill::An ninh mạng": 0.0031,
-    "skill::Machine Learning": 0.0031,
-    "skill::Golang": 0.003,
-    "skill::Python": 0.0028,
-    "skill::CI/CD": 0.0021,
-    "skill::Kotlin": 0.002,
-    "skill::Kubernetes": 0.0018
+    "experience_years": 0.8769,
+    "role": 0.0882,
+    "level": 0.0715,
+    "platform": 0.0527,
+    "skill::Next.js": 0.0145,
+    "skill::LLM / GenAI": 0.0113,
+    "company_type": 0.0105,
+    "work_mode": 0.0098,
+    "skill::Kafka": 0.0087,
+    "skill::Golang": 0.0081,
+    "region": 0.0062,
+    "skill::Python": 0.0045,
+    "skill::React Native": 0.0044,
+    "skill::AWS": 0.0016,
+    "skill::Tiếng Anh": 0.0012,
+    "skill::Kubernetes": 0.0011,
+    "skill::HTML/CSS": 0.0011,
+    "skill::TypeScript": 0.0008,
+    "skill::An ninh mạng": 0.0008,
+    "skill::React": 0.0007
   }
 }

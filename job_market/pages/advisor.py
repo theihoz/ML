@@ -5,7 +5,7 @@ import streamlit as st
 
 from career_market import salary_app
 from career_market import salary_charts as charts
-from career_market.salary_dataset import REGIONS, ROLE_ORDER, SKILLS
+from career_market.salary_dataset import COMPANY_TYPES, REGIONS, ROLE_ORDER, SKILLS
 from career_market.salary_model import MODEL_LABELS
 from career_market.salary_visuals import png
 
@@ -63,6 +63,14 @@ with left, st.container(border=True):
             default=shared["skills"] or ["Java", "SQL", "Git"],
             placeholder="Chọn ngôn ngữ, framework, công cụ…",
         )
+        with st.expander("Thêm thông tin (không bắt buộc)"):
+            title = st.text_input(
+                "Chức danh mong muốn", placeholder="Ví dụ: Senior Backend Engineer, Expert…"
+            )
+            company_type = st.selectbox(
+                "Loại công ty", ["Khác", *[name for name, _ in COMPANY_TYPES]]
+            )
+            work_mode = st.selectbox("Hình thức làm việc", ["Không rõ", "Toàn thời gian", "Từ xa"])
         model_name = st.selectbox(
             "Mô hình",
             models,
@@ -79,7 +87,14 @@ if shared["role"] and "advisor_result" not in st.session_state:
     submitted = True  # mở từ đường dẫn chia sẻ: tư vấn ngay với hồ sơ đã điền
 if submitted:
     st.session_state["advisor_result"] = salary_app.advice(
-        role, region, float(years), tuple(sorted(skills)), model_name
+        role,
+        region,
+        float(years),
+        tuple(sorted(skills)),
+        model_name,
+        title.strip(),
+        company_type,
+        work_mode,
     )
     st.session_state["advisor_profile"] = {"role": role, "region": region, "years": years}
 result = st.session_state.get("advisor_result")
