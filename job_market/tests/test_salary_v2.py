@@ -159,3 +159,42 @@ def test_selected_model_stays_within_accepted_error_budget():
     # tham số trên valid không kéo MAE về trong ngân sách cũ.
     report = load_report()
     assert report["models"][report["selected"]]["test"]["MAE"] <= 5.85
+
+
+ADVICE_PROFILES = [
+    ("Backend Developer", 2, ["Java"]),
+    ("Backend Developer", 5, []),
+    ("Frontend Developer", 1, ["JavaScript", "React"]),
+    ("Data Engineer", 3, ["Python", "SQL"]),
+    ("Kiểm thử (QA/QC)", 0, []),
+    ("DevOps / Cloud", 4, ["Docker", "Kubernetes", "AWS"]),
+]
+
+
+@pytest.mark.parametrize(("role", "years", "skills"), ADVICE_PROFILES)
+def test_recommended_skills_never_lower_predicted_salary(role, years, skills):
+    result = advise({"role": role, "region": "Hà Nội", "experience_years": years, "skills": skills})
+    assert result["recommendations"]
+    for row in result["recommendations"]:
+        assert row["skill"] not in skills
+        assert row["uplift"] >= -1e-6, (role, years, skills, row)
+
+
+def test_saved_skill_value_has_no_negative_model_uplift():
+    from career_market.salary_model import load_skill_value
+
+    table = load_skill_value()
+    assert len(table)
+    assert (table["model_uplift"] >= -1e-6).all(), table[table["model_uplift"] < 0]
+
+
+def test_saved_report_and_validation_match_the_current_model():
+    from career_market.salary_validation import load_validation
+
+    report = load_report()
+    assert not any(name.endswith("skill_count") for name in report["permutation_importance"])
+    validation = load_validation()
+    selected = report["selected"]
+    assert validation["selected"] == selected
+    point = validation["bootstrap"]["models"][selected]["MAE"]["point"]
+    assert point == pytest.approx(report["models"][selected]["test"]["MAE"], abs=1e-6)
