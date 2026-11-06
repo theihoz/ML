@@ -33,8 +33,12 @@ Cách tin nguồn xác định gross hoặc net; ghi unknown khi nguồn không 
 _Tránh dùng_: Tự coi unknown là gross, loại thu nhập.
 
 **Vai trò nghề nghiệp**:
-Nhóm công việc dùng để so sánh lương và tư vấn, gồm Backend, Frontend, Fullstack, Mobile, Data/ML, DevOps và QA Automation.
+Một trong 23 nhóm công việc CNTT dùng để so sánh lương và tư vấn, suy ra từ chức danh của tin.
 _Tránh dùng_: Cấp bậc, kỹ năng đơn lẻ.
+
+**Cấp bậc**:
+Mức thâm niên của vị trí (Intern, Fresher, Junior, Middle, Senior, Lead, Manager), suy ra từ chức danh và số năm kinh nghiệm yêu cầu.
+_Tránh dùng_: Vai trò nghề nghiệp, chức danh.
 
 **Địa điểm làm việc**:
 Một hoặc nhiều địa điểm vật lý mà tin tuyển dụng cho phép làm việc; một tin có cả HCM và HN vẫn là một tin tuyển dụng.
@@ -51,3 +55,25 @@ _Tránh dùng_: Tỷ lệ người dùng công nghệ trong khảo sát, tổng 
 **Xu hướng theo thời gian**:
 Sự thay đổi của một chỉ tiêu giữa các giai đoạn có thời gian nguồn xác định và phạm vi dữ liệu đủ so sánh.
 _Tránh dùng_: Bảng xếp hạng tại một thời điểm, năm tải dữ liệu thay cho năm đăng tin.
+
+## Độ chính xác thực tế
+
+**Lương thị trường**:
+Lương gross hằng tháng mà người đang làm một vị trí nhận được, theo các khảo sát lương công bố; khác lương chào tuyển trong tin.
+_Tránh dùng_: Lương thực tế (mơ hồ), lương chào tuyển.
+
+**Bộ đối chiếu**:
+Tập số liệu lương thị trường theo vai trò, cấp bậc và thành phố, lấy từ báo cáo lương bên ngoài; dùng để kiểm độ chính xác thực tế, không dùng để huấn luyện.
+_Tránh dùng_: Tập test, ground truth.
+
+**Hồ sơ vàng**:
+Hồ sơ của người thật mà nhóm biết mức lương, kèm vai trò, cấp bậc, thành phố và kỹ năng; dùng để kiểm từng ca cụ thể.
+_Tránh dùng_: Hồ sơ mẫu, dữ liệu test.
+
+**Khoảng lương dự đoán**:
+Kết quả chính của phần mềm: khoảng p25 – trung vị – p75 cho một hồ sơ, thay cho một con số duy nhất.
+_Tránh dùng_: Lương dự đoán (khi chỉ nói một con số), khoảng tin cậy.
+
+**Vùng ưu tiên**:
+Phần thị trường được cam kết độ chính xác: Hà Nội và TP. Hồ Chí Minh cùng tám vai trò phổ biến; ngoài vùng này kết quả kèm cảnh báo ít dữ liệu.
+_Tránh dùng_: Phạm vi hỗ trợ.

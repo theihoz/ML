@@ -13,7 +13,7 @@ python -m pip install './job_market[dev]'
 make demo
 ```
 
-Mở http://127.0.0.1:8502. Kiểm tra mã và kiểm thử bằng `make check` trong cùng môi trường. Tạo lại bộ dữ liệu và huấn luyện lại bằng `make train-v2` (khoảng 20 giây).
+Mở http://127.0.0.1:8502. Kiểm tra mã và kiểm thử bằng `make check` trong cùng môi trường. Tạo lại bộ dữ liệu và huấn luyện lại bằng `make train` (khoảng 20 giây).
 
 ## Chạy bằng Docker
 
@@ -25,7 +25,7 @@ Từ thư mục gốc repository, chuẩn bị và chạy thử **trước ngày
 docker compose up --build -d --wait
 ```
 
-Mở http://localhost:8502. Image chứa mã ứng dụng, ba nguồn dữ liệu, bộ salary-v2, toàn bộ model đã huấn luyện, metric và dữ liệu biểu đồ. Khi build và khởi động, hệ thống kiểm tra dự đoán thật với cả 4 model salary-v2 và 2 model thăm dò, kiểm tra tư vấn kỹ năng và dữ liệu thị trường. Không cần tải dữ liệu hay huấn luyện lại khi demo.
+Mở http://localhost:8502. Image chứa mã ứng dụng, ba nguồn dữ liệu, bộ salary-v2, toàn bộ model đã huấn luyện và metric. Khi build và khởi động, hệ thống kiểm tra dự đoán thật với cả 4 model và tư vấn kỹ năng. Không cần tải dữ liệu hay huấn luyện lại khi demo.
 
 **Ngày demo**, trên máy đã build thành công và còn giữ image, bật Docker rồi chạy đúng một lệnh (dùng được khi không có mạng):
 
@@ -52,20 +52,48 @@ Bộ dữ liệu `salary-v2` gộp ba nguồn thô sẵn có trong `job_market/d
 | Mô hình | MAE test | RMSE test | R² test | MAPE test |
 | --- | --- | --- | --- | --- |
 | Mốc trung vị | 12,15 | 17,17 | −0,04 | 48,3% |
-| Ridge | 5,95 | 8,50 | 0,745 | 22,0% |
-| Random Forest | 5,73 | 8,58 | 0,740 | 20,8% |
-| **Gradient Boosting** (chọn theo valid) | **5,38** | **7,96** | **0,776** | **19,7%** |
+| Ridge | 6,37 | 9,03 | 0,712 | 23,4% |
+| Random Forest | 6,47 | 9,14 | 0,705 | 25,5% |
+| **Gradient Boosting** (chọn theo valid) | **5,82** | **8,58** | **0,740** | **20,7%** |
 
-Đơn vị MAE/RMSE: triệu VND/tháng. Kết quả là lương chào tuyển ước tính, chưa phân biệt gross/net.
+Đơn vị MAE/RMSE: triệu VND/tháng. Mọi mô hình bị ràng buộc "thêm kỹ năng không làm giảm lương" (ADR 0013). Kết quả là lương chào tuyển ước tính, chưa phân biệt gross/net.
 
 ## Các trang
 
 - **Tư vấn & dự đoán lương** (trang chủ): nhập vai trò, khu vực, kinh nghiệm, kỹ năng; nhận lương dự đoán, khoảng thường gặp, kỹ năng nên học và lộ trình theo kinh nghiệm. Có thể chia sẻ hồ sơ qua đường dẫn, ví dụ `/?role=Data%20Engineer&years=3&skills=Python,SQL`.
 - **Tổng quan**: dashboard top công nghệ theo nhu cầu và theo lương, kinh nghiệm – thu nhập, lương theo đủ 23 vai trò, theo khu vực và vai trò × khu vực.
-- **Thị trường việc làm**: nhu cầu kỹ năng theo nguồn và bộ lọc.
+- **Thị trường việc làm**: kỹ năng được yêu cầu nhiều và lương cao, lọc theo nguồn, vai trò, khu vực.
 - **Đánh giá mô hình**: MAE, RMSE, R², MAPE trên train/valid/test, thực tế – dự đoán, mức quan trọng đặc trưng, giá trị gia tăng của kỹ năng.
 - **Dữ liệu huấn luyện**: phễu làm sạch, nhãn train/valid/test, tải CSV.
 
-Bản thăm dò ban đầu (Ridge/Linear Regression trên 14 nhãn duyệt tay) vẫn giữ ở các đường dẫn ẩn `Du_doan_tham_do`, `Huan_luyen`, `Du_lieu` làm hồ sơ.
+## Cấu trúc thư mục
 
-Báo cáo tiểu luận, sơ đồ draw.io và hình minh họa nằm trong `report/`. Cách thao tác nằm trong `docs/DEMO.md`; bố cục mã trong `docs/STRUCTURE.md`.
+```
+job_market/
+├── app.py                  Điểm vào Streamlit, menu 5 trang
+├── pages/                  5 trang giao diện
+│   ├── advisor.py          Tư vấn & dự đoán lương (trang chủ)
+│   ├── overview.py         Tổng quan
+│   ├── market.py           Thị trường việc làm
+│   ├── evaluation.py       Đánh giá mô hình
+│   └── dataset.py          Dữ liệu huấn luyện
+├── src/career_market/      Lõi xử lý (đọc theo thứ tự bước)
+│   ├── data/rules.py       Bước 1: chuẩn hóa một tin
+│   ├── data/dataset.py     Bước 2: gộp 3 nguồn, chia train/valid/test
+│   ├── model/estimators.py Bước 3a: đặc trưng + 4 mô hình
+│   ├── model/training.py   Bước 3b: huấn luyện, chọn mô hình
+│   ├── model/advisor.py    Bước 4: dự đoán + gợi ý kỹ năng
+│   ├── model/validation.py Bước 5: kiểm định
+│   ├── ui/                 Biểu đồ, cache, theme
+│   ├── paths.py            Đường dẫn dữ liệu/mô hình
+│   └── __main__.py         Dòng lệnh
+├── datasets/raw/           3 file CSV gốc
+├── datasets/processed/     Bộ salary-v2 đã làm sạch
+├── artifacts/salary-v2/    Mô hình .joblib và metric đã lưu
+└── tests/test_salary.py    Kiểm thử toàn luồng
+docker/                     Kiểm tra khi khởi động container
+docs/                       Hướng dẫn demo, quyết định thiết kế (adr/)
+report/                     Báo cáo, slide, sơ đồ, hình
+```
+
+Cách thao tác nằm trong `docs/DEMO.md`.

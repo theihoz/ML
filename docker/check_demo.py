@@ -1,18 +1,14 @@
-"""Verify bundled demo data and real inference; never train or download assets."""
+"""Kiểm tra trước khi demo: đủ dữ liệu + 4 mô hình chạy được. Không huấn luyện, không tải mạng."""
 
 import json
 import math
 
 import pandas as pd
-from career_market import MarketService
-from career_market.salary_dataset import dataset_path, load_dataset
-from career_market.salary_model import (
-    MODEL_LABELS,
-    advise,
-    artifacts_dir,
-    load_skill_value,
-    predict_profile,
-)
+from career_market.data.dataset import load_dataset
+from career_market.model.advisor import advise, predict_profile
+from career_market.model.estimators import MODEL_LABELS
+from career_market.model.training import load_skill_value
+from career_market.paths import artifacts_dir, dataset_path
 
 
 def check_demo():
@@ -48,15 +44,8 @@ def check_demo():
     if not advice["recommendations"] or not advice["experience_path"]:
         raise RuntimeError("Không tạo được tư vấn kỹ năng/lộ trình kinh nghiệm.")
 
-    service = MarketService()
-    if not service.prepare()["rows"]:
-        raise RuntimeError("Không đọc được dữ liệu thị trường.")
-    for name in ("Ridge", "LinearRegression"):
-        result = service.estimate_salary("Data/ML", "HN", model_name=name)
-        if result["status"] != "ok" or not result["salary_vnd_month"] > 0:
-            raise RuntimeError(f"Model thăm dò {name} không chạy được: {result}")
     print(
-        f"Demo OK: {len(frame):,} tin; 4 model salary-v2, 2 model thăm dò; "
+        f"Demo OK: {len(frame):,} tin; 4 model salary-v2; "
         f"{advice['model']} dự đoán {advice['salary']:.2f} triệu VND/tháng; tư vấn sẵn sàng.",
         flush=True,
     )

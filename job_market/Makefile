@@ -3,7 +3,7 @@ PORT ?= 8502
 export PYTHONPATH := src
 export MPLCONFIGDIR := $(CURDIR)/.cache/matplotlib
 
-.PHONY: check lint test run sources preview
+.PHONY: check lint test run
 check: lint test
 
 lint:
@@ -15,9 +15,3 @@ test:
 
 run:
 	$(PYTHON) -m streamlit run app.py --server.address 127.0.0.1 --server.port $(PORT)
-
-sources:
-	$(PYTHON) -m career_market sources
-
-preview:
-	$(PYTHON) -m career_market preview jobs-2023 --limit 5

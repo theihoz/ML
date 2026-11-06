@@ -1,15 +1,18 @@
-"""Trang tư vấn nghề nghiệp: nhập hồ sơ, dự đoán lương và gợi ý kỹ năng nên học."""
+"""Trang chủ — Tư vấn & dự đoán lương.
+
+Mục này làm gì: người dùng nhập hồ sơ → gọi model/advisor.py → hiện lương dự đoán,
+kỹ năng nên học và lộ trình theo kinh nghiệm.
+"""
 
 import pandas as pd
 import streamlit as st
 
-from career_market import salary_app
-from career_market import salary_charts as charts
-from career_market.salary_dataset import REGIONS, ROLE_ORDER, SKILLS
-from career_market.salary_model import MODEL_LABELS
-from career_market.salary_visuals import png
+from career_market.data.rules import REGIONS, ROLE_ORDER, SKILLS
+from career_market.model.estimators import MODEL_LABELS
+from career_market.ui import cache, charts
+from career_market.ui.charts import png
 
-report = salary_app.report()
+report = cache.report()
 models = [name for name in MODEL_LABELS if name != "Baseline"]
 # Hồ sơ có thể truyền qua đường dẫn, ví dụ ?role=Data Engineer&years=3&skills=Python,SQL,
 # để chia sẻ kết quả tư vấn; giá trị không hợp lệ bị bỏ qua.
@@ -30,6 +33,7 @@ st.write(
     "Nhập vai trò, kinh nghiệm và kỹ năng hiện có. Mô hình đã huấn luyện sẵn trên "
     f"{report['dataset_rows']:,} tin tuyển dụng sẽ ước tính mức lương và gợi ý kỹ năng nên học thêm."
 )
+# Mục này: form nhập hồ sơ (cột trái) và kết quả lương (cột phải).
 left, right = st.columns([1, 1.25], gap="large")
 with left, st.container(border=True):
     st.subheader("Hồ sơ của bạn")
@@ -68,7 +72,7 @@ with left, st.container(border=True):
 if shared["role"] and "advisor_result" not in st.session_state:
     submitted = True  # mở từ đường dẫn chia sẻ: tư vấn ngay với hồ sơ đã điền
 if submitted:
-    st.session_state["advisor_result"] = salary_app.advice(
+    st.session_state["advisor_result"] = cache.advice(
         role, region, float(years), tuple(sorted(skills)), model_name
     )
     st.session_state["advisor_profile"] = {"role": role, "region": region, "years": years}
@@ -98,6 +102,7 @@ with right, st.container(border=True):
                 f"{market['role_p25']:.1f}–{market['role_p75']:.1f} triệu."
             )
 
+# Mục này: gợi ý kỹ năng + lộ trình kinh nghiệm, chỉ hiện sau khi bấm nút.
 if result is not None:
     st.subheader("Kỹ năng nên học thêm")
     recommendations = result["recommendations"]
