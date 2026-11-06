@@ -92,3 +92,13 @@ def test_language_mentioned_only_as_a_benefit_is_not_a_requirement():
     benefit = "Phúc lợi: trợ cấp ngoại ngữ (với ứng viên có chứng chỉ tiếng Nhật N3 trở lên)"
     assert "Tiếng Nhật" not in extract_skills(benefit)
     assert "Tiếng Nhật" in extract_skills("Yêu cầu: tiếng Nhật N2 trở lên")
+
+
+def test_rules_fixed_by_the_ai_audit_sample():
+    # Mẫu kiểm tra 67 tin duyệt ngày 06/11/2026 (datasets/labels/2026-11-06/audit_sample_ai_67.csv).
+    assert "JavaScript" not in extract_skills("PHP Developer Kafka Java Node.js")
+    assert "JavaScript" not in extract_skills("Redux Tailwind CSS Vue.js Next.js React")
+    assert "JavaScript" in extract_skills("JavaScript, JS ES6")
+    assert derive_level("Midle PHP Developer", 2) == "Middle"
+    assert classify_role("AX Developer") == "ERP / SAP Consultant"
+    assert classify_role("Microsoft Dynamics AX Developer") == "ERP / SAP Consultant"

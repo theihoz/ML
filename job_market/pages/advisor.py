@@ -9,6 +9,7 @@ import streamlit as st
 
 from career_market.data.rules import COMPANY_TYPES, LEVELS, REGIONS, ROLE_ORDER, SKILLS
 from career_market.model.estimators import MODEL_LABELS
+from career_market.model.versions import freshness_line
 from career_market.ui import cache, charts
 from career_market.ui.charts import png
 
@@ -44,6 +45,8 @@ if not production.get("production_ready"):
         st.page_link(
             "pages/evaluation.py", label="Xem đánh giá mô hình", icon=":material/insights:"
         )
+# Mục này: dòng độ mới của dữ liệu, đọc từ manifest phiên bản đang phục vụ (#111).
+st.caption(freshness_line())
 st.write(
     "Nhập vai trò, kinh nghiệm và kỹ năng hiện có. Mô hình đã huấn luyện sẵn trên "
     f"{report['dataset_rows']:,} tin tuyển dụng sẽ ước tính mức lương và gợi ý kỹ năng nên học thêm."

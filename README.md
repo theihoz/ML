@@ -13,7 +13,7 @@ python -m pip install './job_market[dev]'
 make demo
 ```
 
-Mở http://127.0.0.1:8502. Kiểm tra mã và kiểm thử bằng `make check` trong cùng môi trường. Tạo lại bộ dữ liệu và huấn luyện lại bằng `make train` (khoảng 30 giây). Model mới được ghi vào `artifacts/salary-v2-candidate` và chỉ thay model đang phục vụ khi qua cổng chuẩn production (đạt chuẩn, hoặc tốt hơn model hiện tại khi cả hai chưa đạt); lệnh in rõ thay hay giữ và lý do.
+Mở http://127.0.0.1:8502. Kiểm tra mã và kiểm thử bằng `make check` trong cùng môi trường. Tạo lại bộ dữ liệu và huấn luyện lại bằng `make train` (khoảng 30 giây). Mỗi lần huấn luyện tạo một phiên bản mới trong `job_market/artifacts/` và chỉ thành bản phục vụ khi qua cổng chuẩn production (đạt chuẩn, hoặc tốt hơn model hiện tại khi cả hai chưa đạt); lệnh in rõ thay hay giữ và lý do. Thêm dữ liệu mới, phiên bản và quay lại bản cũ: xem `job_market/README.md`.
 
 ## Chạy bằng Docker
 

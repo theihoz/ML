@@ -23,7 +23,7 @@ packages = ["src/career_market"]
 "datasets/raw" = "career_market/datasets/raw"
 "datasets/processed/salary_dataset_v2.csv" = "career_market/datasets/processed/salary_dataset_v2.csv"
 "datasets/processed/salary_dataset_v2.json" = "career_market/datasets/processed/salary_dataset_v2.json"
-"artifacts/salary-v2" = "career_market/artifacts/salary-v2"
+"artifacts" = "career_market/artifacts"
 
 [tool.pytest.ini_options]
 testpaths = ["tests"]

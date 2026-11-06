@@ -16,6 +16,22 @@ def dataset_path():
     return data_root() / "processed" / "salary_dataset_v2.csv"
 
 
+FIRST_VERSION = "salary-v2"
+
+
+def artifacts_root():
+    """Thư mục artifacts/: mỗi thư mục con là một phiên bản model (#108)."""
+    return data_root().parent / "artifacts"
+
+
+def current_version(root=None):
+    """Tên phiên bản đang phục vụ, đọc từ con trỏ artifacts/CURRENT (mặc định salary-v2)."""
+    pointer = Path(root or artifacts_root()) / "CURRENT"
+    if pointer.exists():
+        return pointer.read_text(encoding="utf-8").strip() or FIRST_VERSION
+    return FIRST_VERSION
+
+
 def artifacts_dir():
-    """Thư mục chứa mô hình .joblib, metrics.json, validation.json."""
-    return data_root().parent / "artifacts" / "salary-v2"
+    """Thư mục của phiên bản đang phục vụ: mô hình .joblib, metrics.json, validation.json."""
+    return artifacts_root() / current_version()

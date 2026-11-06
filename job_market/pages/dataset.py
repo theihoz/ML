@@ -1,16 +1,18 @@
 """Trang Dữ liệu huấn luyện.
 
-Mục này làm gì: phễu làm sạch (8.523 → 3.809 tin), phân bố train/valid/test, bảng dữ liệu + tải CSV.
+Mục này làm gì: phễu làm sạch (tin thô → tin có nhãn), phân bố train/valid/test, bảng dữ liệu + tải CSV.
 """
 
 import json
 
 import streamlit as st
 
+from career_market.model.versions import freshness_line
 from career_market.paths import dataset_path
 from career_market.ui import cache
 
 st.title("Dữ liệu huấn luyện")
+st.caption(freshness_line())
 frame = cache.dataset()
 summary = json.loads(dataset_path().with_suffix(".json").read_text(encoding="utf-8"))
 funnel = summary["funnel"]

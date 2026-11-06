@@ -226,6 +226,31 @@ def gender_audit(frame):
     }
 
 
+def latest_batch(parts, predicted):
+    """Chỉ số phụ (#106): sai số của model trên tin của lô nhập mới nhất (valid + test).
+
+    Tin của lô mới thuộc công ty đã ở train thì nằm ở train nên không được chấm ở đây.
+    """
+    rows = pd.concat([parts["valid"], parts["test"]], ignore_index=True)
+    values = np.concatenate([predicted["valid"], predicted["test"]])
+    batches = rows.get("batch", pd.Series("", index=rows.index)).fillna("").astype(str)
+    if not (batches != "").any():
+        return {"status": "chưa có lô mới", "batch": None, "n": 0}
+    batch = max(batches[batches != ""])
+    mask = (batches == batch).to_numpy()
+    if not mask.any():
+        return {"status": "lô mới không có tin valid/test", "batch": batch, "n": 0}
+    actual = rows.loc[mask, "salary"].to_numpy(dtype=float)
+    error_pct = np.abs(values[mask] - actual) / actual * 100
+    return {
+        "status": "đã chấm",
+        "batch": batch,
+        "n": int(mask.sum()),
+        "MAE": float(np.mean(np.abs(values[mask] - actual))),
+        "median_error_pct": float(np.median(error_pct)),
+    }
+
+
 def validate(output=None, rounds=BOOTSTRAP_ROUNDS, directory=None):
     """Kiểm định model đã lưu trong ``directory`` (mặc định: model đang phục vụ)."""
     parts, predictions, report = _predictions(directory)
@@ -247,6 +272,7 @@ def validate(output=None, rounds=BOOTSTRAP_ROUNDS, directory=None):
             interval_ratios(valid["salary"].to_numpy(), predictions[selected]["valid"], 0.8),
             rounds,
         ),
+        "latest_batch": latest_batch(parts, predictions[selected]),
     }
     path = output or Path(directory or artifacts_dir()) / "validation.json"
     path.write_text(json.dumps(result, ensure_ascii=False, indent=2), encoding="utf-8")

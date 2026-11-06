@@ -92,7 +92,8 @@ ROLE_RULES = [
     ),
     (
         "ERP / SAP Consultant",
-        r"\b(?:erp|sap|odoo|dynamics 365|tư vấn triển khai|triển khai phần mềm)\b",
+        r"\b(?:erp|sap|odoo|dynamics(?: 365| ax)?|ax developer|x\+\+|tư vấn triển khai|"
+        r"triển khai phần mềm)\b",
     ),
     (
         "Backend Developer",
@@ -132,7 +133,8 @@ EXCLUDED_TITLE = (
 SKILLS = {
     "Python": r"python",
     "Java": r"java(?!\s*script)",
-    "JavaScript": r"javascript|\bjs\b",
+    # "Node.js", "Vue.js", "Next.js" không phải yêu cầu JavaScript riêng (mẫu duyệt 06/11/2026).
+    "JavaScript": r"javascript|(?<![.\w])js\b",
     "TypeScript": r"typescript",
     "C#": r"c#",
     "C++": r"c\+\+",
@@ -366,7 +368,7 @@ def derive_level(title, years, source_level=""):
         return "Senior"
     if re.search(r"\bjunior\b|\bjr\.?\b", title):
         return "Junior"
-    if re.search(r"\bmiddle\b|\bmid\b", title):
+    if re.search(r"\bmidd?le\b|\bmid\b", title):  # "Midle" là lỗi chính tả hay gặp
         return "Middle"
     if pd.isna(years):
         return "Junior"

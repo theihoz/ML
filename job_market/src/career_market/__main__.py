@@ -1,11 +1,14 @@
 """Dòng lệnh: python -m career_market <lệnh>.
 
 build-dataset   Bước 2: tạo lại datasets/processed/salary_dataset_v2.csv
-train           Bước 3: huấn luyện vào thư mục ứng viên, chỉ thay model khi qua cổng
+train           Bước 3: huấn luyện thành phiên bản mới, chỉ phục vụ khi qua cổng
+versions        Liệt kê phiên bản model, đánh dấu bản đang phục vụ
+rollback        Quay lại phiên bản đã phục vụ trước đó
 validate        Bước 5: kiểm định mô hình đã lưu (gồm chuẩn production)
 reality-check   Đối chiếu mô hình đã lưu với báo cáo lương và hồ sơ vàng
 advise          Bước 4: dự đoán + gợi ý kỹ năng cho một hồ sơ
 import-batch    Nhập lô tin tuyển dụng từ CSV
+refresh         Nhập lô → dựng dữ liệu → huấn luyện → cổng thay model, một lệnh
 """
 
 import argparse
@@ -17,21 +20,28 @@ from .data.batches import BatchError, import_batch
 from .data.dataset import write_dataset
 from .data.rules import REGIONS, ROLE_ORDER
 from .model.advisor import advise
-from .model.promotion import retrain
 from .model.reality import reality_check
 from .model.training import train
 from .model.validation import validate
-from .paths import artifacts_dir
+from .model.versions import list_versions, retrain_version, rollback
+from .refresh import refresh
 
 
 def main() -> int:
     parser = argparse.ArgumentParser(description="Dự đoán lương CNTT và tư vấn kỹ năng.")
     commands = parser.add_subparsers(dest="command", required=True)
-    commands.add_parser("build-dataset", help="Gộp ba nguồn thô thành bộ salary-v2 có split")
-    commands.add_parser(
-        "train",
-        help="Huấn luyện lại vào thư mục ứng viên; chỉ thay model đang phục vụ khi qua cổng",
+    build = commands.add_parser("build-dataset", help="Gộp nguồn thô và lô thành bộ salary-v2")
+    build.add_argument(
+        "--single-salary-rule",
+        choices=["ratio", "expand30", "point"],
+        default="ratio",
+        help="Cách suy đầu còn lại của tin chỉ ghi một con số lương (#118)",
     )
+    commands.add_parser(
+        "train", help="Huấn luyện thành phiên bản mới; chỉ phục vụ khi qua cổng thay model"
+    )
+    commands.add_parser("versions", help="Liệt kê phiên bản model và bản đang phục vụ")
+    commands.add_parser("rollback", help="Quay lại phiên bản đã phục vụ trước đó")
     commands.add_parser("validate", help="Hiệu chuẩn, bootstrap và công bằng của mô hình đã lưu")
     reality = commands.add_parser(
         "reality-check", help="Đối chiếu mô hình đã lưu với báo cáo lương"
@@ -48,19 +58,28 @@ def main() -> int:
     batch.add_argument(
         "--batches-dir", type=Path, help="Thư mục lưu lô (mặc định datasets/batches)"
     )
+    fresh = commands.add_parser("refresh", help="Chạy cả chuỗi huấn luyện lại (#109)")
+    fresh.add_argument("csv", nargs="*", type=Path, help="Các lô CSV cần nhập trước khi dựng")
+    fresh.add_argument("--source", help="Tên nguồn của các lô, ghi đè cột source")
+    fresh.add_argument("--crawl", help="Crawl trang (ví dụ topcv) trước khi dựng")
     args = parser.parse_args()
 
     if args.command == "build-dataset":
-        result = write_dataset()
+        result = write_dataset(single_salary_rule=args.single_salary_rule)
     elif args.command == "train":
-        serving = artifacts_dir()
-        result = retrain(
-            serving,
-            serving.with_name(serving.name + "-candidate"),
+        result = retrain_version(
             train=lambda output: train(output),
             validate=lambda directory: validate(directory=directory),
             rescore=lambda directory, output: validate(output=output, directory=directory),
         )
+    elif args.command == "versions":
+        result = list_versions()
+    elif args.command == "rollback":
+        try:
+            result = rollback()
+        except ValueError as error:
+            print(str(error), file=sys.stderr)
+            return 2
     elif args.command == "validate":
         result = validate()
         for difference in result["bootstrap"]["differences"].values():
@@ -73,6 +92,24 @@ def main() -> int:
         except BatchError as error:
             print(str(error), file=sys.stderr)
             return 2
+    elif args.command == "refresh":
+        if args.crawl:
+            # Crawler TopCV (#110) chờ ticket điều khoản thu thập (#103).
+            print(f"Chưa có crawler cho {args.crawl!r} (#110 chờ #103).", file=sys.stderr)
+            return 2
+        result = refresh(
+            args.csv,
+            args.source,
+            build=write_dataset,
+            retrain=lambda batches: retrain_version(
+                train=lambda output: train(output),
+                validate=lambda directory: validate(directory=directory),
+                rescore=lambda directory, output: validate(output=output, directory=directory),
+                batches=batches,
+            ),
+        )
+        print(json.dumps(result, ensure_ascii=False, indent=2))
+        return 0 if result["status"] == "ok" else 1
     else:
         skills = [s.strip() for s in args.skills.split(",") if s.strip()]
         result = advise(

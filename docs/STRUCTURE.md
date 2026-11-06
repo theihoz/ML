@@ -22,6 +22,9 @@ Phần còn lại:
 | `job_market/app.py`, `pages/` | Giao diện Streamlit: 5 trang |
 | `src/career_market/ui/` | Biểu đồ (`charts.py`), bộ nhớ đệm (`cache.py`), CSS (`theme.py`) |
 | `src/career_market/data/label_review.py`, `data/batches.py` | Mẫu duyệt nhãn tự động; nhập lô tin tuyển dụng CSV |
+| `src/career_market/data/review.py` | Hàng đợi duyệt tay và sổ nhãn đã duyệt (`datasets/labels/reviewed.csv`) |
+| `src/career_market/model/versions.py` | Phiên bản model, con trỏ `artifacts/CURRENT`, quay lại bản cũ, dòng độ mới |
+| `src/career_market/refresh.py` | Lệnh `refresh`: nhập lô → dựng → huấn luyện → kiểm định → cổng thay model |
 | `src/career_market/paths.py` | Đường dẫn dữ liệu và mô hình |
 | `src/career_market/__main__.py` | Dòng lệnh `build-dataset`, `train`, `validate`, `advise` |
 | `job_market/datasets/` | Dữ liệu thô và bộ salary-v2 |

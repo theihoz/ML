@@ -12,7 +12,17 @@ from pathlib import Path
 import pandas as pd
 
 from ..paths import data_root, dataset_path
+from .batches import batches_dir, load_batch, stored_batches
+from .review import (
+    QUEUE_COLUMNS,
+    ledger_salary,
+    load_ledger,
+    queue_path,
+    review_key,
+    salary_reason,
+)
 from .rules import (
+    _EXCLUDED,
     classify_role,
     company_type,
     derive_level,
@@ -30,6 +40,11 @@ from .rules import (
 DATASET_VERSION = "salary-v2"
 SPLIT_SEED = 42
 SPLIT_SHARES = {"train": 0.70, "valid": 0.15, "test": 0.15}
+# Cách suy đầu còn lại của tin chỉ ghi một con số lương ("Tới X", "Từ X"), #118:
+#   ratio    tỉ lệ cao/thấp trung vị của tin ghi đủ hai đầu cùng nguồn (#81, mặc định)
+#   expand30 luật cố định ×0.7 / ×1.3
+#   point    dùng đúng con số đó làm nhãn điểm
+SINGLE_SALARY_RULES = ("ratio", "expand30", "point")
 
 
 def _year(value, default):
@@ -118,34 +133,101 @@ def _split_for(company_key):
     return "test"
 
 
-# Mục này: ba hàm đọc nguồn ở trên đưa mọi tin về cùng một dạng dict; build_dataset gộp lại.
-def build_dataset(raw_dir=None):
-    """Đọc ba nguồn thô và trả về DataFrame đã làm sạch kèm cột split.
+def _batch_items(directory):
+    """Tin của mọi lô đã nhập (#105), cùng dạng dict với ba nguồn thô (#106)."""
+    for manifest in stored_batches(directory):
+        imported = _year(manifest["imported_at"], 2026)
+        for row in load_batch(manifest, directory).itertuples():
+            yield {
+                "source": row.source,
+                "title": row.title,
+                "company": row.company,
+                "location": row.location,
+                "salary_text": row.salary_text,
+                "experience_text": row.experience_text,
+                "level_text": "",
+                "year": _year(row.posted_date, imported),
+                "skill_text": (row.title, row.description),
+                "source_url": row.url,
+                "work_mode": None,
+                "field": "",
+                "batch": manifest["id"],
+            }
+
+
+def _queue(queue, item, key, reason):
+    queue.append(
+        {
+            "key": key,
+            "batch": item["batch"],
+            "source": item["source"],
+            "title": item["title"],
+            "company": item["company"],
+            "salary_text": item["salary_text"],
+            "reason": reason,
+            "url": item["source_url"],
+        }
+    )
+
+
+# Mục này: các hàm đọc nguồn ở trên đưa mọi tin về cùng một dạng dict; build_dataset gộp lại.
+def build_dataset(raw_dir=None, batches=None, ledger=None, single_salary_rule="ratio"):
+    """Đọc ba nguồn thô và mọi lô đã nhập, trả về DataFrame đã làm sạch kèm cột split.
 
     Tin sinh tự động bị loại trước khi đọc lương (#81). Tin chỉ ghi một đầu lương được tính
     lại bằng tỉ lệ cao/thấp trung vị của tin ghi đủ hai đầu trong tập train cùng nguồn.
+    Sổ nhãn đã duyệt được áp dụng trước khi chia tập; tin lô mới không gắn được nhãn vào
+    hàng đợi duyệt tay (``frame.attrs["review_queue"]``).
     """
+    if single_salary_rule not in SINGLE_SALARY_RULES:
+        raise ValueError(f"Quy tắc lương một số không hợp lệ: {single_salary_rule}")
     raw = Path(raw_dir) if raw_dir else data_root() / "raw"
-    funnel = {"raw": 0, "synthetic_removed": 0, "has_salary": 0, "it_role": 0, "deduplicated": 0}
-    records = []
-    for reader in (_it_posts, _topcv, _careerbuilder):
-        for item in reader(raw):
+    batch_root = Path(batches) if batches else batches_dir()
+    reviewed = load_ledger(ledger)
+    funnel = {
+        "raw": 0,
+        "synthetic_removed": 0,
+        "review_rejected": 0,
+        "has_salary": 0,
+        "it_role": 0,
+        "review_queue": 0,
+        "deduplicated": 0,
+    }
+    records, queue = [], []
+    sources = [reader(raw) for reader in (_it_posts, _topcv, _careerbuilder)]
+    if batch_root.is_dir():
+        sources.append(_batch_items(batch_root))
+    for stream in sources:
+        for item in stream:
+            item.setdefault("batch", "")
             funnel["raw"] += 1
             if is_synthetic(item["source_url"]):
                 funnel["synthetic_removed"] += 1
                 continue
+            key = review_key(item["source_url"], item["title"], item["company"])
+            entry = reviewed.get(key)
+            if entry and entry["decision"] == "reject":
+                funnel["review_rejected"] += 1
+                continue
             year = min(max(item["year"], 2023), 2026)
-            salary = parse_salary(item["salary_text"], year)
+            manual = ledger_salary(entry) if entry else None
+            salary = manual or parse_salary(item["salary_text"], year)
             if salary is None:
+                if item["batch"]:
+                    _queue(queue, item, key, salary_reason(item["salary_text"]))
                 continue
             funnel["has_salary"] += 1
             title = re.sub(r"\s+", " ", str(item["title"])).strip()
-            role = classify_role(title)
+            role = (entry and entry["role"]) or classify_role(title)
             if role is None:
+                if item["batch"] and not _EXCLUDED.search(title):
+                    _queue(queue, item, key, "không phân loại được vai trò")
                 continue
             funnel["it_role"] += 1
             years = parse_experience(item["experience_text"], title)
             skills = extract_skills(*item["skill_text"])
+            if entry and entry["skills"]:
+                skills = [s for s in entry["skills"].split("|") if s]
             company = re.sub(r"\s+", " ", str(item["company"])).strip()
             records.append(
                 {
@@ -160,22 +242,28 @@ def build_dataset(raw_dir=None):
                     "location_text": item["location"],
                     "work_mode": normalize_work_mode(item["work_mode"]),
                     "experience_years": years,
-                    "level": derive_level(title, years, item["level_text"]),
+                    "level": (entry and entry["level"])
+                    or derive_level(title, years, item["level_text"]),
                     "year": year,
                     "skills": "|".join(skills),
                     "skill_count": len(skills),
                     "gender_requirement": gender_requirement(*item["skill_text"]),
                     "salary_text": item["salary_text"],
-                    "one_sided": one_sided(item["salary_text"]),
+                    "one_sided": one_sided(item["salary_text"]) and not manual,
                     "salary_min": salary[0],
                     "salary_max": salary[1],
                     "salary": salary[2],
                     "source_url": item["source_url"],
+                    "batch": item["batch"],
                 }
             )
     frame = pd.DataFrame(records)
     frame["split"] = frame["company_key"].map(_split_for)
-    ratios = _one_sided_ratios(frame)
+    ratios = {
+        "ratio": lambda: _one_sided_ratios(frame),
+        "expand30": dict,
+        "point": lambda: {source: 1.0 for source in frame["source"].unique()},
+    }[single_salary_rule]()
     for index in frame.index[frame["one_sided"]]:
         row = frame.loc[index]
         salary = parse_salary(row["salary_text"], row["year"], ratios.get(row["source"]))
@@ -183,12 +271,18 @@ def build_dataset(raw_dir=None):
             frame = frame.drop(index)
             continue
         frame.loc[index, ["salary_min", "salary_max", "salary"]] = salary
+    # Tin lô mới trùng URL với tin đã có (nguồn cũ hoặc lô trước) bị loại.
+    urls = frame["source_url"].fillna("").astype(str)
+    frame = frame[~((frame["batch"] != "") & (urls != "") & urls.duplicated(keep="first"))]
     frame["title_key"] = frame["title"].str.lower().str.replace(r"[^\w]", "", regex=True)
     frame = frame.drop_duplicates(["title_key", "company_key", "salary"], keep="first")
     frame = frame.drop(columns="title_key").reset_index(drop=True)
     funnel["deduplicated"] = len(frame)
+    funnel["review_queue"] = len(queue)
+    frame.attrs["review_queue"] = queue
     frame.insert(0, "row_id", [f"v2-{i:05d}" for i in range(len(frame))])
     frame.attrs["one_sided_ratio"] = ratios
+    frame.attrs["single_salary_rule"] = single_salary_rule
     return frame, funnel
 
 
@@ -208,20 +302,30 @@ def _one_sided_ratios(frame):
     } | {source: round(overall, 4) for source in set(frame["source"]) - set(by_source.index)}
 
 
-def write_dataset(raw_dir=None, output=None):
-    frame, funnel = build_dataset(raw_dir)
+def write_dataset(
+    raw_dir=None, output=None, batches=None, ledger=None, queue=None, single_salary_rule="ratio"
+):
+    frame, funnel = build_dataset(
+        raw_dir, batches=batches, ledger=ledger, single_salary_rule=single_salary_rule
+    )
     output = Path(output) if output else dataset_path()
     output.parent.mkdir(parents=True, exist_ok=True)
     frame.to_csv(output, index=False)
+    queue_file = Path(queue) if queue else (output.parent / queue_path().name)
+    pd.DataFrame(frame.attrs.get("review_queue", []), columns=QUEUE_COLUMNS).to_csv(
+        queue_file, index=False
+    )
     summary = {
         "version": DATASET_VERSION,
         "rows": len(frame),
         "companies": int(frame["company_key"].nunique()),
         "funnel": funnel,
+        "single_salary_rule": single_salary_rule,
         "one_sided_ratio": frame.attrs.get("one_sided_ratio", {}),
         "split": frame["split"].value_counts().to_dict(),
         "roles": frame["role"].value_counts().to_dict(),
         "sources": frame["source"].value_counts().to_dict(),
+        "batches": frame.loc[frame["batch"] != "", "batch"].value_counts().to_dict(),
         "sha256": hashlib.sha256(output.read_bytes()).hexdigest(),
     }
     output.with_suffix(".json").write_text(
@@ -234,8 +338,10 @@ def load_dataset():
     path = dataset_path()
     if not path.exists():
         write_dataset()
-    frame = pd.read_csv(path)
+    frame = pd.read_csv(path, dtype={"batch": str})
     frame["skills"] = frame["skills"].fillna("")
+    if "batch" in frame:
+        frame["batch"] = frame["batch"].fillna("")
     return frame
 
 

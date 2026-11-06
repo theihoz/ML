@@ -5,10 +5,13 @@
   "funnel": {
     "raw": 8523,
     "synthetic_removed": 2400,
+    "review_rejected": 0,
     "has_salary": 2811,
     "it_role": 1771,
+    "review_queue": 0,
     "deduplicated": 1735
   },
+  "single_salary_rule": "ratio",
   "one_sided_ratio": {
     "CareerBuilder 2023": 1.375,
     "IT Jobs 2026 (itviec)": 1.2727,
@@ -28,16 +31,16 @@
     "Mobile Developer": 125,
     "Fullstack Developer": 119,
     "Frontend Developer": 105,
-    "Software Engineer (chung)": 96,
+    "Software Engineer (chung)": 95,
     "AI / ML Engineer": 80,
-    "Tech Lead / Architect": 75,
-    "IT Support / Helpdesk": 74,
+    "IT Support / Helpdesk": 75,
+    "Tech Lead / Architect": 74,
     "DevOps / Cloud": 73,
     "Quản lý dự án / sản phẩm": 65,
     "Quản trị hệ thống / Mạng": 57,
     "Bảo mật": 57,
     "Embedded / IoT": 45,
-    "ERP / SAP Consultant": 31,
+    "ERP / SAP Consultant": 32,
     "Data Engineer": 26,
     "Game Developer": 25,
     "Data Analyst / BI": 24,
@@ -53,5 +56,6 @@
     "IT Jobs 2026 (topcv)": 142,
     "CareerBuilder 2023": 41
   },
-  "sha256": "faf088eed3e883fe1e4bb6d9a23532451e6d3715f27618fded570c6ab5c19174"
+  "batches": {},
+  "sha256": "0b49641142f04f6d623912a65a389d156955f5db53eed3c2bea6cd21abe40884"
 }
