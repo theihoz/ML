@@ -10,6 +10,7 @@ import joblib
 import numpy as np
 import pandas as pd
 
+from .production_standard import assess
 from .salary_dataset import load_dataset
 from .salary_model import MODEL_LABELS, artifacts_dir, feature_frame, load_report
 
@@ -235,6 +236,12 @@ def validate(output=None, rounds=BOOTSTRAP_ROUNDS):
         "bootstrap": bootstrap(test, predictions, selected, rounds),
         "fairness": fairness(test, predictions[selected]["test"], rounds),
         "gender": gender_audit(load_dataset()),
+        "production": assess(
+            test,
+            predictions[selected]["test"],
+            interval_ratios(valid["salary"].to_numpy(), predictions[selected]["valid"], 0.8),
+            rounds,
+        ),
     }
     path = output or artifacts_dir() / "validation.json"
     path.write_text(json.dumps(result, ensure_ascii=False, indent=2), encoding="utf-8")
