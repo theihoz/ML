@@ -171,6 +171,20 @@ st.caption(
     "Ô thiếu hồ sơ vẫn tính trong mẫu số. Dự đoán năm 2026; chưa hiệu chỉnh lương thị trường."
 )
 st.dataframe(pd.DataFrame(reference["cells"]), hide_index=True, width="stretch")
+golden = reality["golden"]
+st.subheader("Hồ sơ vàng")
+st.metric(
+    "Lương gross của hồ sơ ẩn danh",
+    golden["status"],
+    f"{golden['pass_rate']:.0%} hồ sơ đạt" if golden["pass_rate"] is not None else None,
+)
+st.caption(
+    f"{golden['scored']}/{golden['total']} hồ sơ được chấm; "
+    "yêu cầu sai lệch ≤20% ở ≥70% hồ sơ. Mẫu trống chưa được chấm, không tính là trượt. "
+    "Điền datasets/reference/golden_profiles.csv rồi khởi động lại ứng dụng để cập nhật."
+)
+if golden["cells"]:
+    st.dataframe(pd.DataFrame(golden["cells"]), hide_index=True, width="stretch")
 for limitation in reality["limitations"]:
     st.caption(limitation)
 with st.expander("Mốc trung bình gross theo cấp bậc × thành phố (không chấm trung vị)"):

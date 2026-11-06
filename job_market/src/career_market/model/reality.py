@@ -3,6 +3,7 @@
 from ..data.dataset import load_dataset
 from ..data.reference import load_reference, matching_profiles
 from .estimators import CURRENT_YEAR, feature_frame
+from .golden import score_golden
 from .training import load_model
 
 
@@ -25,7 +26,7 @@ def _summary(cells, tolerance, required):
     }
 
 
-def reality_check(reference_path=None, model_name=None):
+def reality_check(reference_path=None, model_name=None, golden_path=None):
     model, name, report = load_model(model_name)
     # Dùng phân bố hồ sơ TRAIN làm trọng số; không coi tin này là số lương khảo sát.
     frame = load_dataset()
@@ -67,6 +68,7 @@ def reality_check(reference_path=None, model_name=None):
     return {
         "model": name,
         "reference": _summary(cells, 0.15, 0.8),
+        "golden": score_golden(golden_path, name),
         "calibration_cells": anchors,
         "unknown_basis_cells": unknown,
         "role_calibration_cells": role_anchors,
