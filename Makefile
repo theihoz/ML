@@ -16,3 +16,4 @@ dataset:
 
 train-v2: dataset
 	cd job_market && PYTHONPATH=src $(PYTHON) -m career_market train-v2
+	cd job_market && PYTHONPATH=src $(PYTHON) -m career_market validate > /dev/null

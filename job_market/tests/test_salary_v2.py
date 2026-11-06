@@ -113,3 +113,19 @@ def test_evaluation_and_dataset_pages_render(page):
     app.switch_page(page).run(timeout=60)
     assert not app.exception
     assert app.metric
+
+
+def test_validation_reports_calibration_bootstrap_and_fairness():
+    from career_market.salary_dataset import gender_requirement
+    from career_market.salary_validation import load_validation
+
+    result = load_validation()
+    eighty = next(row for row in result["calibration"]["levels"] if row["level"] == 0.8)
+    assert 0.7 < eighty["coverage"] < 0.9
+    gb = result["bootstrap"]["models"]["GradientBoosting"]["MAE"]
+    assert gb["ci95"][0] <= gb["point"] <= gb["ci95"][1]
+    assert {"region", "level", "role"} <= set(result["fairness"])
+    assert result["gender"]["used_as_feature"] is False
+    assert gender_requirement("Tester Game Chỉ Tuyển Nữ") == "Chỉ nữ"
+    assert gender_requirement("Lap Trinh Vien Tu 3 Nam Kinh Nghiem") == "Không đề cập"
+    assert gender_requirement("Giới tính: Nam/Nữ") == "Nam/Nữ"

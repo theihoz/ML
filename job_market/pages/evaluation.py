@@ -77,3 +77,79 @@ with st.expander("Kết quả dò siêu tham số trên tập valid"):
     for name, trials in report["tuning"].items():
         st.write(f"**{report['models'][name]['label']}**")
         st.dataframe(pd.DataFrame(trials), hide_index=True, width="stretch")
+
+st.header("Kiểm định độ tin cậy của mô hình")
+check = salary_app.validation()
+boot = check["bootstrap"]
+st.caption(
+    f"Tính trên {check['test_rows']} tin test của {boot['companies']} công ty; "
+    f"bootstrap {boot['rounds']} lần, lấy mẫu lại theo công ty."
+)
+calibration_tab, bootstrap_tab, fairness_tab = st.tabs(
+    ["Hiệu chuẩn khoảng dự đoán", "Bootstrap", "Công bằng theo nhóm"]
+)
+with calibration_tab:
+    levels = pd.DataFrame(check["calibration"]["levels"])
+    cols = st.columns(len(levels))
+    for col, row in zip(cols, levels.itertuples()):
+        col.metric(
+            f"Khoảng {row.level:.0%}",
+            f"{row.coverage:.1%}",
+            f"{(row.coverage - row.level) * 100:+.1f} điểm %",
+            delta_color="off",
+        )
+    left, right = st.columns(2, gap="medium")
+    with left:
+        st.image(salary_app.chart("reliability"), width="stretch")
+    with right:
+        st.caption("Tỉ lệ bao phủ của khoảng 80% theo mức lương thật")
+        st.dataframe(
+            pd.DataFrame(check["calibration"]["by_salary_band"]), hide_index=True, width="stretch"
+        )
+        st.caption("Vai trò bao phủ kém nhất (khoảng 80%)")
+        st.dataframe(
+            pd.DataFrame(check["calibration"]["by_role"][:6]), hide_index=True, width="stretch"
+        )
+with bootstrap_tab:
+    rows = [
+        {
+            "Mô hình": MODEL_LABELS[name],
+            "MAE": values["MAE"]["point"],
+            "MAE 95%": "{:.2f} – {:.2f}".format(*values["MAE"]["ci95"]),
+            "R²": values["R2"]["point"],
+            "R² 95%": "{:.3f} – {:.3f}".format(*values["R2"]["ci95"]),
+        }
+        for name, values in boot["models"].items()
+    ]
+    st.dataframe(pd.DataFrame(rows), hide_index=True, width="stretch")
+    differences = [
+        {
+            "So với": MODEL_LABELS[name],
+            "Chênh MAE trung bình": values["mean"],
+            "Khoảng 95%": "{:.2f} – {:.2f}".format(*values["ci95"]),
+            "Tỉ lệ lần Gradient Boosting tốt hơn": f"{values['p_better']:.1%}",
+        }
+        for name, values in boot["differences"].items()
+    ]
+    st.dataframe(pd.DataFrame(differences), hide_index=True, width="stretch")
+    st.image(salary_app.chart("bootstrap"), width="stretch")
+with fairness_tab:
+    groups = check["fairness"]
+    column = (
+        st.segmented_control(
+            "Nhóm",
+            list(groups),
+            default="region",
+            format_func=lambda key: groups[key]["label"],
+            key="fairness_group",
+        )
+        or "region"
+    )
+    st.image(salary_app.chart("fairness", column), width="stretch")
+    st.dataframe(pd.DataFrame(groups[column]["groups"]), hide_index=True, width="stretch")
+    gender = check["gender"]
+    st.caption(
+        f"Giới tính: dữ liệu không có thông tin giới tính ứng viên và mô hình không dùng giới tính. "
+        f"{gender['mentioned']} tin ({gender['share_pct']:.2f}%) ghi điều kiện giới tính trong nội dung "
+        "— quá ít để đo thống kê; đây là dấu hiệu phân biệt cần cảnh báo khi đăng tin."
+    )

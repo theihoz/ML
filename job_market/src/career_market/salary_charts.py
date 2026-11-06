@@ -272,3 +272,58 @@ def summary(frame):
         "mean": float(frame["salary"].mean()),
         "p90": float(np.quantile(frame["salary"], 0.9)),
     }
+
+
+def reliability(calibration):
+    table = pd.DataFrame(calibration["reliability"])
+    figure, axis = plt.subplots(figsize=(6, 5))
+    axis.plot(
+        [0, 1], [0, 1], color="#475569", linestyle="--", linewidth=1, label="Hiệu chuẩn hoàn hảo"
+    )
+    axis.plot(
+        table["level"], table["coverage"], marker="o", color=BLUE, label="Mô hình trên tập test"
+    )
+    axis.set(
+        xlim=(0, 1),
+        ylim=(0, 1),
+        xlabel="Mức tin cậy danh nghĩa của khoảng",
+        ylabel="Tỉ lệ tin thật nằm trong khoảng",
+    )
+    axis.legend(frameon=False, loc="upper left")
+    figure.tight_layout()
+    return figure
+
+
+def bootstrap_differences(bootstrap, labels):
+    figure, axis = plt.subplots(figsize=(7.5, 4))
+    colors = [BLUE, "#60a5fa", "#94a3b8"]
+    for color, (name, values) in zip(colors, bootstrap["differences"].items()):
+        if name == "Baseline":
+            continue
+        sns.histplot(
+            values["samples"], bins=40, color=color, alpha=0.55, ax=axis, label=labels[name]
+        )
+    axis.axvline(0, color="#0f172a", linewidth=1)
+    axis.set(
+        xlabel="MAE Gradient Boosting − MAE mô hình khác (triệu VND/tháng)",
+        ylabel="Số lần bootstrap",
+    )
+    axis.legend(frameon=False)
+    figure.tight_layout()
+    return figure
+
+
+def fairness_bias(group):
+    rows = [row for row in group["groups"] if row["enough"]]
+    table = pd.DataFrame(rows).sort_values("bias_pct")
+    figure, axis = plt.subplots(figsize=(7.5, max(3, len(table) * 0.45)))
+    low = table["bias_pct"] - table["bias_pct_ci95"].map(lambda ci: ci[0])
+    high = table["bias_pct_ci95"].map(lambda ci: ci[1]) - table["bias_pct"]
+    axis.errorbar(
+        table["bias_pct"], range(len(table)), xerr=[low, high], fmt="o", color=BLUE, capsize=3
+    )
+    axis.axvline(0, color="#0f172a", linewidth=1)
+    axis.set_yticks(range(len(table)), [f"{g} (n={n})" for g, n in zip(table["group"], table["n"])])
+    axis.set(xlabel="Độ lệch trung bình (dự đoán − thật) / thật, % — khoảng tin cậy 95%", ylabel="")
+    figure.tight_layout()
+    return figure

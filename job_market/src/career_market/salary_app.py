@@ -4,7 +4,8 @@ import streamlit as st
 
 from . import salary_charts as charts
 from .salary_dataset import load_dataset
-from .salary_model import advise, load_report, load_skill_value
+from .salary_model import MODEL_LABELS, advise, load_report, load_skill_value
+from .salary_validation import load_validation
 from .salary_visuals import png
 
 
@@ -21,6 +22,11 @@ def report():
 @st.cache_data(show_spinner=False, max_entries=1)
 def skill_value():
     return load_skill_value()
+
+
+@st.cache_data(show_spinner=False, max_entries=1)
+def validation():
+    return load_validation()
 
 
 @st.cache_data(show_spinner=False, max_entries=64)
@@ -40,6 +46,9 @@ def chart(name, *args):
         "models": lambda: charts.model_comparison(report(), *args),
         "importance": lambda: charts.feature_importance(report()),
         "uplift": lambda: charts.skill_uplift(skill_value()),
+        "reliability": lambda: charts.reliability(validation()["calibration"]),
+        "bootstrap": lambda: charts.bootstrap_differences(validation()["bootstrap"], MODEL_LABELS),
+        "fairness": lambda: charts.fairness_bias(validation()["fairness"][args[0]]),
     }
     return png(builders[name]())
 
