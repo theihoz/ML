@@ -8,8 +8,9 @@ from pathlib import Path
 
 from . import MarketError, MarketService
 from .company_cli import company_arguments, run_company_report
+from .model_promotion import retrain
 from .salary_dataset import ROLE_ORDER, write_dataset
-from .salary_model import advise
+from .salary_model import advise, artifacts_dir
 from .salary_model import train as train_v2
 from .salary_validation import validate
 
@@ -52,7 +53,10 @@ def main() -> int:
     for field in ("role", "location"):
         predict.add_argument(f"--{field}", default="")
     commands.add_parser("build-dataset", help="Gộp ba nguồn thô thành bộ salary-v2 có split")
-    commands.add_parser("train-v2", help="Huấn luyện Ridge/RF/Gradient Boosting trên salary-v2")
+    commands.add_parser(
+        "train-v2",
+        help="Huấn luyện lại vào thư mục ứng viên; chỉ thay model đang phục vụ khi qua cổng",
+    )
     commands.add_parser("validate", help="Hiệu chuẩn, bootstrap và công bằng của mô hình đã lưu")
     advice = commands.add_parser("advise", help="Dự đoán lương và gợi ý kỹ năng cho hồ sơ")
     advice.add_argument("--role", choices=ROLE_ORDER, required=True)
@@ -69,7 +73,13 @@ def main() -> int:
         elif args.command == "build-dataset":
             result = write_dataset()
         elif args.command == "train-v2":
-            result = train_v2()
+            serving = artifacts_dir()
+            result = retrain(
+                serving,
+                serving.with_name(serving.name + "-candidate"),
+                train=lambda output: train_v2(output),
+                validate=lambda directory: validate(directory=directory),
+            )
         elif args.command == "validate":
             result = validate()
             for difference in result["bootstrap"]["differences"].values():

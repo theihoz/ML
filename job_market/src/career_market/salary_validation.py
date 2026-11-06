@@ -5,6 +5,7 @@ Tập valid chỉ dùng để dựng khoảng dự đoán, giống cách ứng d
 """
 
 import json
+from pathlib import Path
 
 import joblib
 import numpy as np
@@ -12,7 +13,7 @@ import pandas as pd
 
 from .production_standard import assess
 from .salary_dataset import load_dataset
-from .salary_model import MODEL_LABELS, artifacts_dir, feature_frame, load_report
+from .salary_model import MODEL_LABELS, artifacts_dir, feature_frame
 
 LEVELS = (0.5, 0.8, 0.9)
 RELIABILITY_LEVELS = tuple(round(float(x), 2) for x in np.arange(0.1, 1.0, 0.05))
@@ -29,15 +30,16 @@ FAIRNESS_GROUPS = {
 }
 
 
-def _predictions():
+def _predictions(directory=None):
+    directory = Path(directory) if directory else artifacts_dir()
     frame = load_dataset()
-    report = load_report()
+    report = json.loads((directory / "metrics.json").read_text(encoding="utf-8"))
     parts = {
         name: frame[frame["split"] == name].reset_index(drop=True) for name in ("valid", "test")
     }
     predictions = {}
     for name in report["models"]:
-        model = joblib.load(artifacts_dir() / f"{name}.joblib")
+        model = joblib.load(directory / f"{name}.joblib")
         predictions[name] = {
             part: model.predict(feature_frame(rows)) for part, rows in parts.items()
         }
@@ -222,8 +224,9 @@ def gender_audit(frame):
     }
 
 
-def validate(output=None, rounds=BOOTSTRAP_ROUNDS):
-    parts, predictions, report = _predictions()
+def validate(output=None, rounds=BOOTSTRAP_ROUNDS, directory=None):
+    """Kiểm định model đã lưu trong ``directory`` (mặc định: model đang phục vụ)."""
+    parts, predictions, report = _predictions(directory)
     selected = report["selected"]
     valid, test = parts["valid"], parts["test"]
     result = {
@@ -243,7 +246,7 @@ def validate(output=None, rounds=BOOTSTRAP_ROUNDS):
             rounds,
         ),
     }
-    path = output or artifacts_dir() / "validation.json"
+    path = output or Path(directory or artifacts_dir()) / "validation.json"
     path.write_text(json.dumps(result, ensure_ascii=False, indent=2), encoding="utf-8")
     return result
 
