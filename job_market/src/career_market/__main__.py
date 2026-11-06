@@ -79,6 +79,7 @@ def main() -> int:
                 serving.with_name(serving.name + "-candidate"),
                 train=lambda output: train_v2(output),
                 validate=lambda directory: validate(directory=directory),
+                rescore=lambda directory, output: validate(output=output, directory=directory),
             )
         elif args.command == "validate":
             result = validate()

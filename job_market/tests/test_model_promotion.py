@@ -87,8 +87,25 @@ def test_candidate_worse_on_one_overall_metric_is_kept_out(tmp_path):
     assert "coverage_pct" in result["reason"]
 
 
-def test_candidate_that_passes_no_more_scopes_is_kept_out(tmp_path):
+def test_candidate_with_equal_scopes_but_better_overall_metrics_is_promoted(tmp_path):
+    # Chủ dự án chốt ngày 06/11/2026 (#81): bằng số phạm vi mà tốt hơn hẳn ở ít nhất một chỉ
+    # số chung (và không tệ hơn chỉ số nào) thì vẫn thay.
     serving = _serving(tmp_path, _production(17, 58, 78, groups_passed=3))
+    train, validate = _fake_pipeline(_production(16, 60, 79, groups_passed=3), "new")
+    result = retrain(serving, tmp_path / "candidate", train=train, validate=validate)
+    assert result["promoted"] is True
+
+
+def test_identical_retrain_does_not_replace_the_serving_model(tmp_path):
+    serving = _serving(tmp_path, _production(17, 58, 78, groups_passed=3))
+    train, validate = _fake_pipeline(_production(17, 58, 78, groups_passed=3), "new")
+    result = retrain(serving, tmp_path / "candidate", train=train, validate=validate)
+    assert result["promoted"] is False
+    assert _version(serving) == "old"
+
+
+def test_candidate_passing_fewer_scopes_is_kept_out(tmp_path):
+    serving = _serving(tmp_path, _production(17, 58, 78, groups_passed=4))
     train, validate = _fake_pipeline(_production(16, 60, 79, groups_passed=3), "new")
     result = retrain(serving, tmp_path / "candidate", train=train, validate=validate)
     assert result["promoted"] is False
@@ -99,3 +116,38 @@ def test_first_training_without_a_serving_model_is_promoted(tmp_path):
     result = retrain(tmp_path / "salary-v2", tmp_path / "candidate", train=train, validate=validate)
     assert result["promoted"] is True
     assert _version(tmp_path / "salary-v2") == "new"
+
+
+def test_serving_model_is_rescored_on_the_candidates_data_before_comparing(tmp_path):
+    # Bản chấm cũ của model đang phục vụ (trên dữ liệu cũ) trông tốt hơn ứng viên, nhưng chấm
+    # lại trên cùng tập test mới thì nó tệ hơn: cổng phải dùng bản chấm lại (#81).
+    serving = _serving(tmp_path, _production(15, 66, 80, groups_passed=5))
+    train, validate = _fake_pipeline(_production(16, 61, 79, groups_passed=4), "new")
+    rescored = []
+
+    def rescore(directory, output):
+        rescored.append((directory, output))
+        output.write_text(json.dumps({"production": _production(18, 55, 74, groups_passed=2)}))
+
+    result = retrain(
+        serving, tmp_path / "candidate", train=train, validate=validate, rescore=rescore
+    )
+    assert rescored and rescored[0][0] == serving
+    assert result["promoted"] is True
+    assert result["serving_rescored"] is True
+
+
+def test_coverage_inside_the_standard_band_does_not_count_as_worse(tmp_path):
+    # 83% xa 80% hơn 80.2% nhưng vẫn trong khoảng chuẩn 75–85%: không bị tính là tệ hơn.
+    serving = _serving(tmp_path, _production(18.0, 53.8, 80.2, groups_passed=2))
+    train, validate = _fake_pipeline(_production(16.4, 56.2, 83.0, groups_passed=3), "new")
+    result = retrain(serving, tmp_path / "candidate", train=train, validate=validate)
+    assert result["promoted"] is True
+
+
+def test_coverage_leaving_the_standard_band_counts_as_worse(tmp_path):
+    serving = _serving(tmp_path, _production(18.0, 53.8, 84.0, groups_passed=2))
+    train, validate = _fake_pipeline(_production(16.4, 56.2, 86.0, groups_passed=3), "new")
+    result = retrain(serving, tmp_path / "candidate", train=train, validate=validate)
+    assert result["promoted"] is False
+    assert "coverage_pct" in result["reason"]

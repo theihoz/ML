@@ -36,27 +36,40 @@ Nhóm dưới 20 tin test không được chấm và không tính là trượt. 
 
 Hồ sơ không thỏa chỉ nhận khoảng lương mở rộng, kèm cảnh báo ít dữ liệu và lý do; không có con số và không có thứ hạng phân vị trong vai trò. Khoảng mở rộng của mỗi vai trò và mỗi cấp bậc là p10/p90 của tỉ lệ lương thật / lương dự đoán trên tập valid. Nếu nhóm có dưới 20 tin valid thì dùng p10–p90 lương thị trường trên tập train. Hồ sơ bị chặn lấy khoảng rộng hơn trong khoảng của vai trò và của cấp bậc. Tập test chỉ dùng để chấm.
 
-**Cổng thay model khi huấn luyện lại.** Huấn luyện lại ghi vào thư mục ứng viên rồi chạy kiểm định. Ứng viên chỉ thay model đang phục vụ khi:
+**Cổng thay model khi huấn luyện lại.** Huấn luyện lại ghi vào thư mục ứng viên rồi chạy kiểm định. Model đang phục vụ được **chấm lại trên cùng tập test của ứng viên**, nên hai bên vẫn so được công bằng khi bộ dữ liệu đổi (#81). Ứng viên chỉ thay model đang phục vụ khi:
 - ứng viên đạt chuẩn production; hoặc
-- model đang phục vụ chưa đạt, và ứng viên không tệ hơn ở chỉ số chung nào (độ phủ được so theo khoảng cách tới 80%) và qua được nhiều phạm vi hơn.
+- model đang phục vụ chưa đạt, ứng viên không tệ hơn ở chỉ số chung nào, và:
+  - qua được nhiều phạm vi hơn; hoặc
+  - qua cùng số phạm vi nhưng tốt hơn hẳn ở ít nhất một chỉ số chung.
+
+Độ phủ chỉ bị tính là "tệ hơn" khi ra ngoài khoảng 75–85% hoặc bị đẩy xa thêm khỏi khoảng đó. Trong khoảng này, mọi giá trị đều chấp nhận được.
 
 Trường hợp còn lại giữ model cũ, báo lý do và giữ ứng viên để phân tích. Quy tắc chọn mô hình theo valid MAE không đổi.
 
+Hai điều chỉnh của cổng do chủ dự án chốt ngày 06/11/2026 ở #81: luật độ phủ theo khoảng thay cho "khoảng cách tới 80%", và cho thay khi cùng số phạm vi. Lý do: model học trên tin thật tốt hơn model cũ ở hai chỉ số chung và có độ phủ 83% (vẫn trong chuẩn), nhưng luật cũ vẫn chặn.
+
 ## Hiện trạng
 
-Model Gradient Boosting đang phục vụ chưa đạt chuẩn production:
+**Bộ dữ liệu chỉ gồm tin thật (#81).** 2.400 tin của bộ IT Jobs 2026 là **tin sinh tự động**: URL dạng `…-hist2018000xx`, đúng 800 tin mỗi nền tảng, rải đều 2018–2025, kỹ năng ngẫu nhiên, không có mô tả. Trước #81 chúng chiếm 54% số tin có nhãn và dễ đoán hơn tin thật, nên số liệu cũ trông đẹp hơn thực tế. Ví dụ, model cũ có trung vị sai số 16.5% trên tập test lẫn tin sinh, nhưng 18.0% trên tin thật.
+
+Sau khi loại các tin này, bộ dữ liệu còn 1.735 tin thật (tập test 288 tin). Mô hình có thêm đặc trưng nền tảng đăng tin, hình thức làm việc, loại công ty và từ khóa chức danh. Hệ số cho tin chỉ ghi một đầu lương được ước lượng trên tập train theo từng nguồn (1.27–1.67).
+
+Model Gradient Boosting đang phục vụ, học trên tin thật, vẫn chưa đạt chuẩn production:
 
 | Chỉ số chung | Giá trị điểm | Khoảng 95% | Ngưỡng |
 |---|---|---|---|
-| Trung vị sai số | 16.5% | [15.4, 18.0] | ≤ 15% |
-| Tỉ lệ sai ≤ 20% | 59.1% | [54.4, 63.0] | ≥ 65% |
-| Độ phủ p10–p90 | 77.9% | [74.4, 80.2] | 75–85% |
+| Trung vị sai số | 16.4% | [14.6, 22.1] | ≤ 15% |
+| Tỉ lệ sai ≤ 20% | 56.2% | [49.2, 62.6] | ≥ 65% |
+| Độ phủ p10–p90 | 83.0% | [77.5, 87.5] | 75–85% |
 
-Các nhóm trượt là vai trò Bảo mật, Quản lý dự án / sản phẩm và cấp bậc Lead, Manager.
+MAE test là 6.49tr. Về các nhóm được chấm:
+- Vai trò: Backend, Kiểm thử, Mobile và Fullstack đều đạt.
+- Cấp bậc: Junior, Middle và Senior đạt; Lead trượt.
+- Các vai trò còn lại có dưới 20 tin test nên không được chấm.
 
-Trên tập test, 67% số tin thuộc hồ sơ được hiện con số. Khoảng p10–p90 phủ đúng 80.6% ở nhóm đủ dữ liệu, khoảng mở rộng phủ đúng 87.7% ở phần còn lại.
+Ngân sách MAE ≤ 5.85tr của ADR 0013 được đo trên bộ dữ liệu còn lẫn tin sinh, nên không còn so được. Từ đây, chuẩn production và cổng thay model thay vai trò của ngân sách đó.
 
-Theo #77, nhiễu nhãn lương chỉ chiếm khoảng 2tr MAE. Với đặc trưng hiện có, mức sai thấp nhất đạt được khoảng 4–5.5tr MAE, nên muốn đạt chuẩn cần thông tin mới (#81). Ứng dụng ghi rõ cho người dùng rằng model chưa đạt chuẩn và kết quả chỉ mang tính tham khảo.
+Theo #77 và #79, nhiễu nhãn và bộ gán nhãn không phải nút thắt. Muốn đạt chuẩn, nhiều khả năng cần **thêm tin thật** có lương: tập test 288 tin còn quá nhỏ để chấm phần lớn các vai trò. Việc này để ở mục Not yet specified của bản đồ #76. Ứng dụng ghi rõ cho người dùng rằng kết quả chỉ mang tính tham khảo.
 
 ## Quan hệ với ADR trước
 

@@ -5,6 +5,7 @@ fit trên tập train, chọn siêu tham số và mô hình bằng tập valid, 
 một lần trên tập test. Mục tiêu là log(lương) để giảm ảnh hưởng của lương rất cao.
 """
 
+import functools
 import json
 import time
 from itertools import combinations
@@ -33,7 +34,23 @@ from .prediction_support import build_support, resolve
 from .salary_dataset import SKILLS, derive_level, load_dataset, skill_lists
 from .training_labels import data_root
 
-CATEGORICAL = ["role", "region", "level"]
+CATEGORICAL = ["role", "region", "level", "platform", "work_mode", "company_type"]
+# Từ khóa chức danh mang thông tin lương ngoài cấp bậc (#81); hồ sơ không ghi chức danh = 0.
+TITLE_FLAGS = {
+    "title::expert": r"expert|chuyên gia",
+    "title::principal": r"principal|staff engineer|chief",
+    "title::head": r"head of|\bhead\b|giám đốc|director",
+    "title::consultant": r"consultant|tư vấn",
+}
+
+
+@functools.lru_cache(maxsize=1)
+def default_platform():
+    """Nguồn đăng tin không có ở hồ sơ người dùng: dùng nền tảng phổ biến nhất của train."""
+    frame = load_dataset()
+    return frame.loc[frame["split"] == "train", "platform"].mode().iloc[0]
+
+
 # Không dùng số lượng kỹ năng: tin liệt kê nhiều kỹ năng thường là tin tuyển junior/hàng
 # loạt nên đặc trưng này dạy mô hình rằng "thêm kỹ năng thì lương giảm".
 NUMERIC = ["experience_years", "year"]
@@ -61,7 +78,13 @@ def artifacts_dir():
 def feature_frame(frame):
     """Biến bảng tin (hoặc hồ sơ người dùng) thành ma trận đặc trưng cố định."""
     skills = skill_lists(frame) if "skills" in frame else pd.Series([[]] * len(frame))
-    features = frame[CATEGORICAL].copy()
+    features = frame[["role", "region", "level"]].copy()
+    features["platform"] = frame["platform"] if "platform" in frame else default_platform()
+    features["work_mode"] = frame.get("work_mode", "Không rõ")
+    features["company_type"] = frame.get("company_type", "Khác")
+    titles = frame.get("title", pd.Series([""] * len(frame), index=frame.index)).fillna("")
+    for column, pattern in TITLE_FLAGS.items():
+        features[column] = titles.str.contains(pattern, case=False, regex=True).astype(int)
     features["experience_years"] = pd.to_numeric(frame["experience_years"], errors="coerce")
     features["year"] = frame.get("year", CURRENT_YEAR)
     for name, column in zip(SKILLS, SKILL_COLUMNS):
@@ -82,6 +105,7 @@ def _preprocessor(scale):
             ),
             ("numeric", make_pipeline(*numeric), NUMERIC),
             ("skills", "passthrough", SKILL_COLUMNS),
+            ("title", "passthrough", list(TITLE_FLAGS)),
         ]
     )
 
@@ -346,6 +370,10 @@ def _profile_frame(profile):
                 "experience_years": years,
                 "year": CURRENT_YEAR,
                 "skills": "|".join(profile.get("skills", [])),
+                "title": profile.get("title") or "",
+                "work_mode": profile.get("work_mode") or "Không rõ",
+                "company_type": profile.get("company_type") or "Khác",
+                "platform": default_platform(),
             }
         ]
     )
@@ -355,7 +383,13 @@ def predict_profile(profile, model_name=None):
     model, name, report = load_model(model_name)
     frame = _profile_frame(profile)
     value = float(model.predict(feature_frame(frame))[0])
-    return {"model": name, **_supported(frame, value, report, load_production())}
+    # "predicted" là đầu ra thô của mô hình (luôn có), dùng cho kiểm thử và phân tích;
+    # "salary" là con số hiển thị, None khi hồ sơ ít dữ liệu.
+    return {
+        "model": name,
+        "predicted": value,
+        **_supported(frame, value, report, load_production()),
+    }
 
 
 def advise(profile, model_name=None, top_k=5, min_share=0.03):
