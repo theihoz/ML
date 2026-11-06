@@ -1,4 +1,3 @@
-# Lệnh chạy từ thư mục gốc repository. Gõ `make help` để xem danh sách.
 PYTHON ?= python3
 PORT ?= 8502
 VERSION ?= latest
