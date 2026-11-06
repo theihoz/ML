@@ -325,7 +325,7 @@ const SLIDES = [
       "Lương trên tin tuyển dụng chưa chắc là lương người đi làm thật sự nhận. Vì vậy nhóm đối chiếu thêm với báo cáo lương do TopDev và ITviec công bố, tức số liệu khảo sát người đang đi làm.",
       "Để so được, ứng dụng nhân dự đoán với một hệ số, gọi là hiệu chỉnh, để quy lương trên tin về lương gross thị trường gần đúng. Ví dụ với Backend cấp Junior ở Hà Nội, hệ số là khoảng 1,2.",
       "Kết quả: ở 8 trên 10 nghề, lương dự đoán lệch không quá 15% so với báo cáo, đạt mục tiêu nhóm đặt ra là ít nhất 8 nghề. Hai nghề còn lệch là Frontend, đoán thấp hơn khoảng 18%, và Mobile, đoán cao hơn khoảng 17%.",
-      "Em xin nói thật một giới hạn: báo cáo lương cũng được dùng để tính hệ số, nên con số 8/10 cho biết hệ thống nhất quán với báo cáo, chưa phải bằng chứng độc lập hoàn toàn. Muốn kiểm tra độc lập cần lương thật của người đi làm; nhóm đã chuẩn bị sẵn file \"hồ sơ vàng\" để điền khi có.",
+      "Em xin nói thật một giới hạn: báo cáo lương cũng được dùng để tính hệ số, nên con số 8/10 cho biết hệ thống nhất quán với báo cáo, chưa phải bằng chứng độc lập hoàn toàn. Muốn kiểm tra độc lập cần lương thật của người đi làm; đây là việc nhóm sẽ làm tiếp.",
     ],
   },
   {

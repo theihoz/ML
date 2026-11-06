@@ -183,13 +183,11 @@ Mục tiêu dài hạn (mức Glassdoor): trung vị sai số ≤ 10%, tỉ lệ
 
 $$\text{lệch}_j = \frac{\lvert \text{dự đoán}_j - \text{báo cáo}_j \rvert}{\text{báo cáo}_j}$$
 
-- **Bộ đối chiếu:** đạt khi $\text{lệch}_j \le 15\%$ ở ≥ 80% ô vai trò (hiện 8/10).
-- **Hồ sơ vàng:** đạt khi lệch ≤ 20% ở ≥ 70% hồ sơ (chưa có dữ liệu).
+Đạt khi $\text{lệch}_j \le 15\%$ ở ≥ 80% ô vai trò (hiện 8/10).
 
 ## 12. Vận hành
 
 | Quy tắc | Công thức | Code |
 |---|---|---|
 | Cổng thay model | Thay khi mô hình mới đạt chuẩn; hoặc cả hai chưa đạt, mô hình mới không kém ở chỉ số chung nào và qua nhiều phạm vi hơn / tốt hơn ở ít nhất một chỉ số | `model/promotion.py` |
-| Dừng khi crawl hỏng | Dừng nếu 0 tin, hoặc $\frac{\#\text{tin thiếu tiêu đề/lương/công ty}}{n} > 30\%$ | `refresh.py` |
 | Mẫu kiểm tra nhãn | Tỉ lệ sai $= 100 - 100\cdot\frac{\#\text{đúng}}{\#\text{đã chấm}}$ theo từng loại nhãn | `data/review.py` |

@@ -1,12 +1,12 @@
 """Cổng thay model khi huấn luyện lại (spec #87, ticket #90).
 
-Huấn luyện lại ghi vào một thư mục ứng viên, chạy validation trên ứng viên, rồi mới quyết
-định có thay model đang phục vụ hay không. Quy tắc chọn mô hình theo valid MAE (ADR 0008)
+Mục này làm gì: so kết quả chấm chuẩn production của model đang phục vụ và model vừa huấn
+luyện, rồi quyết định có thay hay không (``decide``). Việc tạo phiên bản và đổi con trỏ nằm ở
+``model/versions.py``. Quy tắc chọn mô hình theo valid MAE (ADR 0008)
 không đổi: cổng chỉ quyết định thay hay giữ, không dùng test để chọn siêu tham số.
 """
 
 import json
-import shutil
 from pathlib import Path
 
 from .production import THRESHOLDS
@@ -99,41 +99,3 @@ def _better_metrics(current, candidate):
     if _outside(new["coverage_pct"]) < _outside(now["coverage_pct"]):
         better.append("coverage_pct")
     return better
-
-
-def _promote(candidate, serving):
-    """Chép mô hình mới sang thư mục đang phục vụ."""
-    serving.mkdir(parents=True, exist_ok=True)
-    for path in candidate.iterdir():
-        if path.is_file() and path.name != "serving_rescored_validation.json":
-            shutil.copy2(path, serving / path.name)
-
-
-def retrain(serving, candidate, *, train, validate, rescore=None):
-    """Huấn luyện vào ``candidate``, kiểm chuẩn, chỉ chép sang ``serving`` khi qua cổng.
-
-    ``rescore(serving, output)`` chấm lại model đang phục vụ trên dữ liệu hiện tại (cùng tập
-    test với ứng viên) và ghi ra ``output``; nhờ vậy hai bên được so trên cùng tập test kể cả
-    khi bộ dữ liệu đã đổi (#81). Không truyền thì dùng bản chấm đã lưu của model đang phục vụ.
-    """
-    serving, candidate = Path(serving), Path(candidate)
-    if candidate.exists():
-        shutil.rmtree(candidate)
-    train(candidate)
-    validate(candidate)
-    current = _production(serving)
-    rescored = current is not None and rescore is not None
-    if rescored:
-        output = candidate / "serving_rescored_validation.json"
-        rescore(serving, output)
-        current = json.loads(output.read_text(encoding="utf-8")).get("production")
-    promoted, reason = decide(current, _production(candidate))
-    if promoted:
-        _promote(candidate, serving)
-    return {
-        "promoted": promoted,
-        "reason": reason,
-        "serving_rescored": rescored,
-        "serving": str(serving),
-        "candidate": str(candidate),
-    }

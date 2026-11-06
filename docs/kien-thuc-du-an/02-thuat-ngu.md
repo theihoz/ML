@@ -61,7 +61,6 @@ Giải thích bằng lời thường, xếp theo nhóm. Định nghĩa chuẩn c
 | **Độ lệch công bằng** | Mô hình đoán cao/thấp đều cho một nhóm nào đó bao nhiêu % | Junior bị đoán cao ~7% |
 | **Chuẩn production** | Mức chất lượng tối thiểu để đưa cho người dùng thật, theo cách Glassdoor/LinkedIn công bố | ADR 0014 |
 | **Bộ đối chiếu** 📘 | Số liệu lương từ báo cáo bên ngoài dùng để kiểm tra độ chính xác thực tế, không dùng để học | TopDev 2024–2025 |
-| **Hồ sơ vàng** 📘 | Hồ sơ người thật mà nhóm biết lương, dùng để kiểm từng ca | Chưa có dữ liệu |
 | **Nhóm đủ dữ liệu** 📘 | Vai trò × cấp bậc có ít nhất 20 tin để học; chỉ nhóm này được hiện con số | Backend × Junior |
 
 ## Về dữ liệu và vận hành

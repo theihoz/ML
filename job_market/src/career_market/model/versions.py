@@ -83,8 +83,6 @@ def list_versions(root=None):
     serving = current_version(root)
     rows = []
     for directory in sorted(p for p in root.iterdir() if (p / "metrics.json").exists()):
-        if directory.name.endswith("-candidate"):
-            continue
         manifest = read_manifest(directory) or {"version": directory.name}
         rows.append({**manifest, "current": directory.name == serving})
     return sorted(rows, key=lambda row: (row.get("created_at") or "", row["version"]))

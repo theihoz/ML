@@ -56,7 +56,7 @@ Kết quả: 8.523 tin thô → 1.735 tin dùng được.
 | Mô hình thắng thật hay nhờ may? | Bootstrap 1.000 lần, bốc lại theo công ty, so theo cặp |
 | Có công bằng không? | Độ lệch % theo khu vực, cấp bậc, kinh nghiệm, nền tảng, vai trò, kèm khoảng tin cậy |
 | Đủ tốt để dùng thật chưa? | Chuẩn production: trung vị sai số %, tỉ lệ sai ≤ 20%, độ phủ khoảng (ADR 0014) |
-| Khớp thực tế không? | So với báo cáo lương TopDev (≤ 15% ở ≥ 80% vai trò) và hồ sơ vàng (≤ 20% ở ≥ 70% hồ sơ) |
+| Khớp thực tế không? | So với báo cáo lương TopDev (≤ 15% ở ≥ 80% vai trò) |
 
 ## Thêm dữ liệu và huấn luyện lại (lệnh `refresh`)
 

@@ -5,7 +5,7 @@ train           Bước 3: huấn luyện thành phiên bản mới, chỉ phụ
 versions        Liệt kê phiên bản model, đánh dấu bản đang phục vụ
 rollback        Quay lại phiên bản đã phục vụ trước đó
 validate        Bước 5: kiểm định mô hình đã lưu (gồm chuẩn production)
-reality-check   Đối chiếu mô hình đã lưu với báo cáo lương và hồ sơ vàng
+reality-check   Đối chiếu mô hình đã lưu với báo cáo lương bên ngoài
 advise          Bước 4: dự đoán + gợi ý kỹ năng cho một hồ sơ
 import-batch    Nhập lô tin tuyển dụng từ CSV
 refresh         Nhập lô → dựng dữ liệu → huấn luyện → cổng thay model, một lệnh
@@ -44,10 +44,7 @@ def main() -> int:
     commands.add_parser("versions", help="Liệt kê phiên bản model và bản đang phục vụ")
     commands.add_parser("rollback", help="Quay lại phiên bản đã phục vụ trước đó")
     commands.add_parser("validate", help="Hiệu chuẩn, bootstrap và công bằng của mô hình đã lưu")
-    reality = commands.add_parser(
-        "reality-check", help="Đối chiếu mô hình đã lưu với báo cáo lương"
-    )
-    reality.add_argument("--golden-path", help="CSV hồ sơ vàng ẩn danh; mặc định dùng mẫu đóng gói")
+    commands.add_parser("reality-check", help="Đối chiếu mô hình đã lưu với báo cáo lương")
     advice = commands.add_parser("advise", help="Dự đoán lương và gợi ý kỹ năng cho hồ sơ")
     advice.add_argument("--role", choices=ROLE_ORDER, required=True)
     advice.add_argument("--region", choices=REGIONS, default="Hà Nội")
@@ -62,7 +59,6 @@ def main() -> int:
     fresh = commands.add_parser("refresh", help="Chạy cả chuỗi huấn luyện lại (#109)")
     fresh.add_argument("csv", nargs="*", type=Path, help="Các lô CSV cần nhập trước khi dựng")
     fresh.add_argument("--source", help="Tên nguồn của các lô, ghi đè cột source")
-    fresh.add_argument("--crawl", help="Crawl trang (ví dụ topcv) trước khi dựng")
     args = parser.parse_args()
 
     if args.command == "build-dataset":
@@ -86,7 +82,7 @@ def main() -> int:
         for difference in result["bootstrap"]["differences"].values():
             difference.pop("samples")  # bỏ 1000 mẫu bootstrap cho gọn khi in
     elif args.command == "reality-check":
-        result = reality_check(golden_path=args.golden_path)
+        result = reality_check()
     elif args.command == "import-batch":
         try:
             result = import_batch(args.csv, args.source, directory=args.batches_dir)
@@ -94,10 +90,6 @@ def main() -> int:
             print(str(error), file=sys.stderr)
             return 2
     elif args.command == "refresh":
-        if args.crawl:
-            # Crawler TopCV (#110) chờ ticket điều khoản thu thập (#103).
-            print(f"Chưa có crawler cho {args.crawl!r} (#110 chờ #103).", file=sys.stderr)
-            return 2
         result = refresh(
             args.csv,
             args.source,
