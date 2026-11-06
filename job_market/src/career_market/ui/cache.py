@@ -8,6 +8,7 @@ import streamlit as st
 from ..data.dataset import load_dataset
 from ..model.advisor import advise
 from ..model.estimators import MODEL_LABELS
+from ..model.reality import reality_check
 from ..model.training import load_report, load_skill_value
 from ..model.validation import load_validation
 from . import charts
@@ -83,3 +84,8 @@ def advice(role, region, years, skills, model_name):
         {"role": role, "region": region, "experience_years": years, "skills": list(skills)},
         model_name=model_name,
     )
+
+
+@st.cache_data(show_spinner=False, max_entries=1)
+def reality():
+    return reality_check()
