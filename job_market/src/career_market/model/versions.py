@@ -147,6 +147,32 @@ def rollback(root=None):
     return {"current": history[-1], "history": history}
 
 
+def use_version(name="latest", root=None):
+    """Nạp một phiên bản để phục vụ, kể cả bản đã trượt cổng; "latest" = bản huấn luyện gần nhất.
+
+    Mục này làm gì: đổi con trỏ ``CURRENT`` sang phiên bản được chọn và ghi vào lịch sử, nên
+    ``rollback`` vẫn quay lại được bản trước đó.
+    """
+    root = Path(root) if root else artifacts_root()
+    if name == "latest":
+        rows = list_versions(root)
+        if not rows:
+            raise ValueError("Chưa có phiên bản nào trong artifacts/.")
+        name = rows[-1]["version"]
+    if not (root / name / "metrics.json").exists():
+        raise ValueError(f"Không có phiên bản {name!r} trong {root}.")
+    history = _history(root)
+    if history[-1] != name:
+        history = [*history, name]
+    _point(root, name, history)
+    manifest = read_manifest(root / name) or {}
+    return {
+        "current": name,
+        "production_ready": manifest.get("production_ready"),
+        "history": history,
+    }
+
+
 def freshness_line(manifest=None):
     """Dòng độ mới cho app (#111): phiên bản, ngày cập nhật, số tin train, trạng thái chuẩn."""
     manifest = manifest or current_manifest()

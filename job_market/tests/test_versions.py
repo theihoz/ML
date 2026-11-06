@@ -113,3 +113,29 @@ def test_freshness_line_marks_unready_models_as_trial():
     manifest = {"version": "v", "created_at": "2026-11-06T00:00:00", "train_rows": 1234}
     assert "bản thử nghiệm" in versions.freshness_line({**manifest, "production_ready": False})
     assert "đạt chuẩn" in versions.freshness_line({**manifest, "production_ready": True})
+
+
+def test_use_latest_serves_the_newest_version_even_if_it_failed_the_gate(root):
+    first = _retrain(root, ready=True, median=10.0, second=1)
+    failed = _retrain(root, ready=False, median=40.0, second=2)
+    assert paths.current_version(root) == first["version"]  # cổng giữ bản cũ
+    loaded = versions.use_version("latest", root)
+    assert loaded["current"] == failed["version"] == paths.current_version(root)
+    assert loaded["production_ready"] is False
+    assert versions.rollback(root)["current"] == first["version"]  # vẫn quay lại được
+
+
+def test_use_named_version_and_reject_unknown(root):
+    assert versions.use_version("salary-v2", root)["current"] == "salary-v2"
+    with pytest.raises(ValueError, match="Không có phiên bản"):
+        versions.use_version("khong-co", root)
+
+
+def test_score_rows_cover_every_model_on_three_splits():
+    from career_market.model.training import load_report, score_rows
+
+    report = load_report()
+    rows = score_rows(report)
+    assert len(rows) == 3 * len(report["models"])
+    selected = [r for r in rows if r["selected"] and r["part"] == "test"]
+    assert selected[0]["MAE"] == report["models"][report["selected"]]["test"]["MAE"]

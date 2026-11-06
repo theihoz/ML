@@ -174,6 +174,21 @@ def load_report():
     return json.loads(path.read_text(encoding="utf-8"))
 
 
+def score_rows(report=None):
+    """Bảng sai số của từng mô hình trên tập học / chọn / kiểm tra (model đang phục vụ)."""
+    report = report or load_report()
+    return [
+        {
+            "model": name,
+            "selected": name == report["selected"],
+            "part": part,
+            **{key: values[part][key] for key in ("MAE", "RMSE", "R2", "MAPE", "n")},
+        }
+        for name, values in report["models"].items()
+        for part in ("train", "valid", "test")
+    ]
+
+
 def load_production():
     """Bảng chấm chuẩn production của model đang phục vụ, hoặc None nếu chưa kiểm định."""
     path = artifacts_dir() / "validation.json"

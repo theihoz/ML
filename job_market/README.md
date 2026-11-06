@@ -9,6 +9,8 @@ PYTHONPATH=src python -m career_market build-dataset     # tạo lại bộ sala
 PYTHONPATH=src python -m career_market train             # huấn luyện thành phiên bản mới, qua cổng
 PYTHONPATH=src python -m career_market validate          # kiểm định model đang phục vụ
 PYTHONPATH=src python -m career_market reality-check     # đối chiếu với báo cáo lương
+PYTHONPATH=src python -m career_market scores            # sai số trên train / valid / test
+PYTHONPATH=src python -m career_market use latest        # nạp phiên bản vừa huấn luyện
 PYTHONPATH=src python -m career_market advise --role "Backend Developer" --years 2 --skills "Java,SQL"
 ```
 

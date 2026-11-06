@@ -72,7 +72,7 @@ PYTHONPATH=src python -m career_market advise --role "Data Engineer" --years 3 -
 
 Ứng dụng chỉ nạp mô hình đã lưu trong `job_market/artifacts/salary-v2`, không huấn luyện lại khi bấm dự đoán. Gradient Boosting được chọn theo MAE trên tập valid; MAE trên tập test là 5,82 triệu/tháng trên 696 tin.
 
-Mức tăng lương theo kỹ năng là quan hệ học được từ tin tuyển dụng, không phải quan hệ nhân quả. Dữ liệu lệch về Hà Nội (87% số tin có lương), nên kết quả cho TP. Hồ Chí Minh và Đà Nẵng kém chắc chắn hơn.
+Mức tăng lương theo kỹ năng là quan hệ học được từ tin tuyển dụng, không phải quan hệ nhân quả. Dữ liệu lệch về Hà Nội (80% số tin có lương), nên kết quả cho TP. Hồ Chí Minh và Đà Nẵng kém chắc chắn hơn.
 
 ## Huấn luyện lại
 
@@ -80,4 +80,11 @@ Mức tăng lương theo kỹ năng là quan hệ học được từ tin tuyể
 make train
 ```
 
-Lệnh tạo lại `job_market/datasets/processed/salary_dataset_v2.csv` (có cột `split`) rồi huấn luyện Ridge, Random Forest, Gradient Boosting và mốc trung vị, ghi metric vào `metrics.json`, sau đó chạy kiểm định ghi `validation.json`.
+Lệnh tạo lại `job_market/datasets/processed/salary_dataset_v2.csv` (có cột `split`), huấn luyện Ridge, Random Forest, Gradient Boosting và mốc trung vị thành **một phiên bản mới** trong `job_market/artifacts/`, kiểm định, rồi qua cổng thay model.
+
+```sh
+make load      # nạp phiên bản vừa train để demo, kể cả khi trượt cổng
+make valid     # kiểm định, đối chiếu báo cáo lương, in bảng sai số
+make scores    # chỉ in bảng sai số train / valid / test
+make rollback  # quay lại phiên bản trước
+```
