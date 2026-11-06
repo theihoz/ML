@@ -48,11 +48,13 @@ SINGLE_SALARY_RULES = ("ratio", "expand30", "point")
 
 
 def _year(value, default):
+    """Lấy năm (2023–2026) từ chuỗi ngày; không có thì dùng năm mặc định."""
     match = re.search(r"(20\d\d)", str(value or ""))
     return int(match[1]) if match else default
 
 
 def _topcv(raw):
+    """Đọc nguồn TopCV 2026 (chỉ có chức danh) thành các tin cùng một dạng."""
     frame = pd.read_csv(raw / "topcv_jobs.csv")
     for row in frame.itertuples():
         yield {
@@ -72,6 +74,7 @@ def _topcv(raw):
 
 
 def _it_posts(raw):
+    """Đọc nguồn IT Jobs 2026 (VietnamWorks, ITviec, TopCV, CareerViet)."""
     frame = pd.read_csv(raw / "vietnam_it_job_posts_v1.csv")
     for row in frame.itertuples():
         try:
@@ -97,6 +100,7 @@ def _it_posts(raw):
 
 
 def _careerbuilder(raw):
+    """Đọc nguồn CareerBuilder 2023, chỉ giữ tin thuộc ngành CNTT."""
     frame = pd.read_csv(raw / "vietnamese-job-posting.csv")
     frame = frame[frame["category"].fillna("").str.contains("CNTT")]
     for row in frame.itertuples():
@@ -117,6 +121,7 @@ def _careerbuilder(raw):
 
 
 def _company_key(name):
+    """Chuẩn hóa tên công ty (bỏ dấu cách, ký tự lạ) để nhận ra cùng một công ty."""
     text = re.sub(r"\s+", " ", str(name or "").lower())
     text = re.sub(r"^(?:pro|hot|top)\s*", "", text)
     return re.sub(r"[^\w]", "", text) or "unknown"
@@ -156,6 +161,7 @@ def _batch_items(directory):
 
 
 def _queue(queue, item, key, reason):
+    """Thêm một tin vào hàng đợi duyệt tay, kèm lý do máy không gán nhãn được."""
     queue.append(
         {
             "key": key,
@@ -305,6 +311,7 @@ def _one_sided_ratios(frame):
 def write_dataset(
     raw_dir=None, output=None, batches=None, ledger=None, queue=None, single_salary_rule="ratio"
 ):
+    """Dựng bộ dữ liệu rồi ghi ra file CSV, file tóm tắt JSON và hàng đợi duyệt tay."""
     frame, funnel = build_dataset(
         raw_dir, batches=batches, ledger=ledger, single_salary_rule=single_salary_rule
     )
@@ -335,6 +342,7 @@ def write_dataset(
 
 
 def load_dataset():
+    """Đọc bộ dữ liệu đã dựng (tự dựng nếu chưa có)."""
     path = dataset_path()
     if not path.exists():
         write_dataset()
@@ -346,4 +354,5 @@ def load_dataset():
 
 
 def skill_lists(frame):
+    """Tách cột kỹ năng dạng "Java|SQL" thành danh sách cho từng tin."""
     return frame["skills"].fillna("").map(lambda value: [s for s in value.split("|") if s])

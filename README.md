@@ -96,4 +96,4 @@ docs/                       Hướng dẫn demo, quyết định thiết kế (a
 report/                     Báo cáo, slide, sơ đồ, hình
 ```
 
-Cách thao tác nằm trong `docs/DEMO.md`.
+Cách thao tác nằm trong `docs/DEMO.md`. Công nghệ, thuật ngữ, phương pháp và công thức của dự án: `docs/kien-thuc-du-an/` (bắt đầu từ `00-muc-luc.md`).

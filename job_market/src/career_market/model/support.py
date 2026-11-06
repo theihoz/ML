@@ -50,6 +50,7 @@ def build_support(train, valid, valid_predicted):
 
 
 def _apply(band, value):
+    """Áp một khoảng (theo tỉ lệ hoặc theo lương thị trường) lên một dự đoán."""
     if band["kind"] == "ratio":
         return value * band["p10"], value * band["p90"]
     return band["low"], band["high"]

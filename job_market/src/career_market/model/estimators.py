@@ -68,6 +68,7 @@ def feature_frame(frame):
 
 
 def _preprocessor(scale):
+    """Chuẩn bị đặc trưng: mã hóa chữ thành số, điền ô trống, (Ridge) đưa về cùng thang đo."""
     numeric = [SimpleImputer(strategy="median", add_indicator=True)]
     if scale:
         numeric.append(StandardScaler())
@@ -93,6 +94,7 @@ class SignedRidge(RegressorMixin, BaseEstimator):
         self.nonnegative_prefix = nonnegative_prefix
 
     def fit(self, X, y):
+        """Học từ dữ liệu."""
         names = list(getattr(X, "columns", range(np.shape(X)[1])))
         X = np.asarray(X, dtype=float)
         y = np.asarray(y, dtype=float)
@@ -110,6 +112,7 @@ class SignedRidge(RegressorMixin, BaseEstimator):
         return self
 
     def predict(self, X):
+        """Dự đoán cho dữ liệu mới."""
         return np.asarray(X, dtype=float) @ self.coef_ + self.intercept_
 
 
@@ -124,10 +127,12 @@ class SkillEnvelope(RegressorMixin, BaseEstimator):
         self.estimator = estimator
 
     def fit(self, X, y):
+        """Học từ dữ liệu."""
         self.estimator_ = clone(self.estimator).fit(X, y)
         return self
 
     def predict(self, X):
+        """Dự đoán cho dữ liệu mới."""
         skills = [c for c in X.columns if c.startswith("skill::")]
         owned = X[skills].to_numpy() > 0
         groups, cleared = [], []  # cleared: (vị trí dòng mở rộng, cột kỹ năng tắt)
@@ -148,6 +153,7 @@ class SkillEnvelope(RegressorMixin, BaseEstimator):
 
 
 def build_model(name, **params):
+    """Tạo một trong 4 mô hình (mốc trung vị, Ridge, Random Forest, Gradient Boosting)."""
     if name == "Baseline":
         return DummyRegressor(strategy="median")
     if name == "Ridge":

@@ -299,6 +299,7 @@ WORK_MODES = [
 
 
 def normalize_work_mode(text):
+    """Đổi hình thức làm việc về một trong: Từ xa, Thực tập, Bán thời gian, Toàn thời gian."""
     raw = str(text or "").lower()
     return next((name for name, pattern in WORK_MODES if re.search(pattern, raw)), "Không rõ")
 
@@ -352,8 +353,10 @@ def parse_experience(text, title=""):
 
 
 def derive_level(title, years, source_level=""):
+    """Cấp bậc của tin: lấy từ chức danh trước, không có thì suy từ số năm kinh nghiệm."""
     title = str(title or "").lower()
-    # Source levels are unreliable (#119); keep the argument for compatibility.
+    # Không dùng cấp bậc do trang nguồn gắn: đo thấy phần lớn nhãn "Intern" của nguồn
+    # là sai (#119). Tham số source_level giữ lại để code cũ gọi vẫn chạy.
     if re.search(r"\bintern\b|thực tập", title):
         return "Intern"
     # "Product/Project/Delivery Manager" là tên vai trò, không phải cấp quản lý (#98).
@@ -382,6 +385,7 @@ def derive_level(title, years, source_level=""):
 
 
 def normalize_region(text):
+    """Đổi địa điểm về một trong 5 khu vực: Hà Nội, TP. Hồ Chí Minh, Đà Nẵng, Remote, tỉnh khác."""
     raw = str(text or "").lower()
     if re.search(r"hà nội|ha noi|hanoi", raw):
         return "Hà Nội"
@@ -401,6 +405,7 @@ _BENEFIT = re.compile(r"trợ cấp|phụ cấp|phúc lợi|allowance", re.I)
 
 
 def _required(name, pattern, text):
+    """Kỹ năng có thật sự được yêu cầu không (ngoại ngữ chỉ nhắc ở phần phúc lợi thì không tính)."""
     for match in pattern.finditer(text):
         if name not in _LANGUAGES or not _BENEFIT.search(
             text[max(0, match.start() - 60) : match.start()]
@@ -410,6 +415,7 @@ def _required(name, pattern, text):
 
 
 def extract_skills(*texts):
+    """Dò danh sách 69 kỹ năng trong chức danh và mô tả công việc."""
     text = " \n ".join(str(t) for t in texts if isinstance(t, str))
     text = re.sub(r"<[^>]+>", " ", text)
     return [name for name, pattern in _SKILL_PATTERNS.items() if _required(name, pattern, text)]

@@ -1,4 +1,9 @@
-"""Đối chiếu vai trò; tách các mốc đã fit hệ số khỏi các ô chấm điểm."""
+"""Kiểm tra thực tế: so dự đoán với báo cáo lương bên ngoài (#115).
+
+Mục này làm gì: với mỗi vai trò trong báo cáo TopDev, lấy trung vị lương dự đoán (đã quy về
+gross) và so với trung vị báo cáo; đạt khi lệch không quá 15% ở ít nhất 80% vai trò. Các
+mốc đã dùng để tính hệ số hiệu chỉnh được báo riêng, không tính là bằng chứng độc lập.
+"""
 
 from ..data.dataset import load_dataset
 from ..data.reference import load_reference, matching_profiles
@@ -9,6 +14,7 @@ from .training import load_model
 
 
 def _summary(cells, tolerance, required):
+    """Tổng hợp các ô đã chấm thành kết luận đạt / không đạt / chưa có dữ liệu."""
     scored = [row for row in cells if row["relative_error"] is not None]
     rate = sum(row["passed"] for row in scored) / len(cells) if cells else None
     return {
@@ -28,6 +34,7 @@ def _summary(cells, tolerance, required):
 
 
 def reality_check(reference_path=None, model_name=None, golden_path=None):
+    """So mô hình với báo cáo lương bên ngoài và hồ sơ vàng; trả kết quả từng ô."""
     model, name, report = load_model(model_name)
     # Dùng phân bố hồ sơ TRAIN làm trọng số; không coi tin này là số lương khảo sát.
     frame = load_dataset()

@@ -28,6 +28,7 @@ from .refresh import refresh
 
 
 def main() -> int:
+    """Đọc lệnh người dùng gõ, chạy bước tương ứng và in kết quả dạng JSON."""
     parser = argparse.ArgumentParser(description="Dự đoán lương CNTT và tư vấn kỹ năng.")
     commands = parser.add_subparsers(dest="command", required=True)
     build = commands.add_parser("build-dataset", help="Gộp nguồn thô và lô thành bộ salary-v2")

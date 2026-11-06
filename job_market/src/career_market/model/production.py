@@ -28,6 +28,7 @@ GROUP_COLUMNS = ("role", "level")
 
 
 def _metric_values(error_pct, inside):
+    """Ba chỉ số chuẩn: trung vị sai số %, tỉ lệ sai ≤ 20%, độ phủ khoảng p10–p90."""
     return {
         "median_error_pct": float(np.median(error_pct)),
         "within_20_pct": float((error_pct <= 20).mean() * 100),
@@ -36,6 +37,7 @@ def _metric_values(error_pct, inside):
 
 
 def _company_samples(companies, rounds, seed):
+    """Bốc ngẫu nhiên lại các công ty (có thể trùng) cho mỗi lần thi lại bootstrap."""
     rng = np.random.default_rng(seed)
     codes, keys = np.unique(companies, return_inverse=True)
     members = [np.flatnonzero(keys == k) for k in range(len(codes))]
@@ -65,6 +67,7 @@ def _judge(metric, point, ci95, limits, by_point=False):
 
 
 def _score(error_pct, inside, samples, limits, by_point=False):
+    """Chấm một nhóm tin theo ba chỉ số và so với ngưỡng."""
     boot = {metric: [] for metric in METRICS}
     for index in samples:
         if len(index):

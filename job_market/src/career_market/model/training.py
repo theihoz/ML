@@ -37,6 +37,7 @@ GRID = {
 
 
 def scores(actual, predicted):
+    """Bốn chỉ số sai số: MAE, RMSE, R², MAPE (xem docs/kien-thuc-du-an/04-cong-thuc.md)."""
     return {
         "MAE": float(mean_absolute_error(actual, predicted)),
         "RMSE": float(np.sqrt(mean_squared_error(actual, predicted))),
@@ -166,6 +167,7 @@ def skill_value(frame, model, min_postings=20):
 
 
 def load_report():
+    """Đọc báo cáo huấn luyện (metrics.json) của phiên bản đang phục vụ."""
     path = artifacts_dir() / "metrics.json"
     if not path.exists():
         return train()
@@ -181,10 +183,12 @@ def load_production():
 
 
 def load_model(name=None):
+    """Nạp một mô hình đã lưu (mặc định: mô hình được chọn)."""
     report = load_report()
     name = name or report["selected"]
     return joblib.load(artifacts_dir() / f"{name}.joblib"), name, report
 
 
 def load_skill_value():
+    """Đọc bảng giá trị gia tăng của từng kỹ năng."""
     return pd.read_csv(artifacts_dir() / "skill_value.csv")

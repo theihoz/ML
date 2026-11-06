@@ -29,6 +29,7 @@ PRIORITY_ROLES = {
 
 
 def data_sufficiency(profile, frame, level):
+    """Hồ sơ có đủ dữ liệu không: trong vùng ưu tiên và nhóm có ít nhất 20 tin học."""
     in_priority = (
         profile.get("region", "Hà Nội") in PRIORITY_CITIES and profile["role"] in PRIORITY_ROLES
     )
@@ -52,6 +53,7 @@ def data_sufficiency(profile, frame, level):
 
 
 def _profile_frame(profile):
+    """Biến hồ sơ người dùng nhập thành một dòng dữ liệu giống một tin tuyển dụng."""
     years = profile.get("experience_years")
     level = profile.get("level") or derive_level("", years)
     return pd.DataFrame(

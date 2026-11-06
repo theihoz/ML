@@ -97,6 +97,7 @@ STATUS_LABELS = {"pass": "Đạt", "fail": "Không đạt", "not_scored": "Khôn
 
 
 def _limit(value):
+    """Viết ngưỡng dạng chữ (một số, hoặc khoảng "a–b")."""
     return f"{value[0]}–{value[1]}" if isinstance(value, list | tuple) else str(value)
 
 

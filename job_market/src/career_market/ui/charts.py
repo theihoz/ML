@@ -33,12 +33,14 @@ def png(figure):
 
 
 def skill_table(frame):
+    """Bảng mỗi kỹ năng: số tin nhắc đến và trung vị lương của các tin đó."""
     exploded = frame.assign(skill=skill_lists(frame)).explode("skill").dropna(subset=["skill"])
     table = exploded.groupby("skill")["salary"].agg(postings="size", median="median")
     return table.reset_index()
 
 
 def _skill_bar_height(rows):
+    """Chiều cao biểu đồ theo số thanh, để chữ không chồng lên nhau."""
     return max(5.0, 0.22 * rows + 1.0)
 
 
@@ -74,6 +76,7 @@ def top_skill_salary(frame, limit=None, min_postings=30):
 
 
 def experience_salary(frame):
+    """Biểu đồ hộp lương theo số năm kinh nghiệm, kèm đường trung vị."""
     data = frame.dropna(subset=["experience_years"]).copy()
     data["Kinh nghiệm (năm)"] = pd.cut(
         data["experience_years"], EXPERIENCE_BINS, labels=EXPERIENCE_LABELS
@@ -119,6 +122,7 @@ def role_salary(frame):
 
 
 def region_salary(frame):
+    """Trung vị lương và số tin theo khu vực."""
     order = [region for region in REGIONS if region in set(frame["region"])]
     table = frame.groupby("region")["salary"].agg(["median", "size"]).reindex(order)
     figure, axis = plt.subplots(figsize=(7.5, 4))
@@ -135,6 +139,7 @@ def region_salary(frame):
 
 
 def role_region_heatmap(frame, min_postings=3):
+    """Bản đồ nhiệt trung vị lương theo vai trò × khu vực (ô dưới 3 tin để trống)."""
     table = frame.pivot_table(index="role", columns="region", values="salary", aggfunc="median")
     counts = frame.pivot_table(index="role", columns="region", values="salary", aggfunc="size")
     table = table.where(counts >= min_postings)
@@ -157,6 +162,7 @@ def role_region_heatmap(frame, min_postings=3):
 
 
 def salary_distribution(frame):
+    """Phân bố lương của tất cả tin (biểu đồ tần suất)."""
     figure, axis = plt.subplots(figsize=(7.5, 4))
     sns.histplot(frame["salary"], bins=40, color=BLUE, ax=axis)
     axis.axvline(frame["salary"].median(), color="#0f172a", linestyle="--", linewidth=1)
@@ -166,6 +172,7 @@ def salary_distribution(frame):
 
 
 def role_demand(frame):
+    """Số tin có lương của từng vai trò."""
     counts = frame["role"].value_counts()
     figure, axis = plt.subplots(figsize=(8.5, max(5, len(counts) * 0.32)))
     sns.barplot(x=counts.to_numpy(), y=counts.index, color=BLUE, ax=axis)
@@ -176,6 +183,7 @@ def role_demand(frame):
 
 
 def split_by_role(frame):
+    """Số tin tập học / chọn / kiểm tra của từng vai trò."""
     table = pd.crosstab(frame["role"], frame["split"])[["train", "valid", "test"]]
     table = table.loc[table.sum(axis=1).sort_values().index]
     figure, axis = plt.subplots(figsize=(8.5, max(5, len(table) * 0.32)))
@@ -187,6 +195,7 @@ def split_by_role(frame):
 
 
 def model_comparison(report, part="test"):
+    """So MAE và RMSE của 4 mô hình trên một tập."""
     rows = [
         {"Mô hình": values["label"], "MAE": values[part]["MAE"], "RMSE": values[part]["RMSE"]}
         for values in report["models"].values()
@@ -210,6 +219,7 @@ def model_comparison(report, part="test"):
 
 
 def actual_vs_predicted(predictions):
+    """Mỗi điểm là một tin: lương thật (ngang) và lương dự đoán (dọc)."""
     figure, axis = plt.subplots(figsize=(6, 5))
     axis.scatter(predictions["salary"], predictions["predicted"], s=10, alpha=0.45, color=BLUE)
     limit = max(predictions["salary"].max(), predictions["predicted"].max()) * 1.05
@@ -225,6 +235,7 @@ def actual_vs_predicted(predictions):
 
 
 def feature_importance(report, limit=15):
+    """Mức quan trọng của từng đặc trưng (xáo trộn rồi đo mô hình kém đi bao nhiêu)."""
     series = pd.Series(report["permutation_importance"]).head(limit)
     series.index = [name.replace("skill::", "Kỹ năng: ") for name in series.index]
     figure, axis = plt.subplots(figsize=(7.5, 5))
@@ -235,6 +246,7 @@ def feature_importance(report, limit=15):
 
 
 def skill_uplift(table, limit=15):
+    """Mức tăng lương dự đoán khi thêm từng kỹ năng."""
     table = table.nlargest(limit, "model_uplift")
     figure, axis = plt.subplots(figsize=(7.5, 5))
     colors = [BLUE if value > 0 else GREY for value in table["model_uplift"]]
@@ -248,6 +260,7 @@ def skill_uplift(table, limit=15):
 
 
 def error_by_role(predictions):
+    """Sai số trung bình của mô hình theo vai trò (tập kiểm tra)."""
     table = predictions.groupby("role")["abs_error"].mean().sort_values()
     figure, axis = plt.subplots(figsize=(8, max(5, len(table) * 0.32)))
     sns.barplot(x=table.to_numpy(), y=table.index, color=BLUE, ax=axis)
@@ -257,6 +270,7 @@ def error_by_role(predictions):
 
 
 def recommendation_chart(recommendations):
+    """Biểu đồ kỹ năng gợi ý cho một hồ sơ và mức tăng lương của từng kỹ năng."""
     table = pd.DataFrame(recommendations)
     figure, axis = plt.subplots(figsize=(6.5, 3.2))
     colors = [BLUE if value > 0 else GREY for value in table["uplift"]]
@@ -297,10 +311,12 @@ def experience_path_chart(path):
 
 
 def close(figure):
+    """Đóng biểu đồ để giải phóng bộ nhớ."""
     plt.close(figure)
 
 
 def summary(frame):
+    """Các con số tóm tắt cho thẻ ở trang Tổng quan (số tin, trung vị, P90…)."""
     return {
         "postings": len(frame),
         "companies": int(frame["company_key"].nunique()),
@@ -312,6 +328,7 @@ def summary(frame):
 
 
 def reliability(calibration):
+    """Đường hiệu chuẩn: mức tin cậy danh nghĩa so với tỉ lệ thật nằm trong khoảng."""
     table = pd.DataFrame(calibration["reliability"])
     figure, axis = plt.subplots(figsize=(6, 5))
     axis.plot(
@@ -332,6 +349,7 @@ def reliability(calibration):
 
 
 def bootstrap_differences(bootstrap, labels):
+    """Phân bố chênh lệch MAE giữa các mô hình qua 1.000 lần thi lại."""
     figure, axis = plt.subplots(figsize=(7.5, 4))
     colors = [BLUE, "#60a5fa", "#94a3b8"]
     for color, (name, values) in zip(colors, bootstrap["differences"].items()):
@@ -351,6 +369,7 @@ def bootstrap_differences(bootstrap, labels):
 
 
 def fairness_bias(group):
+    """Độ lệch % của từng nhóm kèm khoảng tin cậy 95%."""
     rows = [row for row in group["groups"] if row["enough"]]
     table = pd.DataFrame(rows).sort_values("bias_pct")
     figure, axis = plt.subplots(figsize=(7.5, max(3, len(table) * 0.45)))

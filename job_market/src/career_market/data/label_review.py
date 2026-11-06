@@ -26,6 +26,7 @@ CONTEXT = 45
 
 
 def _raw_records(raw_dir):
+    """Đọc lại chữ gốc của từng tin để người duyệt so với nhãn máy đã gán."""
     for reader in (_it_posts, _topcv, _careerbuilder):
         for item in reader(raw_dir):
             title = re.sub(r"\s+", " ", str(item["title"])).strip()

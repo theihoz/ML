@@ -17,21 +17,25 @@ from .charts import png
 
 @st.cache_data(show_spinner=False, max_entries=1)
 def dataset():
+    """Bộ dữ liệu, đọc một lần cho cả app."""
     return load_dataset()
 
 
 @st.cache_data(show_spinner=False, max_entries=1)
 def report():
+    """Báo cáo huấn luyện của mô hình đang phục vụ."""
     return load_report()
 
 
 @st.cache_data(show_spinner=False, max_entries=1)
 def skill_value():
+    """Bảng giá trị gia tăng của kỹ năng."""
     return load_skill_value()
 
 
 @st.cache_data(show_spinner=False, max_entries=1)
 def validation():
+    """Kết quả kiểm định (độ tin cậy, công bằng, chuẩn production)."""
     return load_validation()
 
 
@@ -90,6 +94,7 @@ def advice(
     company_type="Khác",
     work_mode="Không rõ",
 ):
+    """Kết quả tư vấn cho một hồ sơ; cùng hồ sơ thì không tính lại."""
     return advise(
         {
             "role": role,
@@ -107,4 +112,5 @@ def advice(
 
 @st.cache_data(show_spinner=False, max_entries=1)
 def reality():
+    """Kết quả so với báo cáo lương bên ngoài."""
     return reality_check()

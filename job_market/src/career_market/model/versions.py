@@ -20,17 +20,20 @@ MANIFEST = "manifest.json"
 
 
 def _history(root):
+    """Danh sách các phiên bản đã từng phục vụ, theo thứ tự."""
     path = Path(root) / HISTORY
     return json.loads(path.read_text(encoding="utf-8")) if path.exists() else [FIRST_VERSION]
 
 
 def _point(root, name, history):
+    """Ghi con trỏ CURRENT sang phiên bản mới và lưu lịch sử."""
     root = Path(root)
     (root / POINTER).write_text(name + "\n", encoding="utf-8")
     (root / HISTORY).write_text(json.dumps(history, ensure_ascii=False, indent=2), "utf-8")
 
 
 def _production(directory):
+    """Đọc kết quả chấm chuẩn production của một phiên bản."""
     path = Path(directory) / "validation.json"
     if not path.exists():
         return None
@@ -63,6 +66,7 @@ def write_manifest(directory, *, created_at=None, promoted=None, batches=None):
 
 
 def read_manifest(directory):
+    """Đọc thông tin của một phiên bản (ngày tạo, số tin, trạng thái chuẩn)."""
     path = Path(directory) / MANIFEST
     return json.loads(path.read_text(encoding="utf-8")) if path.exists() else None
 

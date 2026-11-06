@@ -17,11 +17,13 @@ COVERAGE_BAND = THRESHOLDS["overall"]["coverage_pct"]
 
 
 def _outside(coverage):
+    """Độ phủ khoảng lệch ra ngoài vùng chuẩn 75–85% bao nhiêu điểm %."""
     low, high = COVERAGE_BAND
     return max(low - coverage, coverage - high, 0.0)
 
 
 def _production(directory):
+    """Đọc kết quả chấm chuẩn production đã lưu của một thư mục mô hình."""
     path = Path(directory) / "validation.json"
     if not path.exists():
         return None
@@ -29,10 +31,12 @@ def _production(directory):
 
 
 def _points(production):
+    """Lấy giá trị ba chỉ số chung từ kết quả chấm."""
     return {name: m["point"] for name, m in production["overall"]["metrics"].items()}
 
 
 def _passed_scopes(production):
+    """Đếm số phạm vi (chung, từng vai trò, từng cấp bậc) đã đạt chuẩn."""
     groups = [row for column in ("role", "level") for row in production.get(column, [])]
     return (production["overall"]["status"] == "pass") + sum(
         row["status"] == "pass" for row in groups
@@ -40,6 +44,7 @@ def _passed_scopes(production):
 
 
 def _worse_metrics(current, candidate):
+    """Các chỉ số chung mà mô hình mới kém hơn mô hình đang dùng."""
     now, new = _points(current), _points(candidate)
     worse = []
     if new["median_error_pct"] > now["median_error_pct"]:
@@ -97,6 +102,7 @@ def _better_metrics(current, candidate):
 
 
 def _promote(candidate, serving):
+    """Chép mô hình mới sang thư mục đang phục vụ."""
     serving.mkdir(parents=True, exist_ok=True)
     for path in candidate.iterdir():
         if path.is_file() and path.name != "serving_rescored_validation.json":

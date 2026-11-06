@@ -1,4 +1,9 @@
-"""Independent, anonymized salary observations; never used for model fitting."""
+"""Hồ sơ vàng: chấm mô hình bằng lương thật của người đi làm (#116).
+
+Mục này làm gì: đọc file hồ sơ ẩn danh mà nhóm tự điền (vai trò, cấp bậc, khu vực, kinh
+nghiệm, kỹ năng, lương gross thật), dự đoán cho từng hồ sơ và đếm bao nhiêu hồ sơ lệch
+không quá 20%. Các hồ sơ này không bao giờ được dùng để huấn luyện.
+"""
 
 import math
 
@@ -13,6 +18,7 @@ COLUMNS = {"role", "level", "region", "experience_years", "skills", "gross_salar
 
 
 def _number(row, field, number):
+    """Đọc một ô số trong file hồ sơ vàng, báo lỗi rõ dòng nào nếu sai."""
     try:
         value = float(row[field])
     except (TypeError, ValueError):
@@ -23,6 +29,7 @@ def _number(row, field, number):
 
 
 def score_golden(path=None, model_name=None):
+    """Chấm mô hình trên hồ sơ vàng: đạt khi lệch ≤ 20% ở ít nhất 70% hồ sơ."""
     frame = pd.read_csv(
         path or data_root() / "reference" / "golden_profiles.csv", dtype=str, keep_default_na=False
     )

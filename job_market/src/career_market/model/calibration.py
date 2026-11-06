@@ -1,4 +1,11 @@
-"""Gross gần đúng: mean city/level rồi composite hai median vai trò; không fit benchmark."""
+"""Hiệu chỉnh về lương gross thị trường gần đúng (ADR 0015).
+
+Mục này làm gì: mô hình học từ lương ghi trên tin tuyển dụng. Để ra lương gross người đi
+làm thật sự nhận, nhân dự đoán với một hệ số. Hệ số gồm hai phần:
+1. theo cấp bậc × thành phố: so trung bình lương TopDev với trung bình dự đoán;
+2. theo vai trò: so trung vị ITviec với trung vị dự đoán sau bước 1.
+Báo cáo chỉ dùng để tính hệ số, không dùng để huấn luyện mô hình.
+"""
 
 import hashlib
 import json
@@ -12,10 +19,12 @@ from .estimators import CURRENT_YEAR, feature_frame
 
 
 def _digest(path):
+    """Mã băm của file, để phát hiện hệ số được tính cho một mô hình khác."""
     return hashlib.sha256(Path(path).read_bytes()).hexdigest()
 
 
 def build_calibration(frame, models, report, output):
+    """Tính hệ số hiệu chỉnh gross cho từng mô hình và lưu vào calibration.json."""
     reference = load_reference()
     anchors = reference[(reference["purpose"] == "calibration") & (reference["basis"] == "gross")]
     train = frame[frame["split"] == "train"].copy()
@@ -77,6 +86,7 @@ def build_calibration(frame, models, report, output):
 
 
 def load_calibration(name):
+    """Đọc hệ số đã lưu và kiểm tra nó khớp đúng mô hình đang dùng."""
     root = artifacts_dir()
     path = root / "calibration.json"
     if not path.exists():
@@ -102,6 +112,7 @@ def load_calibration(name):
 
 
 def calibration_for(table, level, region, role=None):
+    """Hệ số gross cho một hồ sơ (cấp bậc, khu vực, vai trò) kèm cảnh báo nếu phải dùng dự phòng."""
     key = f"{level}|{region}"
     if key in table["cells"]:
         factor, scope = table["cells"][key], "level_city"
@@ -127,7 +138,13 @@ def calibration_for(table, level, region, role=None):
         warnings.append(f"Hiệu chỉnh cấp bậc/thành phố dùng dự phòng: {scope}.")
     if role is not None and not role_anchor:
         warnings.append("Chưa có mốc gross cho vai trò; hệ số vai trò bằng 1.")
-    warnings.extend(role_anchor.get("mapping_caveats", []))
+    # "exact" = vai trò khớp đúng nhóm trong báo cáo: không cần cảnh báo. Ghi chú khác (tiếng Anh,
+    # dành cho người bảo trì) được thay bằng một câu dễ hiểu cho người dùng; bản gốc vẫn trả về.
+    if any(c != "exact" for c in role_anchor.get("mapping_caveats", [])):
+        warnings.append(
+            "Báo cáo lương không có đúng nhóm vai trò này; hệ số gross dựa trên nhóm gần nhất, "
+            "chỉ nên tham khảo."
+        )
     return {
         "factor": city_factor * role_factor,
         "city_factor": city_factor,
