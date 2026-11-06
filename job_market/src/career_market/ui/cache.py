@@ -78,8 +78,14 @@ def filter_postings(frame, sources, roles, regions):
 
 
 @st.cache_data(show_spinner=False, max_entries=128)
-def advice(role, region, years, skills, model_name):
+def advice(role, region, years, skills, model_name, level=None):
     return advise(
-        {"role": role, "region": region, "experience_years": years, "skills": list(skills)},
+        {
+            "role": role,
+            "region": region,
+            "experience_years": years,
+            "skills": list(skills),
+            "level": level,
+        },
         model_name=model_name,
     )

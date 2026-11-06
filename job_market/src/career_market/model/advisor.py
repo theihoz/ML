@@ -1,15 +1,52 @@
 """BƯỚC 4 — Dự đoán lương cho một hồ sơ và gợi ý kỹ năng nên học.
 
-Mục này làm gì: nạp mô hình đã lưu (không huấn luyện lại), dự đoán lương + khoảng 80%,
+Mục này làm gì: nạp mô hình đã lưu (không huấn luyện lại), dự đoán khoảng lương p25–trung vị–p75,
 thử thêm từng kỹ năng để đo mức tăng lương, và vẽ lộ trình theo số năm kinh nghiệm.
 """
 
 import pandas as pd
 
 from ..data.dataset import load_dataset, skill_lists
-from ..data.rules import SKILLS, derive_level
+from ..data.rules import LEVELS, SKILLS, derive_level
 from .estimators import CURRENT_YEAR, MODEL_LABELS, SKILL_COLUMNS, feature_frame
 from .training import load_model
+
+PRIORITY_CITIES = {"Hà Nội", "TP. Hồ Chí Minh"}
+PRIORITY_ROLES = {
+    "Backend Developer",
+    "Frontend Developer",
+    "Fullstack Developer",
+    "Mobile Developer",
+    "Kiểm thử (QA/QC)",
+    "DevOps / Cloud",
+    "Data Engineer",
+    "Data Analyst / BI",
+    "AI / ML Engineer",
+    "Business Analyst",
+}  # Data/AI gồm ba vai trò chi tiết trong bộ dữ liệu.
+
+
+def data_sufficiency(profile, frame, level):
+    in_priority = (
+        profile.get("region", "Hà Nội") in PRIORITY_CITIES and profile["role"] in PRIORITY_ROLES
+    )
+    cohort = frame[
+        (frame["split"] == "train")
+        & (frame["role"] == profile["role"])
+        & (frame["region"] == profile.get("region", "Hà Nội"))
+        & (frame["level"] == level)
+    ]
+    warnings = []
+    if not in_priority:
+        warnings.append("Ngoài vùng ưu tiên; ít dữ liệu, chỉ nên tham khảo.")
+    if len(cohort) < 20:
+        warnings.append("Nhóm vai trò × cấp bậc × thành phố có dưới 20 tin huấn luyện.")
+    return {
+        "in_priority": in_priority,
+        "thin_cohort": len(cohort) < 20,
+        "train_postings": len(cohort),
+        "warnings": warnings,
+    }
 
 
 def _profile_frame(profile):
@@ -32,7 +69,7 @@ def _profile_frame(profile):
 def predict_profile(profile, model_name=None):
     model, name, report = load_model(model_name)
     value = float(model.predict(feature_frame(_profile_frame(profile)))[0])
-    band = report["interval_ratio"]
+    band = report["models"][name]["interval_ratio"]
     return {
         "model": name,
         "salary": value,
@@ -53,7 +90,12 @@ def advise(profile, model_name=None, top_k=5, min_share=0.03):
     base_frame = _profile_frame(profile)
     base_features = feature_frame(base_frame)
     base = float(model.predict(base_features)[0])
-    band = report["interval_ratio"]
+    band = report["models"][name]["interval_ratio"]
+    salary_range = {
+        "p25": base * band["p25"],
+        "median": base * band["p50"],
+        "p75": base * band["p75"],
+    }
     role_rows = frame[frame["role"] == profile["role"]]
     role_skills = skill_lists(role_rows)
     owned = set(profile.get("skills", []))
@@ -70,7 +112,7 @@ def advise(profile, model_name=None, top_k=5, min_share=0.03):
         candidates.append(
             {
                 "skill": skill,
-                "uplift": float(model.predict(changed)[0]) - base,
+                "uplift": (float(model.predict(changed)[0]) - base) * band["p50"],
                 "demand_share": share,
             }
         )
@@ -95,22 +137,31 @@ def advise(profile, model_name=None, top_k=5, min_share=0.03):
     # Mục này: lộ trình — dự đoán lại khi thêm 0/1/2/3/5 năm kinh nghiệm.
     path = []
     for extra in (0, 1, 2, 3, 5):
-        future = {**profile, "experience_years": years + extra, "level": None}
+        current_level = base_frame["level"][0]
+        inferred = derive_level("", years + extra)
+        future_level = (
+            current_level
+            if extra == 0
+            else LEVELS[max(LEVELS.index(current_level), LEVELS.index(inferred))]
+        )
+        future = {**profile, "experience_years": years + extra, "level": future_level}
         future_features = feature_frame(_profile_frame(future))
         path.append(
             {
                 "experience_years": years + extra,
                 "level": _profile_frame(future)["level"][0],
-                "salary": float(model.predict(future_features)[0]),
+                "salary": float(model.predict(future_features)[0]) * band["p50"],
             }
         )
     role_salaries = role_rows["salary"]
     return {
         "model": name,
         "model_label": MODEL_LABELS[name],
-        "salary": base,
-        "low": base * band["p10"],
-        "high": base * band["p90"],
+        "salary": salary_range["median"],
+        "low": salary_range["p25"],
+        "high": salary_range["p75"],
+        "salary_range": salary_range,
+        "data_sufficiency": data_sufficiency(profile, frame, base_frame["level"][0]),
         "level": base_frame["level"][0],
         "recommendations": candidates[:top_k],
         "experience_path": path,
