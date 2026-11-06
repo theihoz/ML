@@ -223,3 +223,14 @@ def test_dropping_any_skill_from_a_twelve_skill_profile_never_raises_salary(mode
         fewer = [name for name in FULL_PROFILE_SKILLS if name != skill]
         dropped = predict_profile({**profile, "skills": fewer}, model_name)["salary"]
         assert dropped <= full + 1e-6, (model_name, skill, dropped, full)
+
+
+def test_saved_validation_carries_the_production_standard():
+    from career_market.salary_validation import load_validation
+
+    production = load_validation()["production"]
+    expected = production["overall"]["status"] == "pass" and not any(production["failing"].values())
+    assert production["production_ready"] is expected
+    for column in ("role", "level"):
+        failing = [row["group"] for row in production[column] if row["status"] == "fail"]
+        assert production["failing"][column] == failing
