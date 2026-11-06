@@ -51,3 +51,11 @@ _Tránh dùng_: Tỷ lệ người dùng công nghệ trong khảo sát, tổng 
 **Xu hướng theo thời gian**:
 Sự thay đổi của một chỉ tiêu giữa các giai đoạn có thời gian nguồn xác định và phạm vi dữ liệu đủ so sánh.
 _Tránh dùng_: Bảng xếp hạng tại một thời điểm, năm tải dữ liệu thay cho năm đăng tin.
+
+**Khoảng lương dự đoán**:
+Khoảng từ phân vị 10 đến phân vị 90 mà hệ thống kỳ vọng lương chào tuyển của một hồ sơ rơi vào khoảng 80% số lần; là thông tin chính hiển thị cho người dùng, kèm hoặc thay cho con số dự đoán.
+_Tránh dùng_: Khoảng lương chào tuyển của một tin, sai số tuyệt đối.
+
+**Nhóm đủ dữ liệu**:
+Tổ hợp vai trò nghề nghiệp × cấp bậc có ít nhất 20 tin tuyển dụng trong tập huấn luyện; chỉ nhóm này được hiển thị con số lương dự đoán, nhóm còn lại chỉ hiển thị khoảng lương dự đoán mở rộng kèm cảnh báo ít dữ liệu.
+_Tránh dùng_: Vai trò phổ biến, nhóm có trong dữ liệu.
