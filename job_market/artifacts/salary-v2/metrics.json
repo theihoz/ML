@@ -9,7 +9,7 @@
     "Baseline": {
       "label": "Mốc trung vị",
       "params": {},
-      "fit_seconds": 0.008540457987692207,
+      "fit_seconds": 0.008665792003739625,
       "train": {
         "MAE": 11.934332791548151,
         "RMSE": 16.855788613078687,
@@ -37,26 +37,26 @@
       "params": {
         "alpha": 10.0
       },
-      "fit_seconds": 0.03667454200331122,
+      "fit_seconds": 0.03416974999709055,
       "train": {
-        "MAE": 6.545259775582858,
-        "RMSE": 9.587848114276,
-        "R2": 0.6623256011130148,
-        "MAPE": 24.31725496648602,
+        "MAE": 6.628281018475468,
+        "RMSE": 9.748207737335736,
+        "R2": 0.6509357312261739,
+        "MAPE": 24.403200610327417,
         "n": 2461
       },
       "valid": {
-        "MAE": 6.235676787014931,
-        "RMSE": 9.099602763780776,
-        "R2": 0.7062957196861455,
-        "MAPE": 22.57724698070789,
+        "MAE": 6.423796231804857,
+        "RMSE": 9.275100146217701,
+        "R2": 0.6948575541585729,
+        "MAPE": 23.63446579319448,
         "n": 652
       },
       "test": {
-        "MAE": 6.367936274328727,
-        "RMSE": 9.027199586823611,
-        "R2": 0.7121214164299469,
-        "MAPE": 23.404734681235887,
+        "MAE": 6.455560965936257,
+        "RMSE": 9.163296709257214,
+        "R2": 0.7033756724662017,
+        "MAPE": 23.46265777910465,
         "n": 696
       }
     },
@@ -65,26 +65,26 @@
       "params": {
         "min_samples_leaf": 5
       },
-      "fit_seconds": 0.3788359169848263,
+      "fit_seconds": 0.599934875004692,
       "train": {
-        "MAE": 6.183146625106851,
-        "RMSE": 8.882316873966209,
-        "R2": 0.7101933349921827,
-        "MAPE": 24.872359812679818,
+        "MAE": 6.236654491964184,
+        "RMSE": 8.936181961341028,
+        "R2": 0.7066677245322852,
+        "MAPE": 25.432860729207572,
         "n": 2461
       },
       "valid": {
-        "MAE": 6.569813196119278,
-        "RMSE": 9.119567922385233,
-        "R2": 0.7050054907517774,
-        "MAPE": 26.51925467887617,
+        "MAE": 6.638099700772482,
+        "RMSE": 9.069987307304997,
+        "R2": 0.7082043814266852,
+        "MAPE": 27.743436708405255,
         "n": 652
       },
       "test": {
-        "MAE": 6.472822428052251,
-        "RMSE": 9.135911605261757,
-        "R2": 0.7051459850791877,
-        "MAPE": 25.503774082087077,
+        "MAE": 6.554343961903999,
+        "RMSE": 9.088397516551483,
+        "R2": 0.7082049658398306,
+        "MAPE": 26.25923235584682,
         "n": 696
       }
     },
@@ -94,26 +94,26 @@
         "learning_rate": 0.05,
         "max_leaf_nodes": 15
       },
-      "fit_seconds": 1.9542739579919726,
+      "fit_seconds": 1.025489625026239,
       "train": {
-        "MAE": 5.5819088624422974,
-        "RMSE": 8.31742806444913,
-        "R2": 0.7458828644722204,
-        "MAPE": 20.660190522786746,
+        "MAE": 5.533039290264608,
+        "RMSE": 8.275477335247478,
+        "R2": 0.7484397883320746,
+        "MAPE": 20.386317375511158,
         "n": 2461
       },
       "valid": {
-        "MAE": 5.69657996629609,
-        "RMSE": 8.601126592397561,
-        "R2": 0.7375925944675048,
-        "MAPE": 20.809482239752537,
+        "MAE": 5.724779476646513,
+        "RMSE": 8.567782728351578,
+        "R2": 0.7396231928751821,
+        "MAPE": 21.568955655548635,
         "n": 652
       },
       "test": {
-        "MAE": 5.821186430022001,
-        "RMSE": 8.58020195173445,
-        "R2": 0.7399251912090803,
-        "MAPE": 20.728449056888625,
+        "MAE": 5.806720843851034,
+        "RMSE": 8.557440007581684,
+        "R2": 0.7413032371199322,
+        "MAPE": 20.548906737014004,
         "n": 696
       }
     }
@@ -130,25 +130,25 @@
         "params": {
           "alpha": 0.3
         },
-        "valid_MAE": 6.295685118086185
+        "valid_MAE": 6.4572193510902425
       },
       {
         "params": {
           "alpha": 1.0
         },
-        "valid_MAE": 6.280833129492829
+        "valid_MAE": 6.447251275547688
       },
       {
         "params": {
           "alpha": 3.0
         },
-        "valid_MAE": 6.254645840339722
+        "valid_MAE": 6.431875395458372
       },
       {
         "params": {
           "alpha": 10.0
         },
-        "valid_MAE": 6.235676787014931
+        "valid_MAE": 6.423796231804857
       }
     ],
     "RandomForest": [
@@ -156,19 +156,19 @@
         "params": {
           "min_samples_leaf": 1
         },
-        "valid_MAE": 7.1421463634247555
+        "valid_MAE": 7.216657356133312
       },
       {
         "params": {
           "min_samples_leaf": 3
         },
-        "valid_MAE": 6.646808373978651
+        "valid_MAE": 6.6794287814763
       },
       {
         "params": {
           "min_samples_leaf": 5
         },
-        "valid_MAE": 6.569813196119278
+        "valid_MAE": 6.638099700772483
       }
     ],
     "GradientBoosting": [
@@ -177,146 +177,146 @@
           "learning_rate": 0.05,
           "max_leaf_nodes": 15
         },
-        "valid_MAE": 5.69657996629609
+        "valid_MAE": 5.724779476646513
       },
       {
         "params": {
           "learning_rate": 0.05,
           "max_leaf_nodes": 31
         },
-        "valid_MAE": 5.773447727396824
+        "valid_MAE": 5.818121787563847
       },
       {
         "params": {
           "learning_rate": 0.1,
           "max_leaf_nodes": 15
         },
-        "valid_MAE": 5.8069982332967
+        "valid_MAE": 5.79217452764905
       },
       {
         "params": {
           "learning_rate": 0.1,
           "max_leaf_nodes": 31
         },
-        "valid_MAE": 5.8866688955207565
+        "valid_MAE": 5.901010779345559
       }
     ]
   },
   "selected": "GradientBoosting",
   "interval_ratio": {
-    "p10": 0.7280338898927895,
-    "p90": 1.3610382446534588
+    "p10": 0.7138794410573286,
+    "p90": 1.3502080385162607
   },
   "test_by_role": {
     "AI / ML Engineer": {
-      "mean": 6.194,
+      "mean": 6.276,
       "count": 29
     },
     "Backend Developer": {
-      "mean": 4.598,
+      "mean": 4.55,
       "count": 126
     },
     "BrSE / Cầu nối": {
-      "mean": 5.185,
+      "mean": 6.258,
       "count": 3
     },
     "Business Analyst": {
-      "mean": 4.663,
+      "mean": 4.876,
       "count": 28
     },
     "Bảo mật": {
-      "mean": 6.737,
+      "mean": 6.805,
       "count": 31
     },
     "Data Analyst / BI": {
-      "mean": 2.855,
+      "mean": 3.031,
       "count": 9
     },
     "Data Engineer": {
-      "mean": 8.944,
+      "mean": 8.442,
       "count": 11
     },
     "DevOps / Cloud": {
-      "mean": 9.864,
+      "mean": 9.563,
       "count": 39
     },
     "ERP / SAP Consultant": {
-      "mean": 1.478,
+      "mean": 1.313,
       "count": 1
     },
     "Embedded / IoT": {
-      "mean": 6.405,
+      "mean": 6.189,
       "count": 40
     },
     "Frontend Developer": {
-      "mean": 4.632,
+      "mean": 4.565,
       "count": 51
     },
     "Fullstack Developer": {
-      "mean": 6.013,
+      "mean": 6.084,
       "count": 58
     },
     "Game Developer": {
-      "mean": 6.498,
+      "mean": 7.92,
       "count": 4
     },
     "IT Support / Helpdesk": {
-      "mean": 3.507,
+      "mean": 3.502,
       "count": 15
     },
     "Kiểm thử (QA/QC)": {
-      "mean": 3.865,
+      "mean": 3.724,
       "count": 90
     },
     "Mobile Developer": {
-      "mean": 4.404,
+      "mean": 4.503,
       "count": 56
     },
     "Quản lý IT / CTO": {
-      "mean": 13.934,
+      "mean": 12.48,
       "count": 4
     },
     "Quản lý dự án / sản phẩm": {
-      "mean": 8.591,
+      "mean": 8.453,
       "count": 26
     },
     "Quản trị hệ thống / Mạng": {
-      "mean": 4.344,
+      "mean": 4.813,
       "count": 15
     },
     "Software Engineer (chung)": {
-      "mean": 5.936,
+      "mean": 5.889,
       "count": 41
     },
     "Tech Lead / Architect": {
-      "mean": 20.531,
+      "mean": 21.501,
       "count": 15
     },
     "UI/UX Designer": {
-      "mean": 4.391,
+      "mean": 3.727,
       "count": 4
     }
   },
   "permutation_importance": {
-    "experience_years": 0.9502,
-    "role": 0.0705,
-    "level": 0.0411,
-    "skill::Next.js": 0.0178,
-    "skill::Flutter": 0.0099,
-    "region": 0.0094,
-    "skill::AWS": 0.0082,
-    "year": 0.0069,
-    "skill::Rust": 0.0064,
-    "skill::Tiếng Anh": 0.0048,
-    "skill::LLM / GenAI": 0.0045,
-    "skill::GCP": 0.0033,
-    "skill::TensorFlow/PyTorch": 0.0032,
-    "skill::An ninh mạng": 0.0031,
-    "skill::Machine Learning": 0.0031,
-    "skill::Golang": 0.003,
-    "skill::Python": 0.0028,
-    "skill::CI/CD": 0.0021,
-    "skill::Kotlin": 0.002,
-    "skill::Kubernetes": 0.0018
+    "experience_years": 0.9491,
+    "role": 0.0817,
+    "level": 0.0669,
+    "skill::Next.js": 0.0191,
+    "skill::Flutter": 0.0094,
+    "skill::LLM / GenAI": 0.0088,
+    "skill::AWS": 0.0087,
+    "skill::Rust": 0.0063,
+    "year": 0.0062,
+    "region": 0.006,
+    "skill::Tiếng Anh": 0.0052,
+    "skill::Golang": 0.0039,
+    "skill::TensorFlow/PyTorch": 0.0036,
+    "skill::GCP": 0.0035,
+    "skill::Python": 0.0034,
+    "skill::Machine Learning": 0.0028,
+    "skill::Kubernetes": 0.0026,
+    "skill::An ninh mạng": 0.0021,
+    "skill::React Native": 0.0021,
+    "skill::Redis": 0.0021
   }
 }
