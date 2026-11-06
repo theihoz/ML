@@ -85,3 +85,53 @@ def test_advisor_page_hides_the_number_for_a_low_support_profile():
     assert app.metric[0].label == "Khoảng lương (triệu đồng / tháng)"
     assert "–" in app.metric[0].value
     assert any("Ít dữ liệu" in warning.value for warning in app.warning)
+
+
+def test_low_support_profile_gets_a_plain_language_message_and_posting_count():
+    result = predict_profile(_profile("Tech Lead / Architect", 6))
+    assert result["cohort_rows"] == 0
+    message = result["support_message"]
+    assert "Tech Lead / Architect" in message and "0 tin" in message
+    assert "tin train" not in message and "production" not in message
+
+
+def test_supported_profile_reports_how_many_postings_back_it():
+    result = predict_profile(_profile("Backend Developer", 2))
+    assert result["cohort_rows"] >= 20
+    assert result["support_message"] == ""
+
+
+def _advisor(role):
+    from pathlib import Path
+
+    from streamlit.testing.v1 import AppTest
+
+    app = AppTest.from_file(str(Path(__file__).parents[1] / "app.py"), default_timeout=60).run()
+    app.selectbox[0].set_value(role)
+    app.button[0].click().run()
+    assert not app.exception
+    return app
+
+
+def test_advisor_leads_with_the_band_and_states_the_supporting_postings():
+    app = _advisor("Backend Developer")
+    assert app.metric[0].label == "Khoảng lương (triệu đồng / tháng)"
+    texts = " ".join(str(item.value) for item in app.markdown)
+    assert "Mức điển hình khoảng" in texts
+    assert "Dựa trên" in texts and "tin cùng vai trò và cấp bậc" in texts
+
+
+def test_advisor_warns_on_top_when_the_model_is_not_production_ready():
+    from career_market.salary_model import load_production
+
+    app = _advisor("Backend Developer")
+    shown = any("mang tính tham khảo" in str(item.value) for item in app.info)
+    assert shown is (not load_production()["production_ready"])
+
+
+def test_low_support_advice_hides_salary_uplift_amounts():
+    app = _advisor("Tech Lead / Architect")
+    table = app.dataframe[0].value
+    assert "Tăng lương (triệu)" not in table.columns
+    assert set(table["Lý do"]) <= {"Có thể giúp tăng lương", "Được yêu cầu nhiều"}
+    assert any(expander.label == "Vì sao?" for expander in app.expander)
