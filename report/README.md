@@ -20,3 +20,4 @@ node report/scripts/build_kich_ban.js report/KichBan_ThuyetTrinh_De4.docx
 ```
 
 Biểu đồ dữ liệu được sinh lại và không commit. Ảnh giao diện trong `figures/ui-*.png` được lưu trong repo. Các sơ đồ draw.io chưa được xuất lại trong đợt cập nhật này. Báo cáo và slide ghi rõ mô hình chưa đạt chuẩn production; rà soát nhãn do AI thực hiện, chưa thay thế thẩm định của con người.
+- `TeamWork_PP_Nhom3.ipynb`: notebook báo cáo nhóm (bản thăm dò Ridge/Linear Regression ban đầu), giữ làm hồ sơ.
