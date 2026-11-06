@@ -23,7 +23,10 @@ def main() -> int:
     commands.add_parser("build-dataset", help="Gộp ba nguồn thô thành bộ salary-v2 có split")
     commands.add_parser("train", help="Huấn luyện Ridge/Random Forest/Gradient Boosting")
     commands.add_parser("validate", help="Hiệu chuẩn, bootstrap và công bằng của mô hình đã lưu")
-    commands.add_parser("reality-check", help="Đối chiếu mô hình đã lưu với báo cáo lương")
+    reality = commands.add_parser(
+        "reality-check", help="Đối chiếu mô hình đã lưu với báo cáo lương"
+    )
+    reality.add_argument("--golden-path", help="CSV hồ sơ vàng ẩn danh; mặc định dùng mẫu đóng gói")
     advice = commands.add_parser("advise", help="Dự đoán lương và gợi ý kỹ năng cho hồ sơ")
     advice.add_argument("--role", choices=ROLE_ORDER, required=True)
     advice.add_argument("--region", choices=REGIONS, default="Hà Nội")
@@ -36,7 +39,7 @@ def main() -> int:
     elif args.command == "train":
         result = train()
     elif args.command == "reality-check":
-        result = reality_check()
+        result = reality_check(golden_path=args.golden_path)
     elif args.command == "validate":
         result = validate()
         for difference in result["bootstrap"]["differences"].values():
