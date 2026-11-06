@@ -12,6 +12,7 @@ import json
 from .data.dataset import write_dataset
 from .data.rules import REGIONS, ROLE_ORDER
 from .model.advisor import advise
+from .model.reality import reality_check
 from .model.training import train
 from .model.validation import validate
 
@@ -22,6 +23,7 @@ def main() -> int:
     commands.add_parser("build-dataset", help="Gộp ba nguồn thô thành bộ salary-v2 có split")
     commands.add_parser("train", help="Huấn luyện Ridge/Random Forest/Gradient Boosting")
     commands.add_parser("validate", help="Hiệu chuẩn, bootstrap và công bằng của mô hình đã lưu")
+    commands.add_parser("reality-check", help="Đối chiếu mô hình đã lưu với báo cáo lương")
     advice = commands.add_parser("advise", help="Dự đoán lương và gợi ý kỹ năng cho hồ sơ")
     advice.add_argument("--role", choices=ROLE_ORDER, required=True)
     advice.add_argument("--region", choices=REGIONS, default="Hà Nội")
@@ -33,6 +35,8 @@ def main() -> int:
         result = write_dataset()
     elif args.command == "train":
         result = train()
+    elif args.command == "reality-check":
+        result = reality_check()
     elif args.command == "validate":
         result = validate()
         for difference in result["bootstrap"]["differences"].values():

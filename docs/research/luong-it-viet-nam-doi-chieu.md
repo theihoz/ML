@@ -7,11 +7,11 @@ Ngày tra cứu: 2026-11-06. Đơn vị chuẩn hóa trong file: **triệu VND/t
 ## 1. Tóm tắt
 
 - **Ba nguồn sơ cấp đọc được bảng số liệu đầy đủ:**
-  1. **ITviec**, IT Salary & Recruitment Market Report, các bản 2023-2024, 2024-2025 và 2025-2026. Đây là khảo sát người lao động tự khai. Số liệu là trung vị, đơn vị triệu VND/tháng, chia theo vị trí và theo năm kinh nghiệm. Trang công khai **không có** bảng theo thành phố hay cấp bậc, cũng **không nêu** lương là gross hay net. Nguồn: https://itviec.com/report/vietnam-it-salary-and-recruitment-market và https://itviec.com/report/vietnam-it-salary-and-recruitment-market-2024-2025
+  1. **ITviec**, IT Salary & Recruitment Market Report, các bản 2023-2024, 2024-2025 và 2025-2026. Đây là khảo sát người lao động tự khai. Số liệu là trung vị, đơn vị triệu VND/tháng, chia theo vị trí và theo năm kinh nghiệm. PDF 2023–2024 và 2024–2025 xác nhận trung vị gross, không gồm thưởng/phúc lợi; số năm kinh nghiệm là năm trong vị trí hiện tại. Bản 2025–2026 công khai vẫn chưa xác nhận gross/net. PDF 2024–2025 còn có trung bình theo kinh nghiệm × thành phố (không phải trung vị). Nguồn: https://itviec.com/report/vietnam-it-salary-and-recruitment-market và https://itviec.com/report/vietnam-it-salary-and-recruitment-market-2024-2025
   2. **TopDev**, Vietnam IT Market Report 2023 và 2024-2025. Số liệu kết hợp khảo sát với dữ liệu tin tuyển dụng (JD). Đơn vị là USD, **gross trước thuế**, kèm tỷ giá do chính TopDev công bố. Đây là nguồn **duy nhất** có bảng **cấp bậc × thành phố (HCM / Hà Nội / Đà Nẵng)** và bảng theo vị trí (trung vị và khoảng). Nguồn: https://topdev.vn/TopDev_VietnamITMarketReport2023_VietnamTechTalentsReport.pdf và https://shiftasia.com/wp-content/uploads/2024/12/TopDev_VietnamITMarketReport2024_2025_VietnamITTechTalentLandscape.pdf (bản 2024-2025 lấy từ một bản sao do bên thứ ba lưu, vì trang của TopDev bắt đăng ký mới cho tải: https://topdev.vn/get-report-en).
   3. **Adecco Vietnam Salary Guide 2026.** Đây là khoảng min–max của **lương cơ bản gross**, đơn vị triệu VND/tháng, chia theo HCM và Hà Nội, với hai nhóm kinh nghiệm 1–5 năm và trên 5 năm. Nguồn: https://www.adecco.com/-/jssmedia/project/adecco/adeccovn/pdf/adecco-vietnam-salary-guide-2026.pdf
 - **Không lấy được bảng sơ cấp:** TopCV (trang bị chặn 403, chỉ có số thứ cấp), Navigos/VietnamWorks, Robert Walters, Michael Page, Talentnet-Mercer (bảng chi tiết phải gửi form mới tải được), và bản PDF Adecco 2025 (link cũ chuyển hướng về trang chủ). Về số liệu nhà nước, **không tìm thấy** số liệu lương theo nghề IT từ Tổng cục Thống kê. Chỉ có thu nhập bình quân toàn bộ lao động, theo bài báo thứ cấp: 7,7 triệu/tháng năm 2024 (https://mekongasean.vn/nam-2024-thu-nhap-binh-quan-cua-lao-dong-la-77-trieu-dongthang-37256.html). Con số này không dùng được để đối chiếu.
-- **Mức tin cậy:** TopDev và Adecco rõ ràng về gross. ITviec có cỡ mẫu công bố (1.839 đến 2.324 người) nhưng mỗi ô chỉ có ít người, nhiều ô bị bỏ trống. TopDev không nêu cỡ mẫu cho từng ô. Cả ba nguồn đều thiên về doanh nghiệp lớn ở hai thành phố lớn và nhóm người dùng của chính nền tảng.
+- **Mức tin cậy:** TopDev và Adecco rõ ràng về gross. ITviec có tổng cỡ mẫu công bố (1.839 đến 2.324 người); không công bố cỡ mẫu từng vai trò trong các bảng được dùng, nhiều ô kinh nghiệm bị bỏ trống. Không suy tổng báo cáo thành cỡ mẫu từng ô. TopDev không nêu cỡ mẫu cho từng ô. Cả ba nguồn đều thiên về doanh nghiệp lớn ở hai thành phố lớn và nhóm người dùng của chính nền tảng.
 
 ---
 
@@ -20,8 +20,8 @@ Ngày tra cứu: 2026-11-06. Đơn vị chuẩn hóa trong file: **triệu VND/t
 | # | Nguồn | URL | Năm phát hành | Kỳ dữ liệu | Cỡ mẫu | Loại dữ liệu | Gross/Net | Đơn vị | Thống kê | Phân rã |
 |---|---|---|---|---|---|---|---|---|---|---|
 | S1 | ITviec IT Salary & Recruitment Market Report 2025-2026 | https://itviec.com/report/vietnam-it-salary-and-recruitment-market | 2025 (cuối năm) | 27/05–31/07/2025 và 21/10–11/11/2025 | 1.839 người trả lời (gồm IT professional, freelancer, sinh viên IT, HR, CxO) | Khảo sát online tự khai | **Không nêu** | Triệu VND/tháng | Trung vị | Vị trí × năm KN (<1, 1-2, 3-4, 5-8, >8 năm). Không có thành phố. |
-| S2 | ITviec IT Salary & Recruitment Market Report 2024-2025 | https://itviec.com/report/vietnam-it-salary-and-recruitment-market-2024-2025 | 2024 | 10/09–10/10/2024 | 2.324 người | Khảo sát online tự khai | **Không nêu** | VND/tháng | Trung vị (kèm số năm KN trung vị của vị trí) | 31 vị trí. Mỗi vị trí chỉ có 1 số. |
-| S3 | ITviec IT Salary Report 2023-2024 (blog tóm tắt) | https://itviec.com/blog/it-salary-report-2023-2024/ | 2023 | 19/09–10/10/2023 | 2.207 người | Khảo sát online tự khai | **Không nêu** | Triệu VND/tháng | Trung vị | Chỉ có 6 vị trí trên trang công khai |
+| S2 | ITviec IT Salary & Recruitment Market Report 2024-2025 | https://itviec.com/salary-reports/download/5c4723f6-a99a-4884-be8e-40f42d71fb0b/ | 2024 | 10/09–10/10/2024 | 2.324 người | Khảo sát online tự khai | **Gross**, không gồm thưởng/phúc lợi | VND/tháng | Trung vị (kèm số năm KN trung vị của vị trí) | 31 vị trí. Bảng vai trò trang in 62/PDF 63; KN × thành phố là trung bình trang in 68/PDF 69. |
+| S3 | ITviec IT Salary Report 2023-2024 (PDF đầy đủ) | https://itviec.com/blog/wp-content/uploads/2023/12/ITviec-IT-Salary-Report-2023-2024-Full-EN-85777e.pdf | 2023 | 19/09–10/10/2023 | 2.207 người | Khảo sát online tự khai | **Gross**, không gồm thưởng/phúc lợi | Triệu VND/tháng | Trung vị | 25 vị trí, trang in 23/PDF 24 |
 | S4 | TopDev Vietnam IT Market Report 2024-2025 | https://shiftasia.com/wp-content/uploads/2024/12/TopDev_VietnamITMarketReport2024_2025_VietnamITTechTalentLandscape.pdf (bản sao. Trang gốc: https://topdev.vn/get-report-en) | 09/2024 | 01/2022–07/2024 | 45.015 người khảo sát và hơn 90.000 tin tuyển dụng. Đã loại 9,3% dữ liệu không hợp lệ. | Khảo sát kết hợp dữ liệu JD. Phân phối theo thành phố tính theo "ratio of JD". | **Gross trước thuế**, không gồm OT và thưởng | USD/tháng. Tỷ giá TopDev dùng: **1 USD = 25.000 VND** | Trung bình (cấp bậc, thành phố); trung vị kèm khoảng (vị trí) | Cấp bậc × thành phố; năm KN; vị trí |
 | S5 | TopDev Vietnam IT Market Report 2023 | https://topdev.vn/TopDev_VietnamITMarketReport2023_VietnamTechTalentsReport.pdf | 2023 | 07/2022–07/2023 | 50.012 người khảo sát và hơn 70.000 tin tuyển dụng. Đã loại 9,5% dữ liệu. | Khảo sát kết hợp JD | **Gross trước thuế** | USD/tháng. Tỷ giá TopDev dùng: **1 USD = 23.300 VND** | Trung bình kèm khoảng | Năm KN; thành phố |
 | S6 | Adecco Vietnam Salary Guide 2026 | https://www.adecco.com/-/jssmedia/project/adecco/adeccovn/pdf/adecco-vietnam-salary-guide-2026.pdf | 2026 | Khảo sát cuối năm 2025 | Gửi tới hơn 10.000 người trong cơ sở dữ liệu. Không nêu số phản hồi cho bảng lương. | Dữ liệu khách hàng và ứng viên của Adecco, kết hợp nhận định của chuyên viên tuyển dụng | **Lương cơ bản gross** | Triệu VND/tháng | Khoảng min–max | Vị trí × thành phố (HCM, HN) × KN (1–5 năm, trên 5 năm) |
@@ -89,9 +89,9 @@ Nguồn: https://itviec.com/report/vietnam-it-salary-and-recruitment-market. Kh�
 
 Một số ô có dấu hiệu cỡ mẫu nhỏ, không đơn điệu theo kinh nghiệm: Mobile 1-2 năm (28,8) gần bằng 3-4 năm (29,05); Data Engineer 3-4 năm (56,9) cao hơn tổng (41,3); IT Manager >8 năm (50,3) gần bằng 1-2 năm (46,4); CTO 3-4 năm (100,3).
 
-### 3.4 Vị trí, ITviec 2024-2025 (S2), trung vị kèm số năm kinh nghiệm trung vị, "?"
+### 3.4 Vị trí, ITviec 2024-2025 (S2), trung vị gross kèm năm trong vị trí hiện tại
 
-Nguồn: https://itviec.com/report/vietnam-it-salary-and-recruitment-market-2024-2025. Mỗi vị trí chỉ có một con số, gắn với số năm kinh nghiệm trung vị của người trả lời.
+Nguồn: https://itviec.com/report/vietnam-it-salary-and-recruitment-market-2024-2025. Mỗi vị trí có trung vị lương riêng và trung vị số năm trong vị trí hiện tại riêng; không phải lương điều kiện tại số năm đó.
 
 | Vị trí | Năm KN | Trung vị | Vị trí | Năm KN | Trung vị |
 |---|---|---|---|---|---|
@@ -112,7 +112,9 @@ Nguồn: https://itviec.com/report/vietnam-it-salary-and-recruitment-market-2024
 | CTO/CIO/VPoE | 8 | 96,0 | IT Support/Helpdesk | 6 | 17,3 |
 | Designer (≈ UI/UX) | 6,5 | 34,6 | | | |
 
-ITviec 2023-2024 (S3) chỉ công bố 6 vị trí: Solution Architect 63 (2,5 năm KN), Tech Lead 50 (3 năm), Project Leader/PM 48 (5 năm), Cloud Engineer 45 (4 năm), DevOps/DevSecOps 40,5 (2 năm), Data Engineer 30 (2 năm). Nguồn: https://itviec.com/blog/it-salary-report-2023-2024/. Số năm kinh nghiệm thấp như vậy (Solution Architect chỉ 2,5 năm) đáng ngờ, nên chỉ dùng ở mức tham khảo.
+ITviec 2023–2024 (S3) có 25 vị trí trong PDF đầy đủ, trang in 23/PDF 24. Các trung vị gross cần cho mười vai trò: Backend 27; Frontend 23; Fullstack 30; Mobile 30; DevOps/DevSecOps 40,5; Tester 20; Data Engineer 30; Data Analyst/DS/BI 26; AI/Blockchain 23; BA 25 (triệu VND/tháng). Cloud 45 và QA-QC 31 giữ làm ngữ cảnh thay thế. Năm của Solution Architect 2,5 là **năm trong vị trí hiện tại**, không phải tổng kinh nghiệm IT; không có cơ sở loại nguồn vì con số này. Tổng báo cáo 2.207 người đủ điều kiện; cỡ mẫu từng vai trò chưa công bố.
+
+S2 có 2.324 người trả lời tổng cộng: 2.001 người đang làm IT (1.861 toàn thời gian + 140 kiêm nhiệm), 42 thất nghiệp, 62 freelancer độc lập, 98 sinh viên, 121 HR/CxO; không gán 2.324 cho mỗi ô. Bảng vai trò trang in 62/PDF 63 xác nhận gross không gồm thưởng/phúc lợi; năm kinh nghiệm cũng là năm trong vị trí hiện tại. Các dòng máy đọc được giữ URL, trang in/PDF, tổng báo cáo và cỡ mẫu ô trống riêng biệt trong `job_market/datasets/reference/salary_reference.csv`.
 
 ### 3.5 Vị trí, TopDev 2024-2025 (S4), trung vị và khoảng, G, ×25.000
 
@@ -204,8 +206,8 @@ Số của Adecco cao hơn rõ rệt so với ITviec và TopDev, vì Adecco tuy�
 
 ## 4. Khác biệt so với lương chào tuyển
 
-1. **Gross và net.** TopDev ghi rõ "monthly gross salary before tax", không gồm OT và thưởng, kể cả lương tháng 13 (S4, trang 46). Adecco ghi "base salaries… gross monthly wages" (S6, trang 16). ITviec **không nêu** (S1, S2). Theo TopDev 2023 (S5, trang 28), người lao động đóng 10,5% bảo hiểm bắt buộc (BHXH 8%, BHYT 1,5%, BHTN 1%) trước khi tính thuế TNCN. Vì vậy một tin tuyển dụng ghi "net" sẽ tương ứng với mức gross cao hơn đáng kể. Nếu dữ liệu huấn luyện trộn tin gross và tin net mà không gắn cờ, mô hình sẽ bị nhiễu theo hướng này.
-2. **Khảo sát tự khai và tin tuyển dụng.** ITviec đo lương **đang nhận**, tự khai, kèm thiên lệch người trả lời: người dùng ITviec, có cả CxO và sinh viên, mỗi ô ít mẫu. TopDev kết hợp khảo sát với dữ liệu JD; phân phối theo thành phố và tỷ trọng cấp bậc đều đo bằng "ratio of JD" (S4, trang 25–26). Vì vậy TopDev là nguồn **gần nhất với lương chào tuyển**. Adecco là khoảng lương **headhunter** đặt ra, thiên về doanh nghiệp lớn và FDI.
+1. **Gross và net.** TopDev ghi rõ "monthly gross salary before tax", không gồm OT và thưởng, kể cả lương tháng 13 (S4, trang 46). Adecco ghi "base salaries… gross monthly wages" (S6, trang 16). ITviec S2/S3 xác nhận gross trong PDF; S1 (2025–2026) vẫn chưa nêu basis ở trang công khai. Theo TopDev 2023 (S5, trang 28), người lao động đóng 10,5% bảo hiểm bắt buộc (BHXH 8%, BHYT 1,5%, BHTN 1%) trước khi tính thuế TNCN. Vì vậy một tin tuyển dụng ghi "net" sẽ tương ứng với mức gross cao hơn đáng kể. Nếu dữ liệu huấn luyện trộn tin gross và tin net mà không gắn cờ, mô hình sẽ bị nhiễu theo hướng này.
+2. **Khảo sát tự khai và tin tuyển dụng.** ITviec đo lương **đang nhận**, tự khai, kèm thiên lệch người trả lời: người dùng ITviec, có cả CxO và sinh viên, cỡ mẫu từng vai trò chưa công bố. TopDev kết hợp khảo sát với dữ liệu JD; phân phối theo thành phố và tỷ trọng cấp bậc đều đo bằng "ratio of JD" (S4, trang 25–26). Vì vậy TopDev là nguồn **gần nhất với lương chào tuyển**. Adecco là khoảng lương **headhunter** đặt ra, thiên về doanh nghiệp lớn và FDI.
 3. **Thống kê khác nhau.** ITviec dùng trung vị; TopDev dùng trung bình (cấp bậc, thành phố) và trung vị (vị trí); Adecco dùng min–max. Trung bình lệch phải nên thường cao hơn trung vị. Khoảng min–max không thể so trực tiếp với một điểm dự đoán.
 4. **Đặc thù tin tuyển dụng** (suy luận, không có nguồn định lượng). Tin chào tuyển thường ghi khoảng "từ X đến Y" hoặc "up to Y"; tin ghi "thỏa thuận" bị loại khỏi dữ liệu có lương; tin của công ty trả cao thường là USD. Nếu nhãn của mô hình là điểm giữa khoảng chào tuyển, nhãn có thể cao hơn lương thực nhận ở cấp thấp, và thấp hơn ở cấp rất cao, do nhiều vị trí cao cấp không công khai lương. **Không tìm thấy** nguồn sơ cấp định lượng chênh lệch giữa lương chào tuyển và lương thực nhận ở Việt Nam.
 5. **Thời điểm.** TopDev 2024-2025 dùng dữ liệu từ 01/2022 đến 07/2024, ITviec 2025-2026 dùng dữ liệu năm 2025, Adecco 2026 dùng dữ liệu cuối năm 2025. TopDev nhận định lương trung bình gần như không đổi giai đoạn 2023–2024: $1.311 lên $1.317 (S4, trang 25).
@@ -218,8 +220,8 @@ Số của Adecco cao hơn rõ rệt so với ITviec và TopDev, vì Adecco tuy�
 
 1. **TopDev 2024-2025, mục 3.1 (cấp bậc × thành phố).** Đây là mốc chính để kiểm tra **hiệu ứng thành phố và cấp bậc**: HCM > HN > ĐN, chênh lệch tăng dần từ Middle trở lên, Fresher và Junior gần như bằng nhau. Bảng này là gross và có gốc từ JD. Nên kiểm tra theo **tỷ lệ** (ví dụ HN/HCM ở mức Senior ≈ 0,87; ĐN/HCM ≈ 0,78) thay vì mức tuyệt đối.
 2. **TopDev 2024-2025, mục 3.2 và 3.5.** Dùng để kiểm tra đường cong theo cấp bậc và thứ hạng giữa các vai trò: Architect, SRE, Product Manager và Cloud cao; Tester, UI/UX, Helpdesk thấp. Có thể dùng "Range" làm dải chấp nhận, nhưng nên ghi chú rằng báo cáo không định nghĩa khoảng này.
-3. **ITviec 2025-2026, mục 3.3.** Dùng để kiểm tra vai trò × năm kinh nghiệm **ở mức tổng và các ô có vẻ ổn định**: Backend, Fullstack, Mobile, Embedded, BA, Tester, QA-QC, ERP, IT Support, PM. Coi như **không rõ gross hay net** và **không theo thành phố**. Bỏ qua các ô bất thường đã nêu ở mục 3.3.
-4. **ITviec 2024-2025, mục 3.4.** Mỗi vai trò có một điểm (trung vị tại số năm KN trung vị). Có ích cho các vai trò ITviec 2025-2026 không có: DevOps, Security, System/Network, DBA, BrSE, AI, Designer.
+3. **ITviec 2025-2026, mục 3.3.** Dùng để kiểm tra vai trò × năm kinh nghiệm **ở mức tổng và các ô có vẻ ổn định**: Backend, Fullstack, Mobile, Embedded, BA, Tester, QA-QC, ERP, IT Support, PM. Coi như **không rõ gross hay net** và **không theo thành phố**. Giữ toàn bộ ô đã trích làm context, kể cả ô bất thường; không chấm tiêu chí gross.
+4. **ITviec 2024-2025, mục 3.4.** Mỗi vai trò có trung vị lương cùng trung vị năm trong vị trí hiện tại; không phải lương điều kiện tại đúng số năm đó. Có ích cho các vai trò ITviec 2025-2026 không có: DevOps, Security, System/Network, DBA, BrSE, AI, Designer.
 
 **Chỉ dùng làm cận trên hoặc tham khảo định tính:**
 
@@ -228,7 +230,6 @@ Số của Adecco cao hơn rõ rệt so với ITviec và TopDev, vì Adecco tuy�
 **Không dùng:**
 
 - Số TopCV thứ cấp (mục 3.7), cho tới khi lấy được bản gốc.
-- ITviec 2023-2024 (mục 3.3 cuối, 6 vị trí, số năm KN đáng ngờ).
 - Số Robert Walters, Michael Page, Navigos, Talentnet: **không tìm thấy** bảng IT công khai.
 - Thu nhập bình quân của Tổng cục Thống kê (không theo nghề IT).
 - Các trang tổng hợp, blog, EOR hoặc outsourcing vì không truy được về nguồn gốc.
@@ -239,3 +240,11 @@ Số của Adecco cao hơn rõ rệt so với ITviec và TopDev, vì Adecco tuy�
 - Chấp nhận sai lệch cỡ khoảng p25–p75 hoặc "Range" thay vì đòi khớp điểm.
 - Kiểm tra **chiều và độ lớn tương đối** (cấp bậc, thành phố, thứ hạng vai trò) chặt hơn so với mức tuyệt đối.
 - Ghi rõ trong báo cáo đánh giá rằng tỷ giá quy đổi là tỷ giá của TopDev (25.000 và 23.300), không phải tỷ giá thị trường tại thời điểm dự đoán.
+
+## 6. Chính sách cố định cho dữ liệu đối chiếu (#115)
+
+Giữ nguyên 10 ô trung vị gross TopDev toàn quốc làm đánh giá, không nhân thành vai trò × cấp bậc × thành phố. 15 ô TopDev trung bình gross theo cấp bậc × thành phố là mốc gần đúng riêng; trung bình không đổi tên thành trung vị. Không diễn giải Range thành p25/p75. USD nhân 25.000 theo báo cáo; không có net đã xác nhận nên chưa áp chuyển net→gross. Không có số liệu báo cáo nào đi vào fit mô hình lương chào tuyển.
+
+ITviec hai bản 2023–2024 và 2024–2025 dành riêng cho hiệu chỉnh vai trò ở #117: mỗi bản trọng số bằng nhau, trung bình cộng trung vị công bố là **mốc tổng hợp gần đúng**, không phải trung vị dân số gộp. Mapping cố định trước đánh giá: QA/QC→Tester; DevOps/Cloud→DevOps/DevSecOps; Data Analyst/BI→Data Analyst/DS/BI (nguồn gồm DS); AI/ML→AI/Blockchain (không khớp hoàn toàn); sáu vai trò còn lại theo nhãn nghề. Cloud và QA-QC giữ context, không chọn theo độ gần lương TopDev. Không dùng số năm trong vị trí để lọc cohort tổng kinh nghiệm. Bản 2025–2026 vẫn unknown-basis, không suy gross từ các năm trước.
+
+Bản #115 chưa hiệu chỉnh, dùng phân bố hồ sơ TRAIN dự đoán năm 2026, không dùng lương TRAIN như lương khảo sát. Chưa có quy đổi thời giá hoặc bằng chứng cho từng ô HN/HCM. Sai lệch ≤15% ở ≥80% trên **toàn bộ 10 ô**; thiếu cohort vẫn trong mẫu số. Đây là baseline, không cam kết đạt tiêu chí.
