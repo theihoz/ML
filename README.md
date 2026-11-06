@@ -13,7 +13,7 @@ python -m pip install './job_market[dev]'
 make demo
 ```
 
-Mở http://127.0.0.1:8502. Kiểm tra mã và kiểm thử bằng `make check` trong cùng môi trường. Tạo lại bộ dữ liệu và huấn luyện lại bằng `make train-v2` (khoảng 30 giây). Model mới được ghi vào `artifacts/salary-v2-candidate` và chỉ thay model đang phục vụ khi qua cổng chuẩn production (đạt chuẩn, hoặc tốt hơn model hiện tại khi cả hai chưa đạt); lệnh in rõ thay hay giữ và lý do.
+Mở http://127.0.0.1:8502. Kiểm tra mã và kiểm thử bằng `make check` trong cùng môi trường. Notebook `job_market/notebooks/gan_nhan_du_lieu.ipynb` trình bày từng bước gán nhãn (dữ liệu thô → nhãn lương và nhãn đặc trưng → bỏ trùng, chia theo công ty → độ chính xác trên mẫu duyệt); notebook được commit không có output và CI chạy thử nó. Tạo lại bộ dữ liệu và huấn luyện lại bằng `make train-v2` (khoảng 30 giây). Model mới được ghi vào `artifacts/salary-v2-candidate` và chỉ thay model đang phục vụ khi qua cổng chuẩn production (đạt chuẩn, hoặc tốt hơn model hiện tại khi cả hai chưa đạt); lệnh in rõ thay hay giữ và lý do.
 
 ## Chạy bằng Docker
 
