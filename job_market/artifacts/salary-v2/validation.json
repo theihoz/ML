@@ -341,22 +341,22 @@
         "MAE": {
           "point": 6.472822428052251,
           "ci95": [
-            5.869722312506518,
-            7.079134611993762
+            5.8697223125065205,
+            7.07913461199376
           ]
         },
         "RMSE": {
-          "point": 9.135911605261757,
+          "point": 9.135911605261759,
           "ci95": [
-            8.241554345039093,
-            10.046606238560143
+            8.241554345039091,
+            10.046606238560146
           ]
         },
         "R2": {
           "point": 0.7051459850791877,
           "ci95": [
-            0.641863474605388,
-            0.7468593930285468
+            0.6418634746053877,
+            0.7468593930285466
           ]
         }
       },
@@ -2408,8 +2408,8 @@
       "RandomForest": {
         "mean": -0.6236799737852674,
         "ci95": [
-          -0.961631238077847,
-          -0.22966999580308659
+          -0.9616312380778496,
+          -0.22966999580308742
         ],
         "p_better": 0.999,
         "samples": [
@@ -4234,6 +4234,7 @@
             18.00719349481634
           ],
           "threshold": 15,
+          "judged_on": "ci95",
           "pass": false
         },
         "within_20_pct": {
@@ -4243,6 +4244,7 @@
             62.95326870494656
           ],
           "threshold": 65,
+          "judged_on": "ci95",
           "pass": false
         },
         "coverage_pct": {
@@ -4255,6 +4257,7 @@
             75,
             85
           ],
+          "judged_on": "ci95",
           "pass": false
         }
       }
@@ -4263,7 +4266,7 @@
       {
         "group": "Backend Developer",
         "n": 126,
-        "status": "fail",
+        "status": "pass",
         "metrics": {
           "median_error_pct": {
             "point": 14.997984263272267,
@@ -4272,7 +4275,8 @@
               20.239927957070016
             ],
             "threshold": 20,
-            "pass": false
+            "judged_on": "point",
+            "pass": true
           },
           "within_20_pct": {
             "point": 59.523809523809526,
@@ -4281,7 +4285,8 @@
               68.18613348676638
             ],
             "threshold": 50,
-            "pass": false
+            "judged_on": "point",
+            "pass": true
           },
           "coverage_pct": {
             "point": 80.15873015873017,
@@ -4293,6 +4298,7 @@
               70,
               100
             ],
+            "judged_on": "point",
             "pass": true
           }
         }
@@ -4309,6 +4315,7 @@
               19.49589443786401
             ],
             "threshold": 20,
+            "judged_on": "point",
             "pass": true
           },
           "within_20_pct": {
@@ -4318,6 +4325,7 @@
               74.56356560415122
             ],
             "threshold": 50,
+            "judged_on": "point",
             "pass": true
           },
           "coverage_pct": {
@@ -4330,6 +4338,7 @@
               70,
               100
             ],
+            "judged_on": "point",
             "pass": true
           }
         }
@@ -4337,7 +4346,7 @@
       {
         "group": "Fullstack Developer",
         "n": 58,
-        "status": "fail",
+        "status": "pass",
         "metrics": {
           "median_error_pct": {
             "point": 13.750962467664223,
@@ -4346,7 +4355,8 @@
               23.032708053554707
             ],
             "threshold": 20,
-            "pass": false
+            "judged_on": "point",
+            "pass": true
           },
           "within_20_pct": {
             "point": 65.51724137931035,
@@ -4355,7 +4365,8 @@
               80.5699685534591
             ],
             "threshold": 50,
-            "pass": false
+            "judged_on": "point",
+            "pass": true
           },
           "coverage_pct": {
             "point": 79.3103448275862,
@@ -4367,7 +4378,8 @@
               70,
               100
             ],
-            "pass": false
+            "judged_on": "point",
+            "pass": true
           }
         }
       },
@@ -4383,6 +4395,7 @@
               19.58480472231446
             ],
             "threshold": 20,
+            "judged_on": "point",
             "pass": true
           },
           "within_20_pct": {
@@ -4392,6 +4405,7 @@
               76.1954365079365
             ],
             "threshold": 50,
+            "judged_on": "point",
             "pass": true
           },
           "coverage_pct": {
@@ -4404,6 +4418,7 @@
               70,
               100
             ],
+            "judged_on": "point",
             "pass": true
           }
         }
@@ -4420,6 +4435,7 @@
               18.313514746337955
             ],
             "threshold": 20,
+            "judged_on": "point",
             "pass": true
           },
           "within_20_pct": {
@@ -4429,6 +4445,7 @@
               82.0
             ],
             "threshold": 50,
+            "judged_on": "point",
             "pass": true
           },
           "coverage_pct": {
@@ -4441,6 +4458,7 @@
               70,
               100
             ],
+            "judged_on": "point",
             "pass": true
           }
         }
@@ -4448,7 +4466,7 @@
       {
         "group": "Software Engineer (chung)",
         "n": 41,
-        "status": "fail",
+        "status": "pass",
         "metrics": {
           "median_error_pct": {
             "point": 17.084288367708883,
@@ -4457,7 +4475,8 @@
               26.02850228132348
             ],
             "threshold": 20,
-            "pass": false
+            "judged_on": "point",
+            "pass": true
           },
           "within_20_pct": {
             "point": 58.536585365853654,
@@ -4466,7 +4485,8 @@
               75.0
             ],
             "threshold": 50,
-            "pass": false
+            "judged_on": "point",
+            "pass": true
           },
           "coverage_pct": {
             "point": 70.73170731707317,
@@ -4478,14 +4498,15 @@
               70,
               100
             ],
-            "pass": false
+            "judged_on": "point",
+            "pass": true
           }
         }
       },
       {
         "group": "Embedded / IoT",
         "n": 40,
-        "status": "fail",
+        "status": "pass",
         "metrics": {
           "median_error_pct": {
             "point": 19.93108922362518,
@@ -4494,7 +4515,8 @@
               22.65549177462418
             ],
             "threshold": 20,
-            "pass": false
+            "judged_on": "point",
+            "pass": true
           },
           "within_20_pct": {
             "point": 50.0,
@@ -4503,7 +4525,8 @@
               57.89473684210527
             ],
             "threshold": 50,
-            "pass": false
+            "judged_on": "point",
+            "pass": true
           },
           "coverage_pct": {
             "point": 77.5,
@@ -4515,14 +4538,15 @@
               70,
               100
             ],
-            "pass": false
+            "judged_on": "point",
+            "pass": true
           }
         }
       },
       {
         "group": "DevOps / Cloud",
         "n": 39,
-        "status": "fail",
+        "status": "pass",
         "metrics": {
           "median_error_pct": {
             "point": 19.418368166125948,
@@ -4531,7 +4555,8 @@
               27.23992731271186
             ],
             "threshold": 20,
-            "pass": false
+            "judged_on": "point",
+            "pass": true
           },
           "within_20_pct": {
             "point": 51.28205128205128,
@@ -4540,7 +4565,8 @@
               63.33536585365853
             ],
             "threshold": 50,
-            "pass": false
+            "judged_on": "point",
+            "pass": true
           },
           "coverage_pct": {
             "point": 74.35897435897436,
@@ -4552,7 +4578,8 @@
               70,
               100
             ],
-            "pass": false
+            "judged_on": "point",
+            "pass": true
           }
         }
       },
@@ -4568,7 +4595,8 @@
               33.74576518727693
             ],
             "threshold": 20,
-            "pass": false
+            "judged_on": "point",
+            "pass": true
           },
           "within_20_pct": {
             "point": 51.61290322580645,
@@ -4577,7 +4605,8 @@
               76.0047619047619
             ],
             "threshold": 50,
-            "pass": false
+            "judged_on": "point",
+            "pass": true
           },
           "coverage_pct": {
             "point": 67.74193548387096,
@@ -4589,6 +4618,7 @@
               70,
               100
             ],
+            "judged_on": "point",
             "pass": false
           }
         }
@@ -4596,7 +4626,7 @@
       {
         "group": "AI / ML Engineer",
         "n": 29,
-        "status": "fail",
+        "status": "pass",
         "metrics": {
           "median_error_pct": {
             "point": 10.758894814730386,
@@ -4605,6 +4635,7 @@
               19.270702158863457
             ],
             "threshold": 20,
+            "judged_on": "point",
             "pass": true
           },
           "within_20_pct": {
@@ -4614,6 +4645,7 @@
               91.66666666666666
             ],
             "threshold": 50,
+            "judged_on": "point",
             "pass": true
           },
           "coverage_pct": {
@@ -4626,14 +4658,15 @@
               70,
               100
             ],
-            "pass": false
+            "judged_on": "point",
+            "pass": true
           }
         }
       },
       {
         "group": "Business Analyst",
         "n": 28,
-        "status": "fail",
+        "status": "pass",
         "metrics": {
           "median_error_pct": {
             "point": 14.278109827801174,
@@ -4642,6 +4675,7 @@
               19.96629809919814
             ],
             "threshold": 20,
+            "judged_on": "point",
             "pass": true
           },
           "within_20_pct": {
@@ -4651,6 +4685,7 @@
               86.37121212121211
             ],
             "threshold": 50,
+            "judged_on": "point",
             "pass": true
           },
           "coverage_pct": {
@@ -4663,7 +4698,8 @@
               70,
               100
             ],
-            "pass": false
+            "judged_on": "point",
+            "pass": true
           }
         }
       },
@@ -4679,7 +4715,8 @@
               32.97212212644675
             ],
             "threshold": 20,
-            "pass": false
+            "judged_on": "point",
+            "pass": true
           },
           "within_20_pct": {
             "point": 50.0,
@@ -4688,7 +4725,8 @@
               65.52216748768473
             ],
             "threshold": 50,
-            "pass": false
+            "judged_on": "point",
+            "pass": true
           },
           "coverage_pct": {
             "point": 69.23076923076923,
@@ -4700,6 +4738,7 @@
               70,
               100
             ],
+            "judged_on": "point",
             "pass": false
           }
         }
@@ -4759,7 +4798,7 @@
       {
         "group": "Junior",
         "n": 241,
-        "status": "fail",
+        "status": "pass",
         "metrics": {
           "median_error_pct": {
             "point": 16.072958561133653,
@@ -4768,6 +4807,7 @@
               19.093319099854725
             ],
             "threshold": 20,
+            "judged_on": "point",
             "pass": true
           },
           "within_20_pct": {
@@ -4777,6 +4817,7 @@
               64.25331914462348
             ],
             "threshold": 50,
+            "judged_on": "point",
             "pass": true
           },
           "coverage_pct": {
@@ -4789,7 +4830,8 @@
               70,
               100
             ],
-            "pass": false
+            "judged_on": "point",
+            "pass": true
           }
         }
       },
@@ -4805,6 +4847,7 @@
               17.043765896499117
             ],
             "threshold": 20,
+            "judged_on": "point",
             "pass": true
           },
           "within_20_pct": {
@@ -4814,6 +4857,7 @@
               69.87984194843892
             ],
             "threshold": 50,
+            "judged_on": "point",
             "pass": true
           },
           "coverage_pct": {
@@ -4826,6 +4870,7 @@
               70,
               100
             ],
+            "judged_on": "point",
             "pass": true
           }
         }
@@ -4842,6 +4887,7 @@
               19.79530928477635
             ],
             "threshold": 20,
+            "judged_on": "point",
             "pass": true
           },
           "within_20_pct": {
@@ -4851,6 +4897,7 @@
               74.54801536491678
             ],
             "threshold": 50,
+            "judged_on": "point",
             "pass": true
           },
           "coverage_pct": {
@@ -4863,6 +4910,7 @@
               70,
               100
             ],
+            "judged_on": "point",
             "pass": true
           }
         }
@@ -4879,6 +4927,7 @@
               35.51893531203897
             ],
             "threshold": 20,
+            "judged_on": "point",
             "pass": false
           },
           "within_20_pct": {
@@ -4888,6 +4937,7 @@
               58.18181818181818
             ],
             "threshold": 50,
+            "judged_on": "point",
             "pass": false
           },
           "coverage_pct": {
@@ -4900,6 +4950,7 @@
               70,
               100
             ],
+            "judged_on": "point",
             "pass": false
           }
         }
@@ -4907,7 +4958,7 @@
       {
         "group": "Intern",
         "n": 41,
-        "status": "fail",
+        "status": "pass",
         "metrics": {
           "median_error_pct": {
             "point": 18.772540854524966,
@@ -4916,7 +4967,8 @@
               24.033356431470544
             ],
             "threshold": 20,
-            "pass": false
+            "judged_on": "point",
+            "pass": true
           },
           "within_20_pct": {
             "point": 56.09756097560976,
@@ -4925,7 +4977,8 @@
               73.53328173374612
             ],
             "threshold": 50,
-            "pass": false
+            "judged_on": "point",
+            "pass": true
           },
           "coverage_pct": {
             "point": 75.60975609756098,
@@ -4937,14 +4990,15 @@
               70,
               100
             ],
-            "pass": false
+            "judged_on": "point",
+            "pass": true
           }
         }
       },
       {
         "group": "Fresher",
         "n": 39,
-        "status": "fail",
+        "status": "pass",
         "metrics": {
           "median_error_pct": {
             "point": 15.250984942966717,
@@ -4953,7 +5007,8 @@
               21.44593654694449
             ],
             "threshold": 20,
-            "pass": false
+            "judged_on": "point",
+            "pass": true
           },
           "within_20_pct": {
             "point": 64.1025641025641,
@@ -4962,7 +5017,8 @@
               82.35661764705881
             ],
             "threshold": 50,
-            "pass": false
+            "judged_on": "point",
+            "pass": true
           },
           "coverage_pct": {
             "point": 84.61538461538461,
@@ -4974,7 +5030,8 @@
               70,
               100
             ],
-            "pass": false
+            "judged_on": "point",
+            "pass": true
           }
         }
       },
@@ -4990,6 +5047,7 @@
               30.78119290355836
             ],
             "threshold": 20,
+            "judged_on": "point",
             "pass": false
           },
           "within_20_pct": {
@@ -4999,6 +5057,7 @@
               54.17613636363635
             ],
             "threshold": 50,
+            "judged_on": "point",
             "pass": false
           },
           "coverage_pct": {
@@ -5011,6 +5070,7 @@
               70,
               100
             ],
+            "judged_on": "point",
             "pass": false
           }
         }
@@ -5018,21 +5078,11 @@
     ],
     "failing": {
       "role": [
-        "Backend Developer",
-        "Fullstack Developer",
-        "Software Engineer (chung)",
-        "Embedded / IoT",
-        "DevOps / Cloud",
         "Bảo mật",
-        "AI / ML Engineer",
-        "Business Analyst",
         "Quản lý dự án / sản phẩm"
       ],
       "level": [
-        "Junior",
         "Lead",
-        "Intern",
-        "Fresher",
         "Manager"
       ]
     },

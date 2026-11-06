@@ -84,15 +84,29 @@ with right, st.container(border=True):
             f"{profile['role']} · {profile['region']} · {profile['years']:g} năm · "
             f"cấp bậc ước lượng {result['level']} · {result['model_label']}"
         )
-        st.metric("Triệu đồng / tháng", f"{result['salary']:.1f}")
-        st.write(
-            f"Khoảng thường gặp (80% tin tương tự): **{result['low']:.1f} – {result['high']:.1f}** triệu"
-        )
+        if result["supported"]:
+            st.metric("Triệu đồng / tháng", f"{result['salary']:.1f}")
+            st.write(
+                f"Khoảng thường gặp (80% tin tương tự): "
+                f"**{result['low']:.1f} – {result['high']:.1f}** triệu"
+            )
+        else:
+            st.metric(
+                "Khoảng lương (triệu đồng / tháng)", f"{result['low']:.0f} – {result['high']:.0f}"
+            )
+            st.warning(
+                "Ít dữ liệu: chỉ hiện khoảng lương mở rộng, không hiện con số. "
+                + " ".join(result["support_reasons"]),
+                icon=":material/info:",
+            )
+        if not result["production_ready"]:
+            st.caption("Mô hình chưa đạt chuẩn production; kết quả chỉ mang tính tham khảo.")
         market = result["market"]
         if market["role_median"] is not None:
             a, b = st.columns(2)
             a.metric("Trung vị thị trường của vai trò", f"{market['role_median']:.1f}")
-            b.metric("Vị trí so với vai trò", f"P{market['percentile']:.0f}")
+            if result["supported"]:
+                b.metric("Vị trí so với vai trò", f"P{market['percentile']:.0f}")
             st.caption(
                 f"Dựa trên {market['role_postings']} tin của vai trò; 50% tin nằm trong "
                 f"{market['role_p25']:.1f}–{market['role_p75']:.1f} triệu."

@@ -29,6 +29,7 @@ from sklearn.metrics import (
 from sklearn.pipeline import make_pipeline
 from sklearn.preprocessing import OneHotEncoder, StandardScaler
 
+from .prediction_support import build_support, resolve
 from .salary_dataset import SKILLS, derive_level, load_dataset, skill_lists
 from .training_labels import data_root
 
@@ -237,6 +238,9 @@ def train(output=None):
         "p10": float(np.quantile(ratio, 0.10)),
         "p90": float(np.quantile(ratio, 0.90)),
     }
+    report["support"] = build_support(
+        parts["train"], parts["valid"], model.predict(features["valid"])
+    )
     test_frame = parts["test"].assign(predicted=model.predict(features["test"]))
     test_frame["abs_error"] = (test_frame["predicted"] - test_frame["salary"]).abs()
     test_frame[
@@ -304,6 +308,22 @@ def load_report():
     return json.loads(path.read_text(encoding="utf-8"))
 
 
+def load_production():
+    """Bảng chấm chuẩn production của model đang phục vụ, hoặc None nếu chưa kiểm định."""
+    path = artifacts_dir() / "validation.json"
+    if not path.exists():
+        return None
+    return json.loads(path.read_text(encoding="utf-8")).get("production")
+
+
+def _supported(profile_frame, value, report, production):
+    row = profile_frame.iloc[0]
+    return {
+        **resolve(row["role"], row["level"], value, report, production),
+        "production_ready": bool(production and production["production_ready"]),
+    }
+
+
 def load_model(name=None):
     report = load_report()
     name = name or report["selected"]
@@ -333,14 +353,9 @@ def _profile_frame(profile):
 
 def predict_profile(profile, model_name=None):
     model, name, report = load_model(model_name)
-    value = float(model.predict(feature_frame(_profile_frame(profile)))[0])
-    band = report["interval_ratio"]
-    return {
-        "model": name,
-        "salary": value,
-        "low": value * band["p10"],
-        "high": value * band["p90"],
-    }
+    frame = _profile_frame(profile)
+    value = float(model.predict(feature_frame(frame))[0])
+    return {"model": name, **_supported(frame, value, report, load_production())}
 
 
 def advise(profile, model_name=None, top_k=5, min_share=0.03):
@@ -355,7 +370,7 @@ def advise(profile, model_name=None, top_k=5, min_share=0.03):
     base_frame = _profile_frame(profile)
     base_features = feature_frame(base_frame)
     base = float(model.predict(base_features)[0])
-    band = report["interval_ratio"]
+    production = load_production()
     role_rows = frame[frame["role"] == profile["role"]]
     role_skills = skill_lists(role_rows)
     owned = set(profile.get("skills", []))
@@ -396,21 +411,24 @@ def advise(profile, model_name=None, top_k=5, min_share=0.03):
     path = []
     for extra in (0, 1, 2, 3, 5):
         future = {**profile, "experience_years": years + extra, "level": None}
-        future_features = feature_frame(_profile_frame(future))
+        future_frame = _profile_frame(future)
+        future_value = float(model.predict(feature_frame(future_frame))[0])
+        step = _supported(future_frame, future_value, report, production)
         path.append(
             {
                 "experience_years": years + extra,
-                "level": _profile_frame(future)["level"][0],
-                "salary": float(model.predict(future_features)[0]),
+                "level": future_frame["level"][0],
+                "salary": step["salary"],
+                "low": step["low"],
+                "high": step["high"],
+                "predicted": future_value,
             }
         )
     role_salaries = role_rows["salary"]
     return {
         "model": name,
         "model_label": MODEL_LABELS[name],
-        "salary": base,
-        "low": base * band["p10"],
-        "high": base * band["p90"],
+        **_supported(base_frame, base, report, production),
         "level": base_frame["level"][0],
         "recommendations": candidates[:top_k],
         "experience_path": path,
