@@ -168,7 +168,7 @@ reference = reality["reference"]
 st.metric("Bộ đối chiếu gross", reference["status"], f"{reference['pass_rate']:.0%} ô đạt")
 st.caption(
     f"{reference['scored']}/{reference['total']} ô có hồ sơ; yêu cầu sai lệch ≤15% ở ≥80% ô. "
-    "Ô thiếu hồ sơ vẫn tính trong mẫu số. Dự đoán năm 2026; chưa hiệu chỉnh lương thị trường."
+    "Ô thiếu hồ sơ vẫn tính trong mẫu số. Dự đoán năm 2026; gross thị trường gần đúng sau hiệu chỉnh."
 )
 st.dataframe(pd.DataFrame(reference["cells"]), hide_index=True, width="stretch")
 golden = reality["golden"]
@@ -187,9 +187,9 @@ if golden["cells"]:
     st.dataframe(pd.DataFrame(golden["cells"]), hide_index=True, width="stretch")
 for limitation in reality["limitations"]:
     st.caption(limitation)
-with st.expander("Mốc trung bình gross theo cấp bậc × thành phố (không chấm trung vị)"):
+with st.expander("Mốc mean gross đã dùng fit city: trước/sau role (không kiểm chứng độc lập)"):
     st.dataframe(pd.DataFrame(reality["calibration_cells"]), hide_index=True, width="stretch")
-with st.expander("ITviec 2023–2025: trung vị gross dành cho hiệu chỉnh vai trò"):
+with st.expander("ITviec 2023–2025 đã dùng fit composite vai trò (không kiểm chứng độc lập)"):
     st.dataframe(pd.DataFrame(reality["role_calibration_cells"]), hide_index=True, width="stretch")
 with st.expander("ITviec 2025–2026: gross/net chưa xác định, chỉ tham khảo"):
     st.dataframe(pd.DataFrame(reality["unknown_basis_cells"]), hide_index=True, width="stretch")

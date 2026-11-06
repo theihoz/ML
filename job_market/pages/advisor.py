@@ -113,7 +113,7 @@ if submitted:
     )
 result = st.session_state.get("advisor_result")
 with right, st.container(border=True):
-    st.subheader("Mức lương ước tính")
+    st.subheader("Lương thị trường gross · gần đúng")
     if result is None:
         st.metric("Triệu đồng / tháng", "—")
         st.caption("Kết quả xuất hiện sau khi bạn bấm Dự đoán & tư vấn.")
@@ -129,9 +129,16 @@ with right, st.container(border=True):
         b.metric("Trung vị · triệu/tháng", f"{interval['median']:.1f}")
         c.metric("p75 · triệu/tháng", f"{interval['p75']:.1f}")
         st.caption(
-            "Khoảng p25–p75 và trung vị lương chào tuyển ước tính; chưa rõ gross/net. "
-            "Phân vị dựa trên tỉ lệ lương thật / dự đoán của tập valid, không phải khoảng tin cậy."
+            "Khoảng gross thị trường gần đúng sau hiệu chỉnh theo báo cáo. Độ rộng p25–p75 "
+            "lấy từ độ phân tán lương chào tuyển valid; không phải phân vị khảo sát gross hay khoảng tin cậy."
         )
+        advertised = result["advertised_range"]
+        st.caption(
+            f"Lương chào tuyển ước tính (chưa rõ gross/net): "
+            f"{advertised['p25']:.1f} – {advertised['median']:.1f} – {advertised['p75']:.1f} triệu/tháng."
+        )
+        for warning in result["calibration"]["warnings"]:
+            st.warning(warning)
         for warning in result["data_sufficiency"]["warnings"]:
             st.warning(warning)
         market = result["market"]
@@ -181,5 +188,5 @@ if result is not None:
         st.image(png(charts.experience_path_chart(result["experience_path"])), width="stretch")
     st.caption(
         f"Sai số tuyệt đối trung bình của mô hình trên tập test: {result['test_mae']:.2f} triệu/tháng. "
-        "Đây là lương chào tuyển ước tính, chưa phân biệt gross/net."
+        "MAE đo trên lương chào tuyển chưa rõ gross/net; lộ trình và mức tăng dùng gross thị trường gần đúng."
     )

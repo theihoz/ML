@@ -6,9 +6,10 @@ import math
 import pandas as pd
 from career_market.data.dataset import load_dataset
 from career_market.model.advisor import advise, predict_profile
+from career_market.model.calibration import load_calibration
 from career_market.model.estimators import MODEL_LABELS
 from career_market.model.training import load_skill_value
-from career_market.paths import artifacts_dir, dataset_path
+from career_market.paths import artifacts_dir, data_root, dataset_path
 
 
 def check_demo():
@@ -17,8 +18,9 @@ def check_demo():
     required += [artifacts_dir() / f"{name}.joblib" for name in MODEL_LABELS]
     required += [
         artifacts_dir() / name
-        for name in ("metrics.json", "skill_value.csv", "test_predictions.csv")
+        for name in ("metrics.json", "skill_value.csv", "test_predictions.csv", "calibration.json")
     ]
+    required.append(data_root() / "reference" / "salary_reference.csv")
     for path in required:
         if not path.is_file():
             raise RuntimeError(f"Thiếu dữ liệu/model demo: {path}. Hãy khôi phục rồi build lại.")
@@ -37,6 +39,7 @@ def check_demo():
         "skills": ["Java", "SQL"],
     }
     for name in MODEL_LABELS:
+        load_calibration(name)
         value = predict_profile(profile, model_name=name)["salary"]
         if not math.isfinite(value) or value <= 0:
             raise RuntimeError(f"Model {name} trả kết quả không hợp lệ: {value}")

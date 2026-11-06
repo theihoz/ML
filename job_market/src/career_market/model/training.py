@@ -120,6 +120,9 @@ def train(output=None):
     (output / "metrics.json").write_text(
         json.dumps(report, ensure_ascii=False, indent=2), encoding="utf-8"
     )
+    from .calibration import build_calibration
+
+    build_calibration(frame, fitted, report, output)
     return report
 
 

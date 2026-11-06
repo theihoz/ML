@@ -1,7 +1,8 @@
-"""Đối chiếu độc lập; không dùng bảng lương báo cáo để fit mô hình chào tuyển."""
+"""Đối chiếu vai trò; tách các mốc đã fit hệ số khỏi các ô chấm điểm."""
 
 from ..data.dataset import load_dataset
 from ..data.reference import load_reference, matching_profiles
+from .calibration import calibrate_predictions, load_calibration
 from .estimators import CURRENT_YEAR, feature_frame
 from .golden import score_golden
 from .training import load_model
@@ -34,6 +35,11 @@ def reality_check(reference_path=None, model_name=None, golden_path=None):
     frame["year"] = CURRENT_YEAR
     band = report["models"][name].get("interval_ratio", report["interval_ratio"])
     frame["predicted"] = model.predict(feature_frame(frame)) * band.get("p50", 1.0)
+    table = load_calibration(name)
+    frame["before_role"] = calibrate_predictions(
+        frame, frame["predicted"], table, include_role=False
+    )
+    frame["predicted"] = calibrate_predictions(frame, frame["predicted"], table)
     cells, anchors, unknown, role_anchors, context = [], [], [], [], []
     for row in load_reference(reference_path).to_dict("records"):
         cohort = matching_profiles(frame, row)
@@ -51,6 +57,13 @@ def reality_check(reference_path=None, model_name=None, golden_path=None):
         cell = {
             **row,
             "prediction": prediction,
+            "before_role_prediction": float(
+                cohort["before_role"].mean()
+                if row["statistic"] == "mean"
+                else cohort["before_role"].median()
+            )
+            if len(cohort)
+            else None,
             "profile_count": len(cohort),
             "relative_error": error,
             "passed": error <= 0.15 if error is not None else False,
@@ -74,11 +87,13 @@ def reality_check(reference_path=None, model_name=None, golden_path=None):
         "role_calibration_cells": role_anchors,
         "context_cells": context,
         "inference_year": CURRENT_YEAR,
-        "prediction_basis": "advertised; not yet market calibrated",
+        "prediction_basis": "gross market; approximate two-stage calibration",
         "limitations": [
             "Ô theo vai trò là toàn quốc; chưa xác nhận riêng HN/HCM.",
             "Trọng số hồ sơ lấy từ train, khác phân bố người trả lời khảo sát.",
-            "Chưa hiệu chỉnh lương thị trường; kết quả này là mốc trước hiệu chỉnh.",
+            "Mốc city/level là mean; mốc vai trò là trung bình hai median ITviec, không phải pooled median.",
+            "Không fit lại city sau vai trò: trung bình city cuối có thể lệch mốc ban đầu.",
+            "Phân vị khoảng dựa trên độ phân tán lương chào tuyển valid, không phải phân vị khảo sát gross.",
             "Hồ sơ được dự đoán ở năm 2026 như form; chưa quy đổi thời giá báo cáo 2024/2025.",
             "TopDev kết hợp JD và khảo sát; chưa phải kiểm chứng thu nhập thuần túy.",
         ],
