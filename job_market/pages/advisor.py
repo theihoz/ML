@@ -7,7 +7,7 @@ kỹ năng nên học và lộ trình theo kinh nghiệm.
 import pandas as pd
 import streamlit as st
 
-from career_market.data.rules import REGIONS, ROLE_ORDER, SKILLS
+from career_market.data.rules import LEVELS, REGIONS, ROLE_ORDER, SKILLS
 from career_market.model.estimators import MODEL_LABELS
 from career_market.ui import cache, charts
 from career_market.ui.charts import png
@@ -18,14 +18,19 @@ models = [name for name in MODEL_LABELS if name != "Baseline"]
 # để chia sẻ kết quả tư vấn; giá trị không hợp lệ bị bỏ qua.
 query = st.query_params
 shared = {
+    "skills_in_query": "skills" in query,
+    "model": query.get("model") if query.get("model") in models else report["selected"],
     "role": query.get("role") if query.get("role") in ROLE_ORDER else None,
     "region": query.get("region") if query.get("region") in REGIONS else None,
     "skills": [s for s in query.get("skills", "").split(",") if s in SKILLS],
+    "level": query.get("level") if query.get("level") in LEVELS else "Tự suy từ kinh nghiệm",
 }
 try:
     shared["years"] = min(max(float(query.get("years", "")), 0.0), 20.0)
 except ValueError:
     shared["years"] = None
+# Chỉ lấy mặc định URL khi mở phiên; cập nhật URL sau submit không đổi widget identity.
+shared = st.session_state.setdefault("advisor_initial_profile", shared)
 
 st.caption("LƯƠNG CNTT VIỆT NAM")
 st.title("Tư vấn & dự đoán lương")
@@ -39,13 +44,26 @@ with left, st.container(border=True):
     st.subheader("Hồ sơ của bạn")
     with st.form("advisor_form"):
         role = st.selectbox(
-            "Vai trò", ROLE_ORDER, index=ROLE_ORDER.index(shared["role"] or "Backend Developer")
+            "Vai trò",
+            ROLE_ORDER,
+            key="advisor_role",
+            index=ROLE_ORDER.index(shared["role"] or "Backend Developer"),
         )
         region = st.selectbox(
-            "Khu vực làm việc", REGIONS, index=REGIONS.index(shared["region"] or REGIONS[0])
+            "Khu vực làm việc",
+            REGIONS,
+            key="advisor_region",
+            index=REGIONS.index(shared["region"] or REGIONS[0]),
+        )
+        level = st.selectbox(
+            "Cấp bậc",
+            ["Tự suy từ kinh nghiệm", *LEVELS],
+            key="advisor_level",
+            index=["Tự suy từ kinh nghiệm", *LEVELS].index(shared["level"]),
         )
         years = st.number_input(
             "Số năm kinh nghiệm",
+            key="advisor_years",
             min_value=0.0,
             max_value=20.0,
             value=shared["years"] if shared["years"] is not None else 2.0,
@@ -54,13 +72,15 @@ with left, st.container(border=True):
         skills = st.multiselect(
             "Kỹ năng đang có",
             list(SKILLS),
-            default=shared["skills"] or ["Java", "SQL", "Git"],
+            key="advisor_skills",
+            default=shared["skills"] if shared["skills_in_query"] else ["Java", "SQL", "Git"],
             placeholder="Chọn ngôn ngữ, framework, công cụ…",
         )
         model_name = st.selectbox(
             "Mô hình",
             models,
-            index=models.index(report["selected"]),
+            key="advisor_model",
+            index=models.index(shared["model"]),
             format_func=lambda name: (
                 MODEL_LABELS[name]
                 + (" (tốt nhất trên valid)" if name == report["selected"] else "")
@@ -73,9 +93,24 @@ if shared["role"] and "advisor_result" not in st.session_state:
     submitted = True  # mở từ đường dẫn chia sẻ: tư vấn ngay với hồ sơ đã điền
 if submitted:
     st.session_state["advisor_result"] = cache.advice(
-        role, region, float(years), tuple(sorted(skills)), model_name
+        role,
+        region,
+        float(years),
+        tuple(sorted(skills)),
+        model_name,
+        None if level == "Tự suy từ kinh nghiệm" else level,
     )
     st.session_state["advisor_profile"] = {"role": role, "region": region, "years": years}
+    st.query_params.update(
+        {
+            "role": role,
+            "region": region,
+            "years": str(years),
+            "skills": ",".join(sorted(skills)),
+            "model": model_name,
+            "level": level if level != "Tự suy từ kinh nghiệm" else "",
+        }
+    )
 result = st.session_state.get("advisor_result")
 with right, st.container(border=True):
     st.subheader("Mức lương ước tính")
@@ -88,18 +123,22 @@ with right, st.container(border=True):
             f"{profile['role']} · {profile['region']} · {profile['years']:g} năm · "
             f"cấp bậc ước lượng {result['level']} · {result['model_label']}"
         )
-        st.metric("Triệu đồng / tháng", f"{result['salary']:.1f}")
-        st.write(
-            f"Khoảng thường gặp (80% tin tương tự): **{result['low']:.1f} – {result['high']:.1f}** triệu"
+        interval = result["salary_range"]
+        a, b, c = st.columns(3)
+        a.metric("p25 · triệu/tháng", f"{interval['p25']:.1f}")
+        b.metric("Trung vị · triệu/tháng", f"{interval['median']:.1f}")
+        c.metric("p75 · triệu/tháng", f"{interval['p75']:.1f}")
+        st.caption(
+            "Khoảng p25–p75 và trung vị lương chào tuyển ước tính; chưa rõ gross/net. "
+            "Phân vị dựa trên tỉ lệ lương thật / dự đoán của tập valid, không phải khoảng tin cậy."
         )
+        for warning in result["data_sufficiency"]["warnings"]:
+            st.warning(warning)
         market = result["market"]
         if market["role_median"] is not None:
-            a, b = st.columns(2)
-            a.metric("Trung vị thị trường của vai trò", f"{market['role_median']:.1f}")
-            b.metric("Vị trí so với vai trò", f"P{market['percentile']:.0f}")
             st.caption(
-                f"Dựa trên {market['role_postings']} tin của vai trò; 50% tin nằm trong "
-                f"{market['role_p25']:.1f}–{market['role_p75']:.1f} triệu."
+                f"Trung vị lương chào tuyển trong {market['role_postings']} tin của vai trò: "
+                f"{market['role_median']:.1f} triệu/tháng."
             )
 
 # Mục này: gợi ý kỹ năng + lộ trình kinh nghiệm, chỉ hiện sau khi bấm nút.

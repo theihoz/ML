@@ -84,18 +84,18 @@ def train(output=None):
                 for part in ("train", "valid", "test")
             },
         }
+        ratio = targets["valid"] / best["model"].predict(features["valid"])
+        report["models"][name]["interval_ratio"] = {
+            f"p{q}": float(np.quantile(ratio, q / 100)) for q in (10, 25, 50, 75, 90)
+        }
         joblib.dump(best["model"], output / f"{name}.joblib", compress=3)
     # Mục này: chọn mô hình tốt nhất theo valid (test chỉ để báo cáo).
     candidates = [name for name in report["models"] if name != "Baseline"]
     selected = min(candidates, key=lambda name: report["models"][name]["valid"]["MAE"])
     report["selected"] = selected
     model = fitted[selected]
-    # Dải tin cậy thực nghiệm: tỉ lệ lương thật / dự đoán trên tập valid.
-    ratio = targets["valid"] / model.predict(features["valid"])
-    report["interval_ratio"] = {
-        "p10": float(np.quantile(ratio, 0.10)),
-        "p90": float(np.quantile(ratio, 0.90)),
-    }
+    # Phân vị thực nghiệm: tỉ lệ lương thật / dự đoán trên tập valid.
+    report["interval_ratio"] = report["models"][selected]["interval_ratio"].copy()
     # Mục này: lưu dự đoán test, sai số theo vai trò, độ quan trọng đặc trưng, giá trị kỹ năng.
     test_frame = parts["test"].assign(predicted=model.predict(features["test"]))
     test_frame["abs_error"] = (test_frame["predicted"] - test_frame["salary"]).abs()
