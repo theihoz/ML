@@ -9,6 +9,7 @@ from pathlib import Path
 from . import MarketError, MarketService
 from .company_cli import company_arguments, run_company_report
 from .model_promotion import retrain
+from .salary_batches import BatchError, import_batch
 from .salary_dataset import ROLE_ORDER, write_dataset
 from .salary_model import advise, artifacts_dir
 from .salary_model import train as train_v2
@@ -52,6 +53,12 @@ def main() -> int:
     predict.add_argument("--model", choices=["Ridge", "LinearRegression"])
     for field in ("role", "location"):
         predict.add_argument(f"--{field}", default="")
+    batch = commands.add_parser("import-batch", help="Nhập lô tin tuyển dụng từ CSV (#105)")
+    batch.add_argument("csv", type=Path)
+    batch.add_argument("--source", help="Tên nguồn của lô, ghi đè cột source trong file")
+    batch.add_argument(
+        "--batches-dir", type=Path, help="Thư mục lưu lô (mặc định datasets/batches)"
+    )
     commands.add_parser("build-dataset", help="Gộp ba nguồn thô thành bộ salary-v2 có split")
     commands.add_parser(
         "train-v2",
@@ -70,6 +77,11 @@ def main() -> int:
             result = [asdict(source) for source in service.sources()]
         elif args.command == "training-readiness":
             result = service.training_readiness()
+        elif args.command == "import-batch":
+            try:
+                result = import_batch(args.csv, args.source, directory=args.batches_dir)
+            except BatchError as error:
+                raise MarketError(str(error)) from error
         elif args.command == "build-dataset":
             result = write_dataset()
         elif args.command == "train-v2":
@@ -129,6 +141,8 @@ def main() -> int:
         print(str(error), file=sys.stderr)
         return 2
     print(json.dumps(result, ensure_ascii=False, indent=2))
+    if args.command == "import-batch":
+        return 1 if result["status"] == "rejected" else 0
     return 2 if args.command == "predict" and result["status"] == "invalid_input" else 0
 
 
