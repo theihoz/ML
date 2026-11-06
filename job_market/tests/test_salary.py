@@ -69,6 +69,66 @@ def test_dataset_has_every_role_and_company_disjoint_splits():
     assert not companies["train"] & companies["valid"]
 
 
+def test_built_dataset_assigns_intern_only_when_title_says_intern():
+    from career_market.data.dataset import build_dataset
+
+    frame, _ = build_dataset()
+    interns = frame[frame["level"] == "Intern"]
+    assert len(interns)
+    assert interns["title"].str.contains(r"\bintern\b|thực tập", case=False).all()
+
+
+@pytest.mark.parametrize(
+    "source_level", ["Intern", "Manager", "Trưởng phòng", "Trưởng nhóm", "Lead", "Fresher"]
+)
+def test_built_dataset_ignores_unreliable_source_level(tmp_path, source_level):
+    import pandas as pd
+
+    from career_market.data.dataset import build_dataset
+    from career_market.paths import data_root
+
+    # CSV inputs are the dataset boundary: source labels conflict with explicit titles/years.
+    for path in (data_root() / "raw").glob("*.csv"):
+        pd.read_csv(path, nrows=0).to_csv(tmp_path / path.name, index=False)
+    pd.DataFrame(
+        [
+            {
+                "title": title,
+                "company": f"Company {index}",
+                "location": "Hà Nội",
+                "salary": "15 - 25 triệu",
+                "experience": "3 năm",
+                "level": source_level,
+                "skills": "[]",
+                "requirements": "",
+                "source_platform": "fixture",
+                "created_at": "2026-01-01",
+            }
+            for index, title in enumerate(
+                [
+                    "Backend Developer",
+                    "Senior Backend Developer",
+                    "Backend Developer - Head Office",
+                    "International Backend Developer",
+                    "Head of Backend Development",
+                    "Backend Developer Intern",
+                    "Thực tập Backend Developer",
+                ]
+            )
+        ]
+    ).to_csv(tmp_path / "vietnam_it_job_posts_v1.csv", index=False)
+    frame, _ = build_dataset(tmp_path)
+    assert frame["level"].tolist() == [
+        "Middle",
+        "Senior",
+        "Middle",
+        "Middle",
+        "Manager",
+        "Intern",
+        "Intern",
+    ]
+
+
 def test_saved_models_beat_median_baseline_on_test():
     report = load_report()
     baseline = report["models"]["Baseline"]["test"]["MAE"]
@@ -89,6 +149,23 @@ def test_advice_predicts_salary_and_recommends_unowned_skills():
     assert skills and "Java" not in skills
     path = [step["salary"] for step in result["experience_path"]]
     assert path == sorted(path)
+
+
+@pytest.mark.parametrize("region", ["Hà Nội", "TP. Hồ Chí Minh"])
+def test_backend_advice_orders_intern_fresher_and_junior_salaries(region):
+    salaries = [
+        advise(
+            {
+                "role": "Backend Developer",
+                "region": region,
+                "level": level,
+                "experience_years": years,
+                "skills": [],
+            }
+        )["salary"]
+        for level, years in [("Intern", 0), ("Fresher", 0), ("Junior", 1)]
+    ]
+    assert salaries[0] < salaries[1] < salaries[2], (region, salaries)
 
 
 def test_advisor_is_home_and_returns_salary_with_skill_advice():
@@ -152,11 +229,11 @@ def test_adding_a_skill_never_lowers_predicted_salary(model_name):
 
 
 def test_selected_model_stays_within_accepted_error_budget():
-    # Quyết định 06/11/2026: ràng buộc đơn điệu theo kỹ năng làm test MAE tăng từ 5.38 lên
-    # khoảng 5.82; ngân sách ban đầu 5.65 (+5%) được nới lên 5.85 (~+9%) sau khi chỉnh siêu
-    # tham số trên valid không kéo MAE về trong ngân sách cũ.
+    # #119: title/experience labels replace unreliable source levels. Rebuilt artifacts
+    # have test MAE 5.806721; 5.84 allows ~0.033 million VND for numerical variation.
+    # Keep skill monotonicity from ADR 0013; see docs/research/119-level-label-audit.md.
     report = load_report()
-    assert report["models"][report["selected"]]["test"]["MAE"] <= 5.85
+    assert report["models"][report["selected"]]["test"]["MAE"] <= 5.84
 
 
 ADVICE_PROFILES = [

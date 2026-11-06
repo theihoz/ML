@@ -281,14 +281,14 @@ def parse_experience(text, title=""):
 
 def derive_level(title, years, source_level=""):
     title = str(title or "").lower()
-    source_level = str(source_level or "").lower()
-    if re.search(r"intern|thực tập", title + " " + source_level):
+    # Source levels are unreliable (#119); keep the argument for compatibility.
+    if re.search(r"\bintern\b|thực tập", title):
         return "Intern"
-    if re.search(r"giám đốc|director|trưởng phòng|\bmanager\b|head of", title + " " + source_level):
+    if re.search(r"giám đốc|director|trưởng phòng|\bmanager\b|\bhead of\b", title):
         return "Manager"
-    if re.search(r"\blead|trưởng nhóm|principal|architect", title + " " + source_level):
+    if re.search(r"\blead|trưởng nhóm|principal|architect", title):
         return "Lead"
-    if re.search(r"fresher|mới tốt nghiệp|graduate", title + " " + source_level):
+    if re.search(r"fresher|mới tốt nghiệp|graduate", title):
         return "Fresher"
     if re.search(r"\bsenior\b|\bsr\.?\b|cao cấp", title):
         return "Senior"
