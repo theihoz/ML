@@ -198,3 +198,28 @@ def test_saved_report_and_validation_match_the_current_model():
     assert validation["selected"] == selected
     point = validation["bootstrap"]["models"][selected]["MAE"]["point"]
     assert point == pytest.approx(report["models"][selected]["test"]["MAE"], abs=1e-6)
+
+
+FULL_PROFILE_SKILLS = [
+    "Java", "Spring Boot", "SQL", "Docker", "AWS", "Kubernetes",
+    "Redis", "MySQL", "Python", "Git", "REST API", "Microservices",
+]  # fmt: skip
+
+
+@pytest.mark.parametrize("model_name", ["Ridge", "RandomForest", "GradientBoosting"])
+def test_dropping_any_skill_from_a_twelve_skill_profile_never_raises_salary(model_name):
+    # 12 là số kỹ năng tối đa của một tin trong dữ liệu; đây là cỡ lớn nhất mà bao đơn điệu
+    # của Random Forest phải xử lý (2^12 tập con).
+    from career_market.salary_model import predict_profile
+
+    profile = {
+        "role": "Backend Developer",
+        "region": "Hà Nội",
+        "experience_years": 5,
+        "skills": FULL_PROFILE_SKILLS,
+    }
+    full = predict_profile(profile, model_name)["salary"]
+    for skill in FULL_PROFILE_SKILLS:
+        fewer = [name for name in FULL_PROFILE_SKILLS if name != skill]
+        dropped = predict_profile({**profile, "skills": fewer}, model_name)["salary"]
+        assert dropped <= full + 1e-6, (model_name, skill, dropped, full)
