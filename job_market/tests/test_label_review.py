@@ -41,5 +41,7 @@ def test_saved_review_covers_every_field_and_reaches_the_reported_accuracy():
     assert set(REVIEW_COLUMNS) <= set(review.columns)
     result = score_review(review)
     assert result["salary"]["reviewed"] == len(review)
-    assert result["role"]["accuracy_pct"] >= 95
-    assert result["skills"]["precision_pct"] >= 98
+    # Sau khi sửa luật ở #98: vai trò và cấp bậc ≥ 98%, độ chính xác kỹ năng ≥ 99.5%.
+    assert result["role"]["accuracy_pct"] >= 98
+    assert result["level"]["accuracy_pct"] >= 98
+    assert result["skills"]["precision_pct"] >= 99.5
