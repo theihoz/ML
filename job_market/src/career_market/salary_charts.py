@@ -23,9 +23,16 @@ def skill_table(frame):
     return table.reset_index()
 
 
-def top_skill_demand(frame, limit=15):
-    table = skill_table(frame).nlargest(limit, "postings")
-    figure, axis = plt.subplots(figsize=(7.5, 5))
+def _skill_bar_height(rows):
+    return max(5.0, 0.22 * rows + 1.0)
+
+
+def top_skill_demand(frame, limit=None):
+    """Số tin nhắc đến từng kỹ năng; ``limit=None`` vẽ toàn bộ kỹ năng."""
+    table = skill_table(frame).sort_values(["postings", "skill"], ascending=[False, True])
+    if limit:
+        table = table.head(limit)
+    figure, axis = plt.subplots(figsize=(7.5, _skill_bar_height(len(table))))
     sns.barplot(data=table, y="skill", x="postings", color=BLUE, ax=axis)
     axis.bar_label(axis.containers[0], padding=3, fontsize=8)
     axis.set(xlabel="Số tin tuyển dụng nhắc đến", ylabel="")
@@ -33,13 +40,19 @@ def top_skill_demand(frame, limit=15):
     return figure
 
 
-def top_skill_salary(frame, limit=15, min_postings=30):
-    table = skill_table(frame)
-    table = table[table["postings"] >= min_postings].nlargest(limit, "median")
-    figure, axis = plt.subplots(figsize=(7.5, 5))
-    sns.barplot(data=table, y="skill", x="median", color=BLUE, ax=axis)
+def top_skill_salary(frame, limit=None, min_postings=30):
+    """Trung vị lương theo kỹ năng; kỹ năng dưới ``min_postings`` tin tô xám (ít dữ liệu)."""
+    table = skill_table(frame).sort_values(["median", "skill"], ascending=[False, True])
+    if limit:
+        table = table.head(limit)
+    colors = [BLUE if n >= min_postings else GREY for n in table["postings"]]
+    figure, axis = plt.subplots(figsize=(7.5, _skill_bar_height(len(table))))
+    sns.barplot(
+        data=table, y="skill", x="median", hue="skill", palette=colors, legend=False, ax=axis
+    )
     axis.axvline(frame["salary"].median(), color="#475569", linestyle="--", linewidth=1)
-    axis.bar_label(axis.containers[0], fmt="%.1f", padding=3, fontsize=8)
+    for container in axis.containers:
+        axis.bar_label(container, fmt="%.1f", padding=3, fontsize=8)
     axis.set(xlabel="Trung vị lương (triệu VND/tháng)", ylabel="")
     figure.tight_layout()
     return figure

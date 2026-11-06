@@ -14,3 +14,7 @@ frontend/dist/
 .agents/skills/developing-with-streamlit
 .claude/skills/developing-with-streamlit
 .claude/launch.json
+
+# Biểu đồ báo cáo sinh từ code: make -C job_market figures
+report/figures/*.png
+!report/figures/ui-*.png
