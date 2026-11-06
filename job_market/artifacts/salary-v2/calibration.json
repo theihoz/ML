@@ -1,0 +1,575 @@
+{
+  "version": 2,
+  "inference_year": 2026,
+  "role_anchor_statistic": "equal-edition arithmetic mean of published medians",
+  "approximate": true,
+  "anchor_statistic": "mean",
+  "reference_sha256": "963d95ac0153d12f01fb601564e8ad21b5b11e8cc274d7ea061ba06de78f703a",
+  "metrics_sha256": "4449b1d5f7ddac1808757cc85235b1f0b0e28c66c14284b7874fb2578eb35d65",
+  "models": {
+    "Baseline": {
+      "cells": {
+        "Fresher|TP. Hồ Chí Minh": 0.39,
+        "Junior|TP. Hồ Chí Minh": 0.815,
+        "Middle|TP. Hồ Chí Minh": 1.2160000000000002,
+        "Senior|TP. Hồ Chí Minh": 1.7080000000000002,
+        "Lead|TP. Hồ Chí Minh": 2.083,
+        "Manager|TP. Hồ Chí Minh": 2.083,
+        "Fresher|Hà Nội": 0.38,
+        "Junior|Hà Nội": 0.8080000000000002,
+        "Middle|Hà Nội": 1.1280000000000001,
+        "Senior|Hà Nội": 1.4820000000000002,
+        "Lead|Hà Nội": 1.6520000000000001,
+        "Manager|Hà Nội": 1.6520000000000001,
+        "Junior|Đà Nẵng": 0.805,
+        "Middle|Đà Nẵng": 1.1260000000000001,
+        "Lead|Đà Nẵng": 1.55,
+        "Manager|Đà Nẵng": 1.55
+      },
+      "levels": {
+        "Fresher": 0.385,
+        "Junior": 0.8080000000000002,
+        "Middle": 1.1280000000000001,
+        "Senior": 1.5950000000000002,
+        "Lead": 1.6520000000000001,
+        "Manager": 1.6520000000000001
+      },
+      "model_sha256": "84434a0b33445febb09de9ade77bf74048826cbef44d35ddba78fd93a0f65f9c",
+      "roles": {
+        "AI / ML Engineer": {
+          "factor": 1.49079754601227,
+          "composite_anchor": 30.375,
+          "source_ids": [
+            "itviec-verified-10",
+            "itviec-verified-22"
+          ],
+          "mapping_caveats": [
+            "source includes Blockchain; model AI/ML not exact match"
+          ]
+        },
+        "Backend Developer": {
+          "factor": 1.1099290780141844,
+          "composite_anchor": 31.3,
+          "source_ids": [
+            "itviec-verified-0",
+            "itviec-verified-12"
+          ],
+          "mapping_caveats": [
+            "exact"
+          ]
+        },
+        "Business Analyst": {
+          "factor": 1.0177304964539007,
+          "composite_anchor": 28.7,
+          "source_ids": [
+            "itviec-verified-11",
+            "itviec-verified-23"
+          ],
+          "mapping_caveats": [
+            "exact"
+          ]
+        },
+        "Data Analyst / BI": {
+          "factor": 1.418316831683168,
+          "composite_anchor": 28.65,
+          "source_ids": [
+            "itviec-verified-9",
+            "itviec-verified-21"
+          ],
+          "mapping_caveats": [
+            "source includes Data Scientist; model sends DS to AI/ML"
+          ]
+        },
+        "Data Engineer": {
+          "factor": 1.3138297872340423,
+          "composite_anchor": 37.05,
+          "source_ids": [
+            "itviec-verified-8",
+            "itviec-verified-20"
+          ],
+          "mapping_caveats": [
+            "exact"
+          ]
+        },
+        "DevOps / Cloud": {
+          "factor": 1.4911347517730493,
+          "composite_anchor": 42.05,
+          "source_ids": [
+            "itviec-verified-4",
+            "itviec-verified-16"
+          ],
+          "mapping_caveats": [
+            "source covers DevOps/DevSecOps but not Cloud"
+          ]
+        },
+        "Frontend Developer": {
+          "factor": 0.9485815602836879,
+          "composite_anchor": 26.75,
+          "source_ids": [
+            "itviec-verified-1",
+            "itviec-verified-13"
+          ],
+          "mapping_caveats": [
+            "exact"
+          ]
+        },
+        "Fullstack Developer": {
+          "factor": 1.1764184397163118,
+          "composite_anchor": 33.175,
+          "source_ids": [
+            "itviec-verified-2",
+            "itviec-verified-14"
+          ],
+          "mapping_caveats": [
+            "exact"
+          ]
+        },
+        "Kiểm thử (QA/QC)": {
+          "factor": 1.121287128712871,
+          "composite_anchor": 22.65,
+          "source_ids": [
+            "itviec-verified-6",
+            "itviec-verified-18"
+          ],
+          "mapping_caveats": [
+            "source subtype; QA-QC separately published"
+          ]
+        },
+        "Mobile Developer": {
+          "factor": 1.2429078014184396,
+          "composite_anchor": 35.05,
+          "source_ids": [
+            "itviec-verified-3",
+            "itviec-verified-15"
+          ],
+          "mapping_caveats": [
+            "exact"
+          ]
+        }
+      }
+    },
+    "Ridge": {
+      "cells": {
+        "Fresher|TP. Hồ Chí Minh": 0.6680387909517119,
+        "Junior|TP. Hồ Chí Minh": 0.9855048369866277,
+        "Middle|TP. Hồ Chí Minh": 1.0281723981183652,
+        "Senior|TP. Hồ Chí Minh": 0.9331791072626296,
+        "Lead|TP. Hồ Chí Minh": 1.5047063742208056,
+        "Manager|TP. Hồ Chí Minh": 1.5047063742208056,
+        "Fresher|Hà Nội": 0.7201630389897299,
+        "Junior|Hà Nội": 1.0467069767980024,
+        "Middle|Hà Nội": 1.0029862911754217,
+        "Senior|Hà Nội": 0.8422393495141607,
+        "Lead|Hà Nội": 0.8216369753380289,
+        "Manager|Hà Nội": 0.8216369753380289,
+        "Junior|Đà Nẵng": 1.0368235915971535,
+        "Middle|Đà Nẵng": 0.9553385797247066,
+        "Lead|Đà Nẵng": 0.7387103663972222,
+        "Manager|Đà Nẵng": 0.7387103663972222
+      },
+      "levels": {
+        "Fresher": 0.6941009149707209,
+        "Junior": 1.0368235915971535,
+        "Middle": 1.0029862911754217,
+        "Senior": 0.8877092283883952,
+        "Lead": 0.8216369753380289,
+        "Manager": 0.8216369753380289
+      },
+      "model_sha256": "4e16670b47fb9a13009a030c4b5afbbb8bdacb0a3a5c7f83de3651259f667e79",
+      "roles": {
+        "AI / ML Engineer": {
+          "factor": 1.03075066226567,
+          "composite_anchor": 30.375,
+          "source_ids": [
+            "itviec-verified-10",
+            "itviec-verified-22"
+          ],
+          "mapping_caveats": [
+            "source includes Blockchain; model AI/ML not exact match"
+          ]
+        },
+        "Backend Developer": {
+          "factor": 1.3338671785445972,
+          "composite_anchor": 31.3,
+          "source_ids": [
+            "itviec-verified-0",
+            "itviec-verified-12"
+          ],
+          "mapping_caveats": [
+            "exact"
+          ]
+        },
+        "Business Analyst": {
+          "factor": 1.1228382293036179,
+          "composite_anchor": 28.7,
+          "source_ids": [
+            "itviec-verified-11",
+            "itviec-verified-23"
+          ],
+          "mapping_caveats": [
+            "exact"
+          ]
+        },
+        "Data Analyst / BI": {
+          "factor": 1.4229246274084468,
+          "composite_anchor": 28.65,
+          "source_ids": [
+            "itviec-verified-9",
+            "itviec-verified-21"
+          ],
+          "mapping_caveats": [
+            "source includes Data Scientist; model sends DS to AI/ML"
+          ]
+        },
+        "Data Engineer": {
+          "factor": 1.1095241792250679,
+          "composite_anchor": 37.05,
+          "source_ids": [
+            "itviec-verified-8",
+            "itviec-verified-20"
+          ],
+          "mapping_caveats": [
+            "exact"
+          ]
+        },
+        "DevOps / Cloud": {
+          "factor": 1.328629908951583,
+          "composite_anchor": 42.05,
+          "source_ids": [
+            "itviec-verified-4",
+            "itviec-verified-16"
+          ],
+          "mapping_caveats": [
+            "source covers DevOps/DevSecOps but not Cloud"
+          ]
+        },
+        "Frontend Developer": {
+          "factor": 1.145039775643035,
+          "composite_anchor": 26.75,
+          "source_ids": [
+            "itviec-verified-1",
+            "itviec-verified-13"
+          ],
+          "mapping_caveats": [
+            "exact"
+          ]
+        },
+        "Fullstack Developer": {
+          "factor": 1.342323293946556,
+          "composite_anchor": 33.175,
+          "source_ids": [
+            "itviec-verified-2",
+            "itviec-verified-14"
+          ],
+          "mapping_caveats": [
+            "exact"
+          ]
+        },
+        "Kiểm thử (QA/QC)": {
+          "factor": 1.204767643563797,
+          "composite_anchor": 22.65,
+          "source_ids": [
+            "itviec-verified-6",
+            "itviec-verified-18"
+          ],
+          "mapping_caveats": [
+            "source subtype; QA-QC separately published"
+          ]
+        },
+        "Mobile Developer": {
+          "factor": 1.3686486315126891,
+          "composite_anchor": 35.05,
+          "source_ids": [
+            "itviec-verified-3",
+            "itviec-verified-15"
+          ],
+          "mapping_caveats": [
+            "exact"
+          ]
+        }
+      }
+    },
+    "RandomForest": {
+      "cells": {
+        "Fresher|TP. Hồ Chí Minh": 0.7620458946103532,
+        "Junior|TP. Hồ Chí Minh": 1.010066342287609,
+        "Middle|TP. Hồ Chí Minh": 1.244064892507854,
+        "Senior|TP. Hồ Chí Minh": 1.2232207135524773,
+        "Lead|TP. Hồ Chí Minh": 1.6635667453917646,
+        "Manager|TP. Hồ Chí Minh": 1.6635667453917646,
+        "Fresher|Hà Nội": 0.7536000634816447,
+        "Junior|Hà Nội": 1.0185685385811842,
+        "Middle|Hà Nội": 0.9885293779502704,
+        "Senior|Hà Nội": 0.8820625600957394,
+        "Lead|Hà Nội": 0.8357401896538061,
+        "Manager|Hà Nội": 0.8357401896538061,
+        "Junior|Đà Nẵng": 1.2657976450055652,
+        "Middle|Đà Nẵng": 0.9809277968791499,
+        "Lead|Đà Nẵng": 0.9006326992631295,
+        "Manager|Đà Nẵng": 0.9006326992631295
+      },
+      "levels": {
+        "Fresher": 0.7578229790459989,
+        "Junior": 1.0185685385811842,
+        "Middle": 0.9885293779502704,
+        "Senior": 1.0526416368241083,
+        "Lead": 0.9006326992631295,
+        "Manager": 0.9006326992631295
+      },
+      "model_sha256": "dce77e43b01ea1a4e507b050fc7fbe32a842459567206e8bf90cbf24f2d83894",
+      "roles": {
+        "AI / ML Engineer": {
+          "factor": 1.0781220400487488,
+          "composite_anchor": 30.375,
+          "source_ids": [
+            "itviec-verified-10",
+            "itviec-verified-22"
+          ],
+          "mapping_caveats": [
+            "source includes Blockchain; model AI/ML not exact match"
+          ]
+        },
+        "Backend Developer": {
+          "factor": 1.1688744360011478,
+          "composite_anchor": 31.3,
+          "source_ids": [
+            "itviec-verified-0",
+            "itviec-verified-12"
+          ],
+          "mapping_caveats": [
+            "exact"
+          ]
+        },
+        "Business Analyst": {
+          "factor": 1.176270738260259,
+          "composite_anchor": 28.7,
+          "source_ids": [
+            "itviec-verified-11",
+            "itviec-verified-23"
+          ],
+          "mapping_caveats": [
+            "exact"
+          ]
+        },
+        "Data Analyst / BI": {
+          "factor": 1.2137874510217945,
+          "composite_anchor": 28.65,
+          "source_ids": [
+            "itviec-verified-9",
+            "itviec-verified-21"
+          ],
+          "mapping_caveats": [
+            "source includes Data Scientist; model sends DS to AI/ML"
+          ]
+        },
+        "Data Engineer": {
+          "factor": 1.0852400840373422,
+          "composite_anchor": 37.05,
+          "source_ids": [
+            "itviec-verified-8",
+            "itviec-verified-20"
+          ],
+          "mapping_caveats": [
+            "exact"
+          ]
+        },
+        "DevOps / Cloud": {
+          "factor": 1.277666328104276,
+          "composite_anchor": 42.05,
+          "source_ids": [
+            "itviec-verified-4",
+            "itviec-verified-16"
+          ],
+          "mapping_caveats": [
+            "source covers DevOps/DevSecOps but not Cloud"
+          ]
+        },
+        "Frontend Developer": {
+          "factor": 1.0141494520855545,
+          "composite_anchor": 26.75,
+          "source_ids": [
+            "itviec-verified-1",
+            "itviec-verified-13"
+          ],
+          "mapping_caveats": [
+            "exact"
+          ]
+        },
+        "Fullstack Developer": {
+          "factor": 1.204328217154709,
+          "composite_anchor": 33.175,
+          "source_ids": [
+            "itviec-verified-2",
+            "itviec-verified-14"
+          ],
+          "mapping_caveats": [
+            "exact"
+          ]
+        },
+        "Kiểm thử (QA/QC)": {
+          "factor": 1.2492532158711929,
+          "composite_anchor": 22.65,
+          "source_ids": [
+            "itviec-verified-6",
+            "itviec-verified-18"
+          ],
+          "mapping_caveats": [
+            "source subtype; QA-QC separately published"
+          ]
+        },
+        "Mobile Developer": {
+          "factor": 1.3022265477708002,
+          "composite_anchor": 35.05,
+          "source_ids": [
+            "itviec-verified-3",
+            "itviec-verified-15"
+          ],
+          "mapping_caveats": [
+            "exact"
+          ]
+        }
+      }
+    },
+    "GradientBoosting": {
+      "cells": {
+        "Fresher|TP. Hồ Chí Minh": 0.6741037634549352,
+        "Junior|TP. Hồ Chí Minh": 0.9013945937796475,
+        "Middle|TP. Hồ Chí Minh": 1.0834186328977644,
+        "Senior|TP. Hồ Chí Minh": 1.0670104108421365,
+        "Lead|TP. Hồ Chí Minh": 1.2313666271296273,
+        "Manager|TP. Hồ Chí Minh": 1.2313666271296273,
+        "Fresher|Hà Nội": 0.7298284467487229,
+        "Junior|Hà Nội": 1.0419034953542112,
+        "Middle|Hà Nội": 1.0200990054329087,
+        "Senior|Hà Nội": 0.8420079043715201,
+        "Lead|Hà Nội": 0.8197415624102481,
+        "Manager|Hà Nội": 0.8197415624102481,
+        "Junior|Đà Nẵng": 1.243652362417374,
+        "Middle|Đà Nẵng": 0.9867567472900892,
+        "Lead|Đà Nẵng": 0.6467879135326194,
+        "Manager|Đà Nẵng": 0.6467879135326194
+      },
+      "levels": {
+        "Fresher": 0.7019661051018291,
+        "Junior": 1.0419034953542112,
+        "Middle": 1.0200990054329087,
+        "Senior": 0.9545091576068283,
+        "Lead": 0.8197415624102481,
+        "Manager": 0.8197415624102481
+      },
+      "model_sha256": "c5fdee89957def943f45fbf8a8bba6b8b22fef0019567db460fe1f24b9286b6e",
+      "roles": {
+        "AI / ML Engineer": {
+          "factor": 0.9885053894881977,
+          "composite_anchor": 30.375,
+          "source_ids": [
+            "itviec-verified-10",
+            "itviec-verified-22"
+          ],
+          "mapping_caveats": [
+            "source includes Blockchain; model AI/ML not exact match"
+          ]
+        },
+        "Backend Developer": {
+          "factor": 1.290886071977604,
+          "composite_anchor": 31.3,
+          "source_ids": [
+            "itviec-verified-0",
+            "itviec-verified-12"
+          ],
+          "mapping_caveats": [
+            "exact"
+          ]
+        },
+        "Business Analyst": {
+          "factor": 1.0959040915128349,
+          "composite_anchor": 28.7,
+          "source_ids": [
+            "itviec-verified-11",
+            "itviec-verified-23"
+          ],
+          "mapping_caveats": [
+            "exact"
+          ]
+        },
+        "Data Analyst / BI": {
+          "factor": 1.25373330501842,
+          "composite_anchor": 28.65,
+          "source_ids": [
+            "itviec-verified-9",
+            "itviec-verified-21"
+          ],
+          "mapping_caveats": [
+            "source includes Data Scientist; model sends DS to AI/ML"
+          ]
+        },
+        "Data Engineer": {
+          "factor": 1.0251275925834995,
+          "composite_anchor": 37.05,
+          "source_ids": [
+            "itviec-verified-8",
+            "itviec-verified-20"
+          ],
+          "mapping_caveats": [
+            "exact"
+          ]
+        },
+        "DevOps / Cloud": {
+          "factor": 1.2411297027204546,
+          "composite_anchor": 42.05,
+          "source_ids": [
+            "itviec-verified-4",
+            "itviec-verified-16"
+          ],
+          "mapping_caveats": [
+            "source covers DevOps/DevSecOps but not Cloud"
+          ]
+        },
+        "Frontend Developer": {
+          "factor": 1.170411630968553,
+          "composite_anchor": 26.75,
+          "source_ids": [
+            "itviec-verified-1",
+            "itviec-verified-13"
+          ],
+          "mapping_caveats": [
+            "exact"
+          ]
+        },
+        "Fullstack Developer": {
+          "factor": 1.3576566920148472,
+          "composite_anchor": 33.175,
+          "source_ids": [
+            "itviec-verified-2",
+            "itviec-verified-14"
+          ],
+          "mapping_caveats": [
+            "exact"
+          ]
+        },
+        "Kiểm thử (QA/QC)": {
+          "factor": 1.1796276959859984,
+          "composite_anchor": 22.65,
+          "source_ids": [
+            "itviec-verified-6",
+            "itviec-verified-18"
+          ],
+          "mapping_caveats": [
+            "source subtype; QA-QC separately published"
+          ]
+        },
+        "Mobile Developer": {
+          "factor": 1.3490210060991412,
+          "composite_anchor": 35.05,
+          "source_ids": [
+            "itviec-verified-3",
+            "itviec-verified-15"
+          ],
+          "mapping_caveats": [
+            "exact"
+          ]
+        }
+      }
+    }
+  }
+}

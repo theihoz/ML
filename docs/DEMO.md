@@ -59,7 +59,7 @@ Mở http://127.0.0.1:8502. Dừng ứng dụng bằng Ctrl+C trong terminal.
 2. Đọc mức lương ước tính, khoảng thường gặp (80% tin tương tự) và vị trí so với trung vị thị trường của vai trò.
 3. Xem bảng **Kỹ năng nên học thêm**: mức tăng lương dự đoán khi bổ sung từng kỹ năng và tỉ lệ tin của vai trò yêu cầu kỹ năng đó.
 4. Xem **Lộ trình theo kinh nghiệm**: lương dự đoán khi tăng thêm 1, 2, 3, 5 năm.
-5. Mở **Tổng quan** để xem dashboard đủ 23 vai trò, **Đánh giá mô hình** để so sánh metric, **Dữ liệu huấn luyện** để xem nhãn train/valid/test.
+5. Mở **Tổng quan** để xem dashboard đủ 23 vai trò, **Thị trường việc làm** để lọc kỹ năng theo nguồn/vai trò/khu vực, **Đánh giá mô hình** để so sánh metric, **Dữ liệu huấn luyện** để xem nhãn train/valid/test.
 
 Tư vấn từ dòng lệnh:
 
@@ -70,14 +70,14 @@ PYTHONPATH=src python -m career_market advise --role "Data Engineer" --years 3 -
 
 ## Đọc kết quả
 
-Ứng dụng chỉ nạp mô hình đã lưu trong `job_market/artifacts/salary-v2`, không huấn luyện lại khi bấm dự đoán. Gradient Boosting được chọn theo MAE trên tập valid; MAE trên tập test là 5,38 triệu/tháng trên 696 tin.
+Ứng dụng chỉ nạp mô hình đã lưu trong `job_market/artifacts/salary-v2`, không huấn luyện lại khi bấm dự đoán. Gradient Boosting được chọn theo MAE trên tập valid; MAE trên tập test là 5,82 triệu/tháng trên 696 tin.
 
 Mức tăng lương theo kỹ năng là quan hệ học được từ tin tuyển dụng, không phải quan hệ nhân quả. Dữ liệu lệch về Hà Nội (87% số tin có lương), nên kết quả cho TP. Hồ Chí Minh và Đà Nẵng kém chắc chắn hơn.
 
 ## Huấn luyện lại
 
 ```sh
-make train-v2
+make train
 ```
 
-Lệnh tạo lại `job_market/datasets/processed/salary_dataset_v2.csv` (có cột `split`) rồi huấn luyện Ridge, Random Forest, Gradient Boosting và mốc trung vị, ghi metric vào `metrics.json`.
+Lệnh tạo lại `job_market/datasets/processed/salary_dataset_v2.csv` (có cột `split`) rồi huấn luyện Ridge, Random Forest, Gradient Boosting và mốc trung vị, ghi metric vào `metrics.json`, sau đó chạy kiểm định ghi `validation.json`.

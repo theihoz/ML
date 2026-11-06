@@ -1,250 +1,300 @@
-"""Small synthetic salary strings test logic only; never market/training fixtures."""
+"""Kiểm thử toàn bộ luồng: chuẩn hóa → dữ liệu → mô hình → tư vấn → giao diện."""
 
-from career_market import MarketService
+from pathlib import Path
 
+import pytest
+from streamlit.testing.v1 import AppTest
 
-def test_bounded_vnd_month_preserves_both_ends_and_target():
-    assert MarketService().normalize_salary("20–30 triệu VND/tháng") == {
-        "salary_lower": 20_000_000,
-        "salary_upper": 30_000_000,
-        "salary_midpoint": 25_000_000,
-        "salary_currency": "VND",
-        "salary_period": "MONTH",
-        "salary_basis": "unknown",
-        "salary_kind": "bounded",
-        "salary_status": "valid",
-        "salary_reason": "eligible_vnd_month",
-        "salary_target_vnd_month": 25_000_000,
-    }
+from career_market.data.dataset import load_dataset
+from career_market.data.rules import ROLE_ORDER, classify_role, parse_experience, parse_salary
+from career_market.model.advisor import advise
+from career_market.model.training import load_report
+
+APP = Path(__file__).parents[1] / "app.py"
 
 
-def test_fixed_salary_accepts_decimal_comma_and_grouped_thousands():
-    service = MarketService()
-    for raw, expected in [
-        ("20,5 triệu VND/tháng", 20_500_000),
-        ("20.500.000 VND/tháng", 20_500_000),
-        ("20,500,000 VND/month", 20_500_000),
-        ("20.500,50 VND/tháng", 20_500.5),
-        ("20,500.50 VND/month", 20_500.5),
-        ("25000k VND/month", 25_000_000),
-    ]:
-        result = service.normalize_salary(raw)
-        assert (
-            result["salary_lower"],
-            result["salary_upper"],
-            result["salary_midpoint"],
-            result["salary_target_vnd_month"],
-            result["salary_kind"],
-        ) == (expected, expected, expected, expected, "fixed")
+@pytest.mark.parametrize(
+    ("text", "expected"),
+    [
+        ("15 - 25 triệu", (15, 25, 20)),
+        ("Lương: 10 Tr - 15 Tr VND", (10, 15, 12.5)),
+        ("Tới 30 triệu", (21, 30, 25.5)),
+        ("15tr-25tr ₫/tháng", (15, 25, 20)),
+        ("200tr-500tr ₫/năm", (200 / 12, 500 / 12, 350 / 12)),
+        ("240tr-360tr ₫/năm", (20, 30, 25)),
+        ("Thoả thuận", None),
+        ("1 triẹu - 40 triẹu/tháng", None),
+    ],
+)
+def test_salary_text_is_normalized_to_million_vnd_per_month(text, expected):
+    result = parse_salary(text)
+    assert result == (pytest.approx(expected, abs=0.01) if expected else None)
 
 
-def test_missing_units_keep_amounts_for_review_without_a_target():
-    for raw, currency, period, reason in [
-        ("20–30 triệu VND", "VND", None, "missing_period"),
-        ("20–30 triệu/tháng", None, "MONTH", "missing_currency"),
-        ("20–30 triệu", None, None, "missing_currency_and_period"),
-    ]:
-        result = MarketService().normalize_salary(raw)
-        assert (
-            result["salary_lower"],
-            result["salary_upper"],
-            result["salary_currency"],
-            result["salary_period"],
-            result["salary_status"],
-            result["salary_reason"],
-            result["salary_target_vnd_month"],
-        ) == (20_000_000, 30_000_000, currency, period, "review", reason, None)
+def test_usd_salary_uses_exchange_rate_of_posting_year():
+    low, high, middle = parse_salary("$ 1,000-1,500 /tháng", 2026)
+    assert (low, high) == (26.0, 39.0)
 
 
-def test_foreign_or_yearly_salary_preserves_units_and_basis_without_conversion():
-    for raw, lower, upper, currency, period, basis in [
-        ("60,000–90,000 USD/year gross", 60_000, 90_000, "USD", "YEAR", "gross"),
-        ("$1.500,50 - $2.000,50/month net", 1500.5, 2000.5, "USD", "MONTH", "net"),
-        ("240–360 triệu VND/năm", 240_000_000, 360_000_000, "VND", "YEAR", "unknown"),
-        ("20–30 triệu đồng mỗi tháng (gross)", 20_000_000, 30_000_000, "VND", "MONTH", "gross"),
-    ]:
-        result = MarketService().normalize_salary(raw)
-        assert (
-            result["salary_lower"],
-            result["salary_upper"],
-            result["salary_currency"],
-            result["salary_period"],
-            result["salary_basis"],
-        ) == (lower, upper, currency, period, basis)
-        if (currency, period) != ("VND", "MONTH"):
-            assert (result["salary_target_vnd_month"], result["salary_reason"]) == (
-                None,
-                "non_vnd_month",
+@pytest.mark.parametrize(
+    ("text", "years"),
+    [("2 năm", 2), ("Dưới 1 năm", 0.5), ("Trên 5 năm", 6), ("1 - 3 Năm", 2), ("Không yêu cầu", 0)],
+)
+def test_experience_text_becomes_years(text, years):
+    assert parse_experience(text) == years
+
+
+@pytest.mark.parametrize(
+    ("title", "role"),
+    [
+        ("Senior Java Developer", "Backend Developer"),
+        ("Data Engineer (Spark)", "Data Engineer"),
+        ("Machine Learning Engineer", "AI / ML Engineer"),
+        ("Automation Tester", "Kiểm thử (QA/QC)"),
+        ("IT Sales Executive", None),
+        ("Kế toán tổng hợp", None),
+    ],
+)
+def test_title_maps_to_one_it_role(title, role):
+    assert classify_role(title) == role
+
+
+def test_dataset_has_every_role_and_company_disjoint_splits():
+    frame = load_dataset()
+    assert len(frame) > 3000
+    assert set(frame["role"]) == set(ROLE_ORDER)
+    assert set(frame["split"]) == {"train", "valid", "test"}
+    companies = frame.groupby("split")["company_key"].apply(set)
+    assert not companies["train"] & companies["test"]
+    assert not companies["train"] & companies["valid"]
+
+
+def test_built_dataset_assigns_intern_only_when_title_says_intern():
+    from career_market.data.dataset import build_dataset
+
+    frame, _ = build_dataset()
+    interns = frame[frame["level"] == "Intern"]
+    assert len(interns)
+    assert interns["title"].str.contains(r"\bintern\b|thực tập", case=False).all()
+
+
+@pytest.mark.parametrize(
+    "source_level", ["Intern", "Manager", "Trưởng phòng", "Trưởng nhóm", "Lead", "Fresher"]
+)
+def test_built_dataset_ignores_unreliable_source_level(tmp_path, source_level):
+    import pandas as pd
+
+    from career_market.data.dataset import build_dataset
+    from career_market.paths import data_root
+
+    # CSV inputs are the dataset boundary: source labels conflict with explicit titles/years.
+    for path in (data_root() / "raw").glob("*.csv"):
+        pd.read_csv(path, nrows=0).to_csv(tmp_path / path.name, index=False)
+    pd.DataFrame(
+        [
+            {
+                "title": title,
+                "company": f"Company {index}",
+                "location": "Hà Nội",
+                "salary": "15 - 25 triệu",
+                "experience": "3 năm",
+                "level": source_level,
+                "skills": "[]",
+                "requirements": "",
+                "source_platform": "fixture",
+                "created_at": "2026-01-01",
+            }
+            for index, title in enumerate(
+                [
+                    "Backend Developer",
+                    "Senior Backend Developer",
+                    "Backend Developer - Head Office",
+                    "International Backend Developer",
+                    "Head of Backend Development",
+                    "Backend Developer Intern",
+                    "Thực tập Backend Developer",
+                ]
             )
-        else:
-            assert result["salary_target_vnd_month"] == 25_000_000
+        ]
+    ).to_csv(tmp_path / "vietnam_it_job_posts_v1.csv", index=False)
+    frame, _ = build_dataset(tmp_path)
+    assert frame["level"].tolist() == [
+        "Middle",
+        "Senior",
+        "Middle",
+        "Middle",
+        "Manager",
+        "Intern",
+        "Intern",
+    ]
 
 
-def test_single_bounds_and_negotiable_values_never_become_targets():
-    for raw, kind, lower, upper, reason in [
-        ("Thỏa thuận", "negotiable", None, None, "negotiable"),
-        ("Lương: Cạnh tranh", "competitive", None, None, "competitive"),
-        ("upto 30 triệu VND/tháng", "upper_bound", None, 30_000_000, "single_bound"),
-        ("up to 30 triệu VND/tháng", "upper_bound", None, 30_000_000, "single_bound"),
-        ("Tới 30 triệu VND/tháng", "upper_bound", None, 30_000_000, "single_bound"),
-        ("Đến 30 triệu VND/tháng", "upper_bound", None, 30_000_000, "single_bound"),
-        ("Trên 20 triệu VND/tháng", "lower_bound", 20_000_000, None, "single_bound"),
-        ("Từ 20 triệu VND/tháng", "lower_bound", 20_000_000, None, "single_bound"),
-    ]:
-        result = MarketService().normalize_salary(raw)
-        assert (
-            result["salary_kind"],
-            result["salary_lower"],
-            result["salary_upper"],
-            result["salary_midpoint"],
-            result["salary_target_vnd_month"],
-            result["salary_reason"],
-        ) == (kind, lower, upper, None, None, reason)
+def test_saved_models_beat_median_baseline_on_test():
+    report = load_report()
+    baseline = report["models"]["Baseline"]["test"]["MAE"]
+    trained = [name for name in report["models"] if name != "Baseline"]
+    assert len(trained) >= 2
+    for name in trained:
+        assert report["models"][name]["test"]["MAE"] < baseline
+        assert {"MAE", "RMSE", "R2", "MAPE"} <= set(report["models"][name]["test"])
 
 
-def test_invalid_inverted_negative_and_conflicting_amounts_require_review():
-    for raw, reason in [
-        ("30–20 triệu VND/tháng", "inverted_range"),
-        ("-20 triệu VND/tháng", "negative_amount"),
-        ("20 - -30 triệu VND/tháng", "negative_amount"),
-        ("0 VND/tháng", "invalid_amount"),
-        ("20,5,0 triệu VND/tháng", "invalid_amount"),
-        ("20..000 VND/tháng", "invalid_amount"),
-        ("20–30 triệu VND USD/tháng", "conflicting_currency"),
-        ("20–30 triệu VND/tháng/year", "conflicting_period"),
-        ("20–30 triệu VND/tháng gross net", "conflicting_basis"),
-        ("20–30 triệu VND/tháng + thưởng 10 triệu", "invalid_amount"),
-        (None, "missing_salary"),
-        ("", "missing_salary"),
-    ]:
-        result = MarketService().normalize_salary(raw)
-        assert (
-            result["salary_status"],
-            result["salary_reason"],
-            result["salary_target_vnd_month"],
-        ) == ("review", reason, None)
-
-
-def test_salary_prefixes_and_vietnamese_range_connectors_keep_correct_bounds():
-    for raw, lower, upper, kind in [
-        ("Lương: Dưới9 Tr VND", None, 9_000_000, "upper_bound"),
-        ("Lương: Trên15 Tr VND", 15_000_000, None, "lower_bound"),
-        ("Từ 20 đến 30 triệu VND/tháng", 20_000_000, 30_000_000, "bounded"),
-        ("20 triệu - 30 triệu VND/tháng", 20_000_000, 30_000_000, "bounded"),
-    ]:
-        result = MarketService().normalize_salary(raw)
-        assert (result["salary_lower"], result["salary_upper"], result["salary_kind"]) == (
-            lower,
-            upper,
-            kind,
-        )
-        if kind == "bounded":
-            assert result["salary_target_vnd_month"] == 25_000_000
-        else:
-            assert result["salary_target_vnd_month"] is None
-
-
-def test_salary_report_parses_all_real_sources_using_only_the_salary_field():
-    report = MarketService().salary_report()
-    assert (report["row_count"], report["target_n"], report["source_counts"]) == (
-        3606,
-        0,
-        {"jobs-2023": 2056, "jobs-2026": 1550},
+def test_advice_predicts_salary_and_recommends_unowned_skills():
+    result = advise(
+        {"role": "Backend Developer", "region": "Hà Nội", "experience_years": 2, "skills": ["Java"]}
     )
-    first = report["rows"][0]
-    assert (
-        first["raw_salary"],
-        first["salary_lower"],
-        first["salary_upper"],
-        first["salary_period"],
-        first["salary_reason"],
-        first["salary_target_vnd_month"],
-    ) == (
-        "Lương: 15 Tr - 25 Tr VND",
-        15_000_000,
-        25_000_000,
-        None,
-        "missing_period",
-        None,
-    )  # This real JD mentions tháng; it is not salary-field evidence.
-    assert first["job_id"] == "35BB6CB4"
-    assert sum(report["reason_counts"].values()) == 3606
-    assert sum(report["status_counts"].values()) == 3606
-    assert MarketService().salary_report("jobs-2026")["row_count"] == 1550
+    assert 5 < result["salary"] < 100
+    assert result["low"] < result["salary"] < result["high"]
+    skills = [row["skill"] for row in result["recommendations"]]
+    assert skills and "Java" not in skills
+    path = [step["salary"] for step in result["experience_path"]]
+    assert path == sorted(path)
 
 
-def test_vnd_symbols_are_currency_evidence_but_not_a_pay_period():
-    for raw, period, target in [
-        ("20–30 triệu đ/tháng", "MONTH", 25_000_000),
-        ("20–30 triệu ₫/tháng", "MONTH", 25_000_000),
-        ("20–30 triệu VNĐ", None, None),
-    ]:
-        result = MarketService().normalize_salary(raw)
-        assert (
-            result["salary_currency"],
-            result["salary_period"],
-            result["salary_target_vnd_month"],
-        ) == ("VND", period, target)
+@pytest.mark.parametrize("region", ["Hà Nội", "TP. Hồ Chí Minh"])
+def test_backend_advice_orders_intern_fresher_and_junior_salaries(region):
+    salaries = [
+        advise(
+            {
+                "role": "Backend Developer",
+                "region": region,
+                "level": level,
+                "experience_years": years,
+                "skills": [],
+            }
+        )["salary"]
+        for level, years in [("Intern", 0), ("Fresher", 0), ("Junior", 1)]
+    ]
+    assert salaries[0] < salaries[1] < salaries[2], (region, salaries)
 
 
-def test_salary_csv_exports_keep_raw_identity_and_reconcile_status_and_review():
-    import csv
-    import io
-
-    service = MarketService()
-    exports = service.salary_exports(service.salary_report())
-    assert set(exports) == {"raw.csv", "normalized.csv", "status.csv", "review.csv"}
-    tables = {name: list(csv.DictReader(io.StringIO(content))) for name, content in exports.items()}
-    assert len(tables["raw.csv"]) == len(tables["normalized.csv"]) == 3606
-    assert len(tables["review.csv"]) == 3606
-    assert sum(int(row["n"]) for row in tables["status.csv"]) == 3606
-    assert sum(int(row["target_n"]) for row in tables["status.csv"]) == 0
-    assert tables["raw.csv"][0]["raw_salary"] == "Lương: 15 Tr - 25 Tr VND"
-    assert tables["normalized.csv"][0]["salary_target_vnd_month"] == ""
-    assert tables["review.csv"][0]["job_id"] == "35BB6CB4"
-    assert tables["normalized.csv"][2056]["source_id"] == "jobs-2026"
-
-
-def test_midpoint_requires_explicit_currency_and_period_evidence():
-    for raw in ["15–25 triệu", "15–25 triệu VND", "15–25 triệu/tháng"]:
-        result = MarketService().normalize_salary(raw)
-        assert (
-            result["salary_lower"],
-            result["salary_upper"],
-            result["salary_midpoint"],
-            result["salary_target_vnd_month"],
-        ) == (15_000_000, 25_000_000, None, None)
-    yearly = MarketService().normalize_salary("60–90 nghìn USD/year")
-    assert (yearly["salary_midpoint"], yearly["salary_target_vnd_month"]) == (75_000, None)
-
-
-def test_salary_page_smoke_shows_real_totals_review_and_four_csv_downloads():
-    from pathlib import Path
-
-    from streamlit.testing.v1 import AppTest
-
-    page = Path(__file__).parents[1] / "pages/tools/salary.py"
-    app = AppTest.from_file(str(page), default_timeout=20).run()
+def test_advisor_is_home_and_returns_salary_with_skill_advice():
+    app = AppTest.from_file(str(APP), default_timeout=60).run()
     assert not app.exception
-    assert [metric.value for metric in app.metric] == ["3606", "0"]
-    assert len(app.get("download_button")) == 4
-    assert any("ML bị chặn" in item.value for item in app.info)
-    assert app.dataframe[0].value.iloc[0]["salary_reason"] == "missing_period"
-    app.selectbox[0].select("jobs-2026").run()
+    assert app.title[0].value == "Tư vấn & dự đoán lương"
+    app.multiselect[0].set_value(["Python", "SQL"])
+    app.selectbox[0].set_value("Data Engineer")
+    app.button[0].click().run()
     assert not app.exception
-    assert [metric.value for metric in app.metric] == ["1550", "0"]
-    app.text_input[0].input("20–30 triệu VND/tháng").run()
+    assert float(app.metric[0].value) > 0
+    assert app.dataframe[0].value["Kỹ năng"].tolist()
+
+
+@pytest.mark.parametrize(
+    "page", ["pages/overview.py", "pages/market.py", "pages/evaluation.py", "pages/dataset.py"]
+)
+def test_every_page_renders(page):
+    app = AppTest.from_file(str(APP), default_timeout=60).run()
+    app.switch_page(page).run(timeout=60)
     assert not app.exception
-    import json
-
-    assert json.loads(app.json[-1].value)["salary_target_vnd_month"] == 25_000_000
+    assert app.metric
 
 
-def test_malformed_parentheses_cannot_turn_an_invalid_salary_into_a_target():
-    for raw in ["(20 triệu VND/tháng", "20 triệu VND/tháng)", "(20 triệu VND/tháng)"]:
-        result = MarketService().normalize_salary(raw)
-        assert (
-            result["salary_status"],
-            result["salary_midpoint"],
-            result["salary_target_vnd_month"],
-        ) == ("review", None, None)
+def test_validation_reports_calibration_bootstrap_and_fairness():
+    from career_market.data.rules import gender_requirement
+    from career_market.model.validation import load_validation
+
+    result = load_validation()
+    eighty = next(row for row in result["calibration"]["levels"] if row["level"] == 0.8)
+    assert 0.7 < eighty["coverage"] < 0.9
+    gb = result["bootstrap"]["models"]["GradientBoosting"]["MAE"]
+    assert gb["ci95"][0] <= gb["point"] <= gb["ci95"][1]
+    assert {"region", "level", "role"} <= set(result["fairness"])
+    assert result["gender"]["used_as_feature"] is False
+    assert gender_requirement("Tester Game Chỉ Tuyển Nữ") == "Chỉ nữ"
+    assert gender_requirement("Lap Trinh Vien Tu 3 Nam Kinh Nghiem") == "Không đề cập"
+    assert gender_requirement("Giới tính: Nam/Nữ") == "Nam/Nữ"
+
+
+MONOTONE_PROFILES = [
+    ("Backend Developer", years, base)
+    for years in (0, 2, 5)
+    for base in ([], ["Java"], ["Java", "Spring Boot", "SQL"], ["Python", "Django", "Docker"])
+] + [("Frontend Developer", 3, ["JavaScript", "React"]), ("Kiểm thử (QA/QC)", 1, [])]
+EXTRA_SKILLS = ["Java", "Python", "Docker", "AWS", "Kubernetes", "MySQL", "Redis", "PHP", "C#"]
+
+
+@pytest.mark.parametrize("model_name", ["Ridge", "RandomForest", "GradientBoosting"])
+def test_adding_a_skill_never_lowers_predicted_salary(model_name):
+    from career_market.model.advisor import predict_profile
+
+    for role, years, base in MONOTONE_PROFILES:
+        profile = {"role": role, "region": "Hà Nội", "experience_years": years, "skills": base}
+        before = predict_profile(profile, model_name)["salary"]
+        for skill in EXTRA_SKILLS:
+            if skill in base:
+                continue
+            after = predict_profile({**profile, "skills": [*base, skill]}, model_name)["salary"]
+            assert after >= before - 1e-6, (model_name, role, years, base, skill, before, after)
+
+
+def test_selected_model_stays_within_accepted_error_budget():
+    # #119: title/experience labels replace unreliable source levels. Rebuilt artifacts
+    # have test MAE 5.806721; 5.84 allows ~0.033 million VND for numerical variation.
+    # Keep skill monotonicity from ADR 0013; see docs/research/119-level-label-audit.md.
+    report = load_report()
+    assert report["models"][report["selected"]]["test"]["MAE"] <= 5.84
+
+
+ADVICE_PROFILES = [
+    ("Backend Developer", 2, ["Java"]),
+    ("Backend Developer", 5, []),
+    ("Frontend Developer", 1, ["JavaScript", "React"]),
+    ("Data Engineer", 3, ["Python", "SQL"]),
+    ("Kiểm thử (QA/QC)", 0, []),
+    ("DevOps / Cloud", 4, ["Docker", "Kubernetes", "AWS"]),
+]
+
+
+@pytest.mark.parametrize(("role", "years", "skills"), ADVICE_PROFILES)
+def test_recommended_skills_never_lower_predicted_salary(role, years, skills):
+    result = advise({"role": role, "region": "Hà Nội", "experience_years": years, "skills": skills})
+    assert result["recommendations"]
+    for row in result["recommendations"]:
+        assert row["skill"] not in skills
+        assert row["uplift"] >= -1e-6, (role, years, skills, row)
+
+
+def test_saved_skill_value_has_no_negative_model_uplift():
+    from career_market.model.training import load_skill_value
+
+    table = load_skill_value()
+    assert len(table)
+    assert (table["model_uplift"] >= -1e-6).all(), table[table["model_uplift"] < 0]
+
+
+def test_saved_report_and_validation_match_the_current_model():
+    from career_market.model.validation import load_validation
+
+    report = load_report()
+    assert not any(name.endswith("skill_count") for name in report["permutation_importance"])
+    validation = load_validation()
+    selected = report["selected"]
+    assert validation["selected"] == selected
+    point = validation["bootstrap"]["models"][selected]["MAE"]["point"]
+    assert point == pytest.approx(report["models"][selected]["test"]["MAE"], abs=1e-6)
+
+
+FULL_PROFILE_SKILLS = [
+    "Java", "Spring Boot", "SQL", "Docker", "AWS", "Kubernetes",
+    "Redis", "MySQL", "Python", "Git", "REST API", "Microservices",
+]  # fmt: skip
+
+
+@pytest.mark.parametrize("model_name", ["Ridge", "RandomForest", "GradientBoosting"])
+def test_dropping_any_skill_from_a_twelve_skill_profile_never_raises_salary(model_name):
+    # 12 là số kỹ năng tối đa của một tin trong dữ liệu; đây là cỡ lớn nhất mà bao đơn điệu
+    # của Random Forest phải xử lý (2^12 tập con).
+    from career_market.model.advisor import predict_profile
+
+    profile = {
+        "role": "Backend Developer",
+        "region": "Hà Nội",
+        "experience_years": 5,
+        "skills": FULL_PROFILE_SKILLS,
+    }
+    full = predict_profile(profile, model_name)["salary"]
+    for skill in FULL_PROFILE_SKILLS:
+        fewer = [name for name in FULL_PROFILE_SKILLS if name != skill]
+        dropped = predict_profile({**profile, "skills": fewer}, model_name)["salary"]
+        assert dropped <= full + 1e-6, (model_name, skill, dropped, full)
