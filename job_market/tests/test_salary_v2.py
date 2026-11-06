@@ -103,7 +103,8 @@ def test_advisor_is_home_and_returns_salary_with_skill_advice():
     app.selectbox[0].set_value("Data Engineer")
     app.button[0].click().run()
     assert not app.exception
-    assert float(app.metric[0].value) > 0
+    low, high = (float(x) for x in app.metric[0].value.split(" – "))
+    assert 0 < low < high
     assert app.dataframe[0].value["Kỹ năng"].tolist()
 
 

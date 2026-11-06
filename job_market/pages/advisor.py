@@ -26,6 +26,16 @@ except ValueError:
 
 st.caption("LƯƠNG CNTT VIỆT NAM")
 st.title("Tư vấn & dự đoán lương")
+production = salary_app.validation().get("production") or {}
+if not production.get("production_ready"):
+    with st.container(horizontal=True, vertical_alignment="center"):
+        st.info(
+            "Kết quả mang tính tham khảo — mô hình chưa đạt chuẩn độ chính xác.",
+            icon=":material/info:",
+        )
+        st.page_link(
+            "pages/evaluation.py", label="Xem đánh giá mô hình", icon=":material/insights:"
+        )
 st.write(
     "Nhập vai trò, kinh nghiệm và kỹ năng hiện có. Mô hình đã huấn luyện sẵn trên "
     f"{report['dataset_rows']:,} tin tuyển dụng sẽ ước tính mức lương và gợi ý kỹ năng nên học thêm."
@@ -84,23 +94,28 @@ with right, st.container(border=True):
             f"{profile['role']} · {profile['region']} · {profile['years']:g} năm · "
             f"cấp bậc ước lượng {result['level']} · {result['model_label']}"
         )
+        # Khoảng lương là thông tin chính (như LinkedIn Salary); con số chỉ là mức điển hình.
+        st.metric(
+            "Khoảng lương (triệu đồng / tháng)", f"{result['low']:.0f} – {result['high']:.0f}"
+        )
         if result["supported"]:
-            st.metric("Triệu đồng / tháng", f"{result['salary']:.1f}")
-            st.write(
-                f"Khoảng thường gặp (80% tin tương tự): "
-                f"**{result['low']:.1f} – {result['high']:.1f}** triệu"
+            st.markdown(
+                f"Mức điển hình khoảng **{result['salary']:.0f} triệu**. Khoảng trên chứa lương "
+                "của khoảng 80% tin tương tự."
+            )
+            st.markdown(
+                f"Dựa trên {result['cohort_rows']} tin cùng vai trò và cấp bậc trong dữ liệu."
             )
         else:
-            st.metric(
-                "Khoảng lương (triệu đồng / tháng)", f"{result['low']:.0f} – {result['high']:.0f}"
-            )
-            st.warning(
-                "Ít dữ liệu: chỉ hiện khoảng lương mở rộng, không hiện con số. "
-                + " ".join(result["support_reasons"]),
-                icon=":material/info:",
-            )
-        if not result["production_ready"]:
-            st.caption("Mô hình chưa đạt chuẩn production; kết quả chỉ mang tính tham khảo.")
+            st.warning("Ít dữ liệu: " + result["support_message"], icon=":material/info:")
+            with st.expander("Vì sao?"):
+                st.markdown(
+                    "Con số lương chỉ hiện khi nhóm vai trò × cấp bậc có ít nhất 20 tin có lương "
+                    "và mô hình đạt độ chính xác cho vai trò, cấp bậc đó. Khoảng lương được mở "
+                    "rộng để vẫn chứa lương thật trong phần lớn trường hợp."
+                )
+                for reason in result["support_reasons"]:
+                    st.markdown(f"- {reason}")
         market = result["market"]
         if market["role_median"] is not None:
             a, b = st.columns(2)
@@ -115,7 +130,24 @@ with right, st.container(border=True):
 if result is not None:
     st.subheader("Kỹ năng nên học thêm")
     recommendations = result["recommendations"]
-    if recommendations:
+    if recommendations and not result["supported"]:
+        # Mức tăng tính từ một dự đoán chưa đủ tin cậy nên không hiện số tiền.
+        table = pd.DataFrame(recommendations)[["skill", "demand_share", "reason"]]
+        table["reason"] = table["reason"].replace({"Tăng lương dự đoán": "Có thể giúp tăng lương"})
+        st.dataframe(
+            table.rename(
+                columns={"skill": "Kỹ năng", "demand_share": "Tỉ lệ tin yêu cầu", "reason": "Lý do"}
+            ),
+            hide_index=True,
+            width="stretch",
+            column_config={
+                "Tỉ lệ tin yêu cầu": st.column_config.ProgressColumn(
+                    min_value=0, max_value=1, format="percent"
+                ),
+            },
+        )
+        st.caption("Hồ sơ ít dữ liệu nên không hiện mức tăng lương ước tính cho từng kỹ năng.")
+    elif recommendations:
         table = pd.DataFrame(recommendations)
         chart_col, table_col = st.columns([1.1, 1], gap="large")
         with chart_col:

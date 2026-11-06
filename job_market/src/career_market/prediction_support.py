@@ -65,14 +65,26 @@ def resolve(role, level, value, report, production):
     if rows < minimum:
         reasons.append(f"Nhóm {role} × {level} chỉ có {rows} tin train (cần ≥ {minimum}).")
     groups = {"role": role, "level": level}
+    messages = []
+    if rows < minimum:
+        messages.append(
+            f"Có ít tin tuyển dụng công bố lương cho {role} ở cấp {level} ({rows} tin), "
+            "nên chỉ hiện khoảng lương."
+        )
     for column in GROUP_COLUMNS:
         if groups[column] in failing.get(column, []):
             reasons.append(f"{GROUP_LABELS[column]} {groups[column]} chưa đạt chuẩn production.")
+            messages.append(
+                f"Dự đoán cho {GROUP_LABELS[column].lower()} {groups[column]} chưa đủ chính xác, "
+                "nên chỉ hiện khoảng lương."
+            )
     if not reasons:
         band = report["interval_ratio"]
         return {
             "supported": True,
             "support_reasons": [],
+            "support_message": "",
+            "cohort_rows": rows,
             "salary": value,
             "low": value * band["p10"],
             "high": value * band["p90"],
@@ -84,6 +96,9 @@ def resolve(role, level, value, report, production):
     return {
         "supported": False,
         "support_reasons": reasons,
+        # Câu cho người dùng: không dùng thuật ngữ kỹ thuật; chi tiết nằm ở support_reasons.
+        "support_message": messages[0],
+        "cohort_rows": rows,
         "salary": None,
         "low": min(low for low, _ in ranges),
         "high": max(high for _, high in ranges),
