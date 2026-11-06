@@ -40,7 +40,7 @@ def check_demo():
     }
     for name in MODEL_LABELS:
         load_calibration(name)
-        value = predict_profile(profile, model_name=name)["salary"]
+        value = predict_profile(profile, model_name=name)["predicted"]
         if not math.isfinite(value) or value <= 0:
             raise RuntimeError(f"Model {name} trả kết quả không hợp lệ: {value}")
     advice = advise(profile)

@@ -71,9 +71,17 @@ Hồ sơ của người thật mà nhóm biết mức lương, kèm vai trò, c�
 _Tránh dùng_: Hồ sơ mẫu, dữ liệu test.
 
 **Khoảng lương dự đoán**:
-Kết quả chính của phần mềm: khoảng p25 – trung vị – p75 cho một hồ sơ, thay cho một con số duy nhất.
-_Tránh dùng_: Lương dự đoán (khi chỉ nói một con số), khoảng tin cậy.
+Kết quả chính của phần mềm cho một hồ sơ: p25 – trung vị – p75 khi hồ sơ thuộc nhóm đủ dữ liệu; với nhóm còn lại là khoảng mở rộng dựng từ phân vị 10–90, không kèm con số.
+_Tránh dùng_: Lương dự đoán (khi chỉ nói một con số), khoảng tin cậy, khoảng lương chào tuyển của một tin.
 
 **Vùng ưu tiên**:
 Phần thị trường được cam kết độ chính xác: Hà Nội và TP. Hồ Chí Minh cùng tám vai trò phổ biến; ngoài vùng này kết quả kèm cảnh báo ít dữ liệu.
 _Tránh dùng_: Phạm vi hỗ trợ.
+
+**Nhóm đủ dữ liệu**:
+Tổ hợp vai trò nghề nghiệp × cấp bậc có ít nhất 20 tin tuyển dụng trong tập huấn luyện; chỉ nhóm này được hiển thị con số lương dự đoán, nhóm còn lại chỉ hiển thị khoảng lương dự đoán mở rộng kèm cảnh báo ít dữ liệu.
+_Tránh dùng_: Vai trò phổ biến, nhóm có trong dữ liệu.
+
+**Tin sinh tự động**:
+Bản ghi trong nguồn dữ liệu trông như tin tuyển dụng nhưng do bên phát hành sinh ra (ví dụ các tin "lịch sử" có URL dạng `-hist2018000xx` của bộ IT Jobs 2026); bị loại khỏi huấn luyện và đánh giá vì không phản ánh thị trường thật.
+_Tránh dùng_: Tin lịch sử, tin cũ.

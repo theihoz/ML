@@ -32,8 +32,10 @@ def test_market_skill_monotonicity_and_levels(name):
             profile = {**PROFILE, "region": city, "level": level, "experience_years": years}
             before = advise(profile, name)
             after = advise({**profile, "skills": ["Java", "SQL", "Docker"]}, name)
-            assert after["salary"] >= before["salary"] - 1e-6
-            salaries.append(before["salary"])
+            # Trung vị luôn được tính, kể cả khi con số hiển thị bị ẩn vì ít dữ liệu (#89).
+            before, after = before["salary_range"]["median"], after["salary_range"]["median"]
+            assert after >= before - 1e-6
+            salaries.append(before)
         assert salaries[0] < salaries[1] < salaries[2]
 
 

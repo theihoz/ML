@@ -9,8 +9,9 @@ import pandas as pd
 from ..data.dataset import load_dataset, skill_lists
 from ..data.rules import LEVELS, SKILLS, derive_level
 from .calibration import calibration_for, load_calibration
-from .estimators import CURRENT_YEAR, MODEL_LABELS, SKILL_COLUMNS, feature_frame
-from .training import load_model
+from .estimators import CURRENT_YEAR, MODEL_LABELS, SKILL_COLUMNS, default_platform, feature_frame
+from .support import resolve
+from .training import load_model, load_production
 
 PRIORITY_CITIES = {"Hà Nội", "TP. Hồ Chí Minh"}
 PRIORITY_ROLES = {
@@ -62,20 +63,38 @@ def _profile_frame(profile):
                 "experience_years": years,
                 "year": CURRENT_YEAR,
                 "skills": "|".join(profile.get("skills", [])),
+                "title": profile.get("title") or "",
+                "work_mode": profile.get("work_mode") or "Không rõ",
+                "company_type": profile.get("company_type") or "Khác",
+                "platform": default_platform(),
             }
         ]
     )
 
 
+def _supported(profile_frame, value, report, production):
+    """Mức hỗ trợ dữ liệu (#89): con số chỉ hiện khi nhóm vai trò × cấp bậc đủ tin train
+    và không trượt chuẩn production; nếu không, chỉ có khoảng mở rộng."""
+    row = profile_frame.iloc[0]
+    return {
+        **resolve(row["role"], row["level"], value, report, production),
+        "production_ready": bool(production and production["production_ready"]),
+    }
+
+
 def predict_profile(profile, model_name=None):
+    """Đầu ra thô của mô hình (lương chào tuyển) kèm mức hỗ trợ dữ liệu.
+
+    "predicted" luôn có, dùng cho kiểm thử và phân tích; "salary" là con số hiển thị,
+    None khi hồ sơ ít dữ liệu.
+    """
     model, name, report = load_model(model_name)
-    value = float(model.predict(feature_frame(_profile_frame(profile)))[0])
-    band = report["models"][name]["interval_ratio"]
+    frame = _profile_frame(profile)
+    value = float(model.predict(feature_frame(frame))[0])
     return {
         "model": name,
-        "salary": value,
-        "low": value * band["p10"],
-        "high": value * band["p90"],
+        "predicted": value,
+        **_supported(frame, value, report, load_production()),
     }
 
 
@@ -103,6 +122,8 @@ def advise(profile, model_name=None, top_k=5, min_share=0.03):
         table, base_frame["level"][0], base_frame["region"][0], profile["role"]
     )
     salary_range = {key: value * calibration["factor"] for key, value in advertised_range.items()}
+    production = load_production()
+    support = _supported(base_frame, base, report, production)
     role_rows = frame[frame["role"] == profile["role"]]
     role_skills = skill_lists(role_rows)
     owned = set(profile.get("skills", []))
@@ -154,25 +175,47 @@ def advise(profile, model_name=None, top_k=5, min_share=0.03):
             else LEVELS[max(LEVELS.index(current_level), LEVELS.index(inferred))]
         )
         future = {**profile, "experience_years": years + extra, "level": future_level}
-        future_features = feature_frame(_profile_frame(future))
+        future_frame = _profile_frame(future)
+        future_value = float(model.predict(feature_frame(future_frame))[0])
+        factor = calibration_for(table, future_level, base_frame["region"][0], profile["role"])[
+            "factor"
+        ]
+        step = _supported(future_frame, future_value, report, production)
+        median = future_value * band["p50"] * factor
         path.append(
             {
                 "experience_years": years + extra,
-                "level": _profile_frame(future)["level"][0],
-                "salary": float(model.predict(future_features)[0])
-                * band["p50"]
-                * calibration_for(table, future_level, base_frame["region"][0], profile["role"])[
-                    "factor"
-                ],
+                "level": future_level,
+                # Nhóm ít dữ liệu: không vẽ con số, chỉ vẽ khoảng mở rộng (#89).
+                "salary": median if step["supported"] else None,
+                "low": future_value * band["p25"] * factor
+                if step["supported"]
+                else step["low"] * factor,
+                "high": future_value * band["p75"] * factor
+                if step["supported"]
+                else step["high"] * factor,
+                "predicted": future_value,
             }
         )
     role_salaries = role_rows["salary"]
     return {
         "model": name,
         "model_label": MODEL_LABELS[name],
-        "salary": salary_range["median"],
-        "low": salary_range["p25"],
-        "high": salary_range["p75"],
+        # Con số hiển thị: trung vị lương thị trường khi đủ dữ liệu; None khi ít dữ liệu,
+        # khi đó low/high là khoảng mở rộng (#89) đã nhân hệ số gross.
+        "salary": salary_range["median"] if support["supported"] else None,
+        "low": salary_range["p25"]
+        if support["supported"]
+        else support["low"] * calibration["factor"],
+        "high": salary_range["p75"]
+        if support["supported"]
+        else support["high"] * calibration["factor"],
+        "predicted": base,
+        "supported": support["supported"],
+        "support_reasons": support["support_reasons"],
+        "support_message": support["support_message"],
+        "cohort_rows": support["cohort_rows"],
+        "production_ready": support["production_ready"],
         "salary_range": salary_range,
         "market_range": salary_range,
         "advertised_range": advertised_range,

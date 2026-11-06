@@ -87,6 +87,72 @@ with st.expander("Kết quả dò siêu tham số trên tập valid"):
 # Mục này: kiểm định (model/validation.py) — mô hình có đáng tin không.
 st.header("Kiểm định độ tin cậy của mô hình")
 check = cache.validation()
+production = check["production"]
+STANDARD_LABELS = {
+    "median_error_pct": "Trung vị sai số %",
+    "within_20_pct": "Tỉ lệ sai ≤ 20%",
+    "coverage_pct": "Độ phủ khoảng p10–p90 (%)",
+}
+STATUS_LABELS = {"pass": "Đạt", "fail": "Không đạt", "not_scored": "Không chấm (< 20 tin test)"}
+
+
+def _limit(value):
+    return f"{value[0]}–{value[1]}" if isinstance(value, list | tuple) else str(value)
+
+
+with st.container(border=True, key="production_standard"):
+    st.subheader("Chuẩn production")
+    if production["production_ready"]:
+        st.success("Mô hình đang phục vụ đạt chuẩn production.")
+    else:
+        st.warning(
+            "Mô hình đang phục vụ chưa đạt chuẩn production: kết quả chỉ mang tính tham khảo."
+        )
+    st.caption(
+        "So cận bất lợi của khoảng tin cậy bootstrap 95% (lấy mẫu lại theo công ty) với ngưỡng; "
+        "chỉ số theo cách Glassdoor và LinkedIn Salary công bố."
+    )
+    st.dataframe(
+        pd.DataFrame(
+            [
+                {
+                    "Chỉ số": STANDARD_LABELS[name],
+                    "Giá trị": round(metric["point"], 1),
+                    "Khoảng 95%": "{:.1f} – {:.1f}".format(*metric["ci95"]),
+                    "Ngưỡng": _limit(metric["threshold"]),
+                    "Kết quả": "Đạt" if metric["pass"] else "Không đạt",
+                }
+                for name, metric in production["overall"]["metrics"].items()
+            ]
+        ),
+        hide_index=True,
+        width="stretch",
+    )
+    goal = production["thresholds"]["long_term"]
+    st.caption(
+        f"Mục tiêu dài hạn (mức Glassdoor): trung vị sai số ≤ {goal['median_error_pct']}% và "
+        f"≥ {goal['within_20_pct']}% dự đoán sai không quá 20%."
+    )
+    for column, label in (("role", "Theo vai trò"), ("level", "Theo cấp bậc")):
+        st.caption(label)
+        st.dataframe(
+            pd.DataFrame(
+                [
+                    {
+                        "Nhóm": row["group"],
+                        "Số tin test": row["n"],
+                        "Kết quả": STATUS_LABELS[row["status"]],
+                        **{
+                            STANDARD_LABELS[name]: round(metric["point"], 1)
+                            for name, metric in row.get("metrics", {}).items()
+                        },
+                    }
+                    for row in production[column]
+                ]
+            ),
+            hide_index=True,
+            width="stretch",
+        )
 boot = check["bootstrap"]
 st.caption(
     f"Tính trên {check['test_rows']} tin test của {boot['companies']} công ty; "

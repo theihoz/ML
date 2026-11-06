@@ -1,10 +1,11 @@
 """BƯỚC 3a — Đặc trưng và định nghĩa mô hình.
 
 Mục này làm gì: biến một tin/hồ sơ thành ma trận đặc trưng (vai trò, khu vực, cấp bậc,
-kinh nghiệm, năm, 70 cột kỹ năng 0/1) và dựng 4 mô hình. Mọi mô hình học trên log(lương)
+kinh nghiệm, năm, nền tảng, hình thức, loại công ty, từ khóa chức danh, cột kỹ năng 0/1) và dựng 4 mô hình. Mọi mô hình học trên log(lương)
 và bị ràng buộc "thêm kỹ năng không làm giảm lương".
 """
 
+import functools
 from itertools import combinations
 
 import numpy as np
@@ -18,10 +19,17 @@ from sklearn.impute import SimpleImputer
 from sklearn.pipeline import make_pipeline
 from sklearn.preprocessing import OneHotEncoder, StandardScaler
 
-from ..data.dataset import skill_lists
+from ..data.dataset import load_dataset, skill_lists
 from ..data.rules import SKILLS
 
-CATEGORICAL = ["role", "region", "level"]
+CATEGORICAL = ["role", "region", "level", "platform", "work_mode", "company_type"]
+# Từ khóa chức danh mang thông tin lương ngoài cấp bậc (#81); hồ sơ không ghi chức danh = 0.
+TITLE_FLAGS = {
+    "title::expert": r"expert|chuyên gia",
+    "title::principal": r"principal|staff engineer|chief",
+    "title::head": r"head of|\bhead\b|giám đốc|director",
+    "title::consultant": r"consultant|tư vấn",
+}
 # Không dùng số lượng kỹ năng: tin liệt kê nhiều kỹ năng thường là tin tuyển junior/hàng
 # loạt nên đặc trưng này dạy mô hình rằng "thêm kỹ năng thì lương giảm".
 NUMERIC = ["experience_years", "year"]
@@ -35,10 +43,23 @@ MODEL_LABELS = {
 CURRENT_YEAR = 2026
 
 
+@functools.lru_cache(maxsize=1)
+def default_platform():
+    """Nguồn đăng tin không có ở hồ sơ người dùng: dùng nền tảng phổ biến nhất của train."""
+    frame = load_dataset()
+    return frame.loc[frame["split"] == "train", "platform"].mode().iloc[0]
+
+
 def feature_frame(frame):
     """Biến bảng tin (hoặc hồ sơ người dùng) thành ma trận đặc trưng cố định."""
     skills = skill_lists(frame) if "skills" in frame else pd.Series([[]] * len(frame))
-    features = frame[CATEGORICAL].copy()
+    features = frame[["role", "region", "level"]].copy()
+    features["platform"] = frame["platform"] if "platform" in frame else default_platform()
+    features["work_mode"] = frame.get("work_mode", "Không rõ")
+    features["company_type"] = frame.get("company_type", "Khác")
+    titles = frame.get("title", pd.Series([""] * len(frame), index=frame.index)).fillna("")
+    for column, pattern in TITLE_FLAGS.items():
+        features[column] = titles.str.contains(pattern, case=False, regex=True).astype(int)
     features["experience_years"] = pd.to_numeric(frame["experience_years"], errors="coerce")
     features["year"] = frame.get("year", CURRENT_YEAR)
     for name, column in zip(SKILLS, SKILL_COLUMNS):
@@ -59,6 +80,7 @@ def _preprocessor(scale):
             ),
             ("numeric", make_pipeline(*numeric), NUMERIC),
             ("skills", "passthrough", SKILL_COLUMNS),
+            ("title", "passthrough", list(TITLE_FLAGS)),
         ]
     )
 

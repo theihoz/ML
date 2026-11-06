@@ -23,6 +23,7 @@ from ..data.dataset import load_dataset, skill_lists
 from ..data.rules import SKILLS
 from ..paths import artifacts_dir
 from .estimators import MODEL_LABELS, SKILL_COLUMNS, build_model, feature_frame
+from .support import build_support
 
 # Lưới siêu tham số thử trên tập valid.
 
@@ -96,6 +97,10 @@ def train(output=None):
     model = fitted[selected]
     # Phân vị thực nghiệm: tỉ lệ lương thật / dự đoán trên tập valid.
     report["interval_ratio"] = report["models"][selected]["interval_ratio"].copy()
+    # Mức hỗ trợ dữ liệu theo vai trò × cấp bậc và khoảng mở rộng cho hồ sơ ít dữ liệu (#89).
+    report["support"] = build_support(
+        parts["train"], parts["valid"], model.predict(features["valid"])
+    )
     # Mục này: lưu dự đoán test, sai số theo vai trò, độ quan trọng đặc trưng, giá trị kỹ năng.
     test_frame = parts["test"].assign(predicted=model.predict(features["test"]))
     test_frame["abs_error"] = (test_frame["predicted"] - test_frame["salary"]).abs()
@@ -165,6 +170,14 @@ def load_report():
     if not path.exists():
         return train()
     return json.loads(path.read_text(encoding="utf-8"))
+
+
+def load_production():
+    """Bảng chấm chuẩn production của model đang phục vụ, hoặc None nếu chưa kiểm định."""
+    path = artifacts_dir() / "validation.json"
+    if not path.exists():
+        return None
+    return json.loads(path.read_text(encoding="utf-8")).get("production")
 
 
 def load_model(name=None):

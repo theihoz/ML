@@ -1,50 +1,57 @@
 {
   "version": "salary-v2",
-  "rows": 3809,
-  "companies": 685,
+  "rows": 1735,
+  "companies": 671,
   "funnel": {
     "raw": 8523,
-    "has_salary": 5041,
-    "it_role": 3857,
-    "deduplicated": 3809
+    "synthetic_removed": 2400,
+    "has_salary": 2811,
+    "it_role": 1771,
+    "deduplicated": 1735
+  },
+  "one_sided_ratio": {
+    "CareerBuilder 2023": 1.375,
+    "IT Jobs 2026 (itviec)": 1.2727,
+    "IT Jobs 2026 (topcv)": 1.6667,
+    "IT Jobs 2026 (vietnamworks)": 1.6667,
+    "TopCV 2026": 1.5
   },
   "split": {
-    "train": 2461,
-    "test": 696,
-    "valid": 652
+    "train": 1169,
+    "test": 288,
+    "valid": 278
   },
   "roles": {
-    "Backend Developer": 718,
-    "Kiểm thử (QA/QC)": 445,
-    "Frontend Developer": 318,
-    "Mobile Developer": 284,
-    "Fullstack Developer": 265,
-    "DevOps / Cloud": 221,
-    "Software Engineer (chung)": 219,
-    "Business Analyst": 196,
-    "Embedded / IoT": 189,
-    "Bảo mật": 156,
-    "AI / ML Engineer": 151,
-    "Quản lý dự án / sản phẩm": 122,
-    "Tech Lead / Architect": 117,
-    "Quản trị hệ thống / Mạng": 79,
-    "Data Engineer": 75,
+    "Backend Developer": 278,
+    "Kiểm thử (QA/QC)": 198,
+    "Business Analyst": 130,
+    "Mobile Developer": 125,
+    "Fullstack Developer": 119,
+    "Frontend Developer": 105,
+    "Software Engineer (chung)": 96,
+    "AI / ML Engineer": 80,
+    "Tech Lead / Architect": 75,
     "IT Support / Helpdesk": 74,
-    "Data Analyst / BI": 56,
+    "DevOps / Cloud": 73,
+    "Quản lý dự án / sản phẩm": 65,
+    "Quản trị hệ thống / Mạng": 57,
+    "Bảo mật": 57,
+    "Embedded / IoT": 45,
     "ERP / SAP Consultant": 31,
-    "Game Developer": 30,
+    "Data Engineer": 26,
+    "Game Developer": 25,
+    "Data Analyst / BI": 24,
     "BrSE / Cầu nối": 23,
-    "Quản lý IT / CTO": 21,
+    "Quản lý IT / CTO": 13,
     "UI/UX Designer": 11,
-    "Quản trị CSDL (DBA)": 8
+    "Quản trị CSDL (DBA)": 5
   },
   "sources": {
-    "IT Jobs 2026 (vietnamworks)": 965,
-    "IT Jobs 2026 (topcv)": 827,
-    "IT Jobs 2026 (itviec)": 686,
-    "IT Jobs 2026 (careerviet)": 680,
-    "TopCV 2026": 609,
-    "CareerBuilder 2023": 42
+    "IT Jobs 2026 (itviec)": 687,
+    "TopCV 2026": 596,
+    "IT Jobs 2026 (vietnamworks)": 269,
+    "IT Jobs 2026 (topcv)": 142,
+    "CareerBuilder 2023": 41
   },
-  "sha256": "896ba7b58f98bebe50efcf9275c37fe893680ccee3f06aa7b1c2ff3d4c22d7a0"
+  "sha256": "faf088eed3e883fe1e4bb6d9a23532451e6d3715f27618fded570c6ab5c19174"
 }

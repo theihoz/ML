@@ -268,20 +268,29 @@ def recommendation_chart(recommendations):
 
 
 def experience_path_chart(path):
+    """Lộ trình theo kinh nghiệm: dải p10–p90 luôn vẽ; con số chỉ vẽ khi đủ dữ liệu."""
     table = pd.DataFrame(path)
+    if "low" not in table:
+        table["low"] = table["high"] = table["salary"]
     figure, axis = plt.subplots(figsize=(6.5, 3.2))
-    axis.plot(table["experience_years"], table["salary"], marker="o", color=BLUE, linewidth=2)
+    axis.fill_between(table["experience_years"], table["low"], table["high"], color="#dbeafe")
+    known = table.dropna(subset=["salary"])
+    if len(known):
+        axis.plot(known["experience_years"], known["salary"], marker="o", color=BLUE, linewidth=2)
     for row in table.itertuples():
+        supported = pd.notna(row.salary)
+        y = row.salary if supported else row.high
+        text = f"{row.salary:.1f}" if supported else f"{row.low:.0f}–{row.high:.0f}"
         axis.annotate(
-            f"{row.salary:.1f}\n{row.level}",
-            (row.experience_years, row.salary),
+            f"{text}\n{row.level}",
+            (row.experience_years, y),
             textcoords="offset points",
             xytext=(0, 8),
             ha="center",
             fontsize=8,
         )
     axis.set(xlabel="Số năm kinh nghiệm", ylabel="Triệu VND/tháng")
-    axis.set_ylim(0, table["salary"].max() * 1.3)
+    axis.set_ylim(0, table["high"].max() * 1.3)
     axis.xaxis.set_major_locator(matplotlib.ticker.MaxNLocator(integer=True))
     figure.tight_layout()
     return figure

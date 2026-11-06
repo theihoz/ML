@@ -6,6 +6,7 @@ có lệch hệ thống theo khu vực, cấp bậc, nền tảng, vai trò khô
 """
 
 import json
+from pathlib import Path
 
 import joblib
 import numpy as np
@@ -14,7 +15,7 @@ import pandas as pd
 from ..data.dataset import load_dataset
 from ..paths import artifacts_dir
 from .estimators import MODEL_LABELS, feature_frame
-from .training import load_report
+from .production import assess
 
 LEVELS = (0.5, 0.8, 0.9)
 RELIABILITY_LEVELS = tuple(round(float(x), 2) for x in np.arange(0.1, 1.0, 0.05))
@@ -31,15 +32,16 @@ FAIRNESS_GROUPS = {
 }
 
 
-def _predictions():
+def _predictions(directory=None):
+    directory = Path(directory) if directory else artifacts_dir()
     frame = load_dataset()
-    report = load_report()
+    report = json.loads((directory / "metrics.json").read_text(encoding="utf-8"))
     parts = {
         name: frame[frame["split"] == name].reset_index(drop=True) for name in ("valid", "test")
     }
     predictions = {}
     for name in report["models"]:
-        model = joblib.load(artifacts_dir() / f"{name}.joblib")
+        model = joblib.load(directory / f"{name}.joblib")
         predictions[name] = {
             part: model.predict(feature_frame(rows)) for part, rows in parts.items()
         }
@@ -224,8 +226,9 @@ def gender_audit(frame):
     }
 
 
-def validate(output=None, rounds=BOOTSTRAP_ROUNDS):
-    parts, predictions, report = _predictions()
+def validate(output=None, rounds=BOOTSTRAP_ROUNDS, directory=None):
+    """Kiểm định model đã lưu trong ``directory`` (mặc định: model đang phục vụ)."""
+    parts, predictions, report = _predictions(directory)
     selected = report["selected"]
     valid, test = parts["valid"], parts["test"]
     result = {
@@ -238,8 +241,14 @@ def validate(output=None, rounds=BOOTSTRAP_ROUNDS):
         "bootstrap": bootstrap(test, predictions, selected, rounds),
         "fairness": fairness(test, predictions[selected]["test"], rounds),
         "gender": gender_audit(load_dataset()),
+        "production": assess(
+            test,
+            predictions[selected]["test"],
+            interval_ratios(valid["salary"].to_numpy(), predictions[selected]["valid"], 0.8),
+            rounds,
+        ),
     }
-    path = output or artifacts_dir() / "validation.json"
+    path = output or Path(directory or artifacts_dir()) / "validation.json"
     path.write_text(json.dumps(result, ensure_ascii=False, indent=2), encoding="utf-8")
     return result
 

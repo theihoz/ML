@@ -7,7 +7,7 @@ kỹ năng nên học và lộ trình theo kinh nghiệm.
 import pandas as pd
 import streamlit as st
 
-from career_market.data.rules import LEVELS, REGIONS, ROLE_ORDER, SKILLS
+from career_market.data.rules import COMPANY_TYPES, LEVELS, REGIONS, ROLE_ORDER, SKILLS
 from career_market.model.estimators import MODEL_LABELS
 from career_market.ui import cache, charts
 from career_market.ui.charts import png
@@ -34,6 +34,16 @@ shared = st.session_state.setdefault("advisor_initial_profile", shared)
 
 st.caption("LƯƠNG CNTT VIỆT NAM")
 st.title("Tư vấn & dự đoán lương")
+production = cache.validation().get("production") or {}
+if not production.get("production_ready"):
+    with st.container(horizontal=True, vertical_alignment="center"):
+        st.info(
+            "Kết quả mang tính tham khảo — mô hình chưa đạt chuẩn độ chính xác.",
+            icon=":material/info:",
+        )
+        st.page_link(
+            "pages/evaluation.py", label="Xem đánh giá mô hình", icon=":material/insights:"
+        )
 st.write(
     "Nhập vai trò, kinh nghiệm và kỹ năng hiện có. Mô hình đã huấn luyện sẵn trên "
     f"{report['dataset_rows']:,} tin tuyển dụng sẽ ước tính mức lương và gợi ý kỹ năng nên học thêm."
@@ -76,6 +86,14 @@ with left, st.container(border=True):
             default=shared["skills"] if shared["skills_in_query"] else ["Java", "SQL", "Git"],
             placeholder="Chọn ngôn ngữ, framework, công cụ…",
         )
+        with st.expander("Thêm thông tin (không bắt buộc)"):
+            title = st.text_input(
+                "Chức danh mong muốn", placeholder="Ví dụ: Senior Backend Engineer, Expert…"
+            )
+            company_type = st.selectbox(
+                "Loại công ty", ["Khác", *[name for name, _ in COMPANY_TYPES]]
+            )
+            work_mode = st.selectbox("Hình thức làm việc", ["Không rõ", "Toàn thời gian", "Từ xa"])
         model_name = st.selectbox(
             "Mô hình",
             models,
@@ -99,6 +117,9 @@ if submitted:
         tuple(sorted(skills)),
         model_name,
         None if level == "Tự suy từ kinh nghiệm" else level,
+        title.strip(),
+        company_type,
+        work_mode,
     )
     st.session_state["advisor_profile"] = {"role": role, "region": region, "years": years}
     st.query_params.update(
@@ -123,20 +144,45 @@ with right, st.container(border=True):
             f"{profile['role']} · {profile['region']} · {profile['years']:g} năm · "
             f"cấp bậc ước lượng {result['level']} · {result['model_label']}"
         )
-        interval = result["salary_range"]
-        a, b, c = st.columns(3)
-        a.metric("p25 · triệu/tháng", f"{interval['p25']:.1f}")
-        b.metric("Trung vị · triệu/tháng", f"{interval['median']:.1f}")
-        c.metric("p75 · triệu/tháng", f"{interval['p75']:.1f}")
-        st.caption(
-            "Khoảng gross thị trường gần đúng sau hiệu chỉnh theo báo cáo. Độ rộng p25–p75 "
-            "lấy từ độ phân tán lương chào tuyển valid; không phải phân vị khảo sát gross hay khoảng tin cậy."
-        )
+        if result["supported"]:
+            # Khoảng lương là thông tin chính (#82, #114); trung vị là mức điển hình.
+            interval = result["salary_range"]
+            st.metric(
+                "Khoảng lương (triệu đồng / tháng)",
+                f"{interval['p25']:.1f} – {interval['p75']:.1f}",
+            )
+            st.markdown(
+                f"Mức điển hình khoảng **{interval['median']:.1f} triệu**; một nửa số tin tương tự "
+                "nằm trong khoảng trên."
+            )
+            st.markdown(
+                f"Dựa trên {result['cohort_rows']} tin cùng vai trò và cấp bậc trong dữ liệu."
+            )
+            st.caption(
+                "Gross thị trường gần đúng sau hiệu chỉnh theo báo cáo. Độ rộng p25–p75 lấy từ độ "
+                "phân tán lương chào tuyển valid; không phải phân vị khảo sát gross hay khoảng tin cậy."
+            )
+        else:
+            # Ít dữ liệu (#89): chỉ hiện khoảng mở rộng, không hiện con số.
+            st.metric(
+                "Khoảng lương (triệu đồng / tháng)", f"{result['low']:.0f} – {result['high']:.0f}"
+            )
+            st.warning("Ít dữ liệu: " + result["support_message"], icon=":material/info:")
+            with st.expander("Vì sao?"):
+                st.markdown(
+                    "Con số lương chỉ hiện khi nhóm vai trò × cấp bậc có ít nhất 20 tin có lương "
+                    "và mô hình đạt độ chính xác cho vai trò, cấp bậc đó. Khoảng lương được mở "
+                    "rộng để vẫn chứa lương thật trong phần lớn trường hợp."
+                )
+                for reason in result["support_reasons"]:
+                    st.markdown(f"- {reason}")
         advertised = result["advertised_range"]
-        st.caption(
-            f"Lương chào tuyển ước tính (chưa rõ gross/net): "
-            f"{advertised['p25']:.1f} – {advertised['median']:.1f} – {advertised['p75']:.1f} triệu/tháng."
-        )
+        if result["supported"]:
+            st.caption(
+                f"Lương chào tuyển ước tính (chưa rõ gross/net): "
+                f"{advertised['p25']:.1f} – {advertised['median']:.1f} – "
+                f"{advertised['p75']:.1f} triệu/tháng."
+            )
         for warning in result["calibration"]["warnings"]:
             st.warning(warning)
         for warning in result["data_sufficiency"]["warnings"]:
@@ -152,7 +198,24 @@ with right, st.container(border=True):
 if result is not None:
     st.subheader("Kỹ năng nên học thêm")
     recommendations = result["recommendations"]
-    if recommendations:
+    if recommendations and not result["supported"]:
+        # Mức tăng tính từ một dự đoán chưa đủ tin cậy nên không hiện số tiền.
+        table = pd.DataFrame(recommendations)[["skill", "demand_share", "reason"]]
+        table["reason"] = table["reason"].replace({"Tăng lương dự đoán": "Có thể giúp tăng lương"})
+        st.dataframe(
+            table.rename(
+                columns={"skill": "Kỹ năng", "demand_share": "Tỉ lệ tin yêu cầu", "reason": "Lý do"}
+            ),
+            hide_index=True,
+            width="stretch",
+            column_config={
+                "Tỉ lệ tin yêu cầu": st.column_config.ProgressColumn(
+                    min_value=0, max_value=1, format="percent"
+                ),
+            },
+        )
+        st.caption("Hồ sơ ít dữ liệu nên không hiện mức tăng lương ước tính cho từng kỹ năng.")
+    elif recommendations:
         table = pd.DataFrame(recommendations)
         chart_col, table_col = st.columns([1.1, 1], gap="large")
         with chart_col:

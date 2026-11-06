@@ -61,7 +61,8 @@ def test_title_maps_to_one_it_role(title, role):
 
 def test_dataset_has_every_role_and_company_disjoint_splits():
     frame = load_dataset()
-    assert len(frame) > 3000
+    # Chỉ tin thật sau khi loại tin sinh tự động (#81).
+    assert len(frame) > 1500
     assert set(frame["role"]) == set(ROLE_ORDER)
     assert set(frame["split"]) == {"train", "valid", "test"}
     companies = frame.groupby("split")["company_key"].apply(set)
@@ -162,7 +163,7 @@ def test_backend_advice_orders_intern_fresher_and_junior_salaries(region):
                 "experience_years": years,
                 "skills": [],
             }
-        )["salary"]
+        )["salary_range"]["median"]  # luôn có, kể cả khi con số hiển thị bị ẩn (#89)
         for level, years in [("Intern", 0), ("Fresher", 0), ("Junior", 1)]
     ]
     assert salaries[0] < salaries[1] < salaries[2], (region, salaries)
@@ -176,7 +177,9 @@ def test_advisor_is_home_and_returns_salary_with_skill_advice():
     app.selectbox[0].set_value("Data Engineer")
     app.button[0].click().run()
     assert not app.exception
-    assert float(app.metric[0].value) > 0
+    # Đủ dữ liệu: ba ô p25/trung vị/p75; ít dữ liệu: một ô "thấp – cao" (#89).
+    values = [float(x) for x in app.metric[0].value.split(" – ")]
+    assert all(v > 0 for v in values) and values == sorted(values)
     assert app.dataframe[0].value["Kỹ năng"].tolist()
 
 
@@ -220,20 +223,38 @@ def test_adding_a_skill_never_lowers_predicted_salary(model_name):
 
     for role, years, base in MONOTONE_PROFILES:
         profile = {"role": role, "region": "Hà Nội", "experience_years": years, "skills": base}
-        before = predict_profile(profile, model_name)["salary"]
+        before = predict_profile(profile, model_name)["predicted"]
         for skill in EXTRA_SKILLS:
             if skill in base:
                 continue
-            after = predict_profile({**profile, "skills": [*base, skill]}, model_name)["salary"]
+            after = predict_profile({**profile, "skills": [*base, skill]}, model_name)["predicted"]
             assert after >= before - 1e-6, (model_name, role, years, base, skill, before, after)
 
 
-def test_selected_model_stays_within_accepted_error_budget():
-    # #119: title/experience labels replace unreliable source levels. Rebuilt artifacts
-    # have test MAE 5.806721; 5.84 allows ~0.033 million VND for numerical variation.
-    # Keep skill monotonicity from ADR 0013; see docs/research/119-level-label-audit.md.
+def test_saved_model_drops_skill_count_and_is_gated_by_the_production_standard():
+    # Ngân sách MAE cố định của ADR 0013 và #119 đo trên bộ dữ liệu còn tin sinh tự động (dễ
+    # đoán hơn). Từ #81 mô hình chỉ học tin thật nên MAE không so được với mốc cũ; chất lượng
+    # được kiểm bằng chuẩn production (ADR 0014) và cổng thay model khi huấn luyện lại.
+    from career_market.model.validation import load_validation
+
     report = load_report()
-    assert report["models"][report["selected"]]["test"]["MAE"] <= 5.84
+    assert "skill_count" not in report["permutation_importance"]
+    assert (
+        report["models"][report["selected"]]["test"]["MAE"]
+        < report["models"]["Baseline"]["test"]["MAE"]
+    )
+    assert "production" in load_validation()
+
+
+def test_saved_validation_carries_the_production_standard():
+    from career_market.model.validation import load_validation
+
+    production = load_validation()["production"]
+    expected = production["overall"]["status"] == "pass" and not any(production["failing"].values())
+    assert production["production_ready"] is expected
+    for column in ("role", "level"):
+        failing = [row["group"] for row in production[column] if row["status"] == "fail"]
+        assert production["failing"][column] == failing
 
 
 ADVICE_PROFILES = [
@@ -293,8 +314,8 @@ def test_dropping_any_skill_from_a_twelve_skill_profile_never_raises_salary(mode
         "experience_years": 5,
         "skills": FULL_PROFILE_SKILLS,
     }
-    full = predict_profile(profile, model_name)["salary"]
+    full = predict_profile(profile, model_name)["predicted"]
     for skill in FULL_PROFILE_SKILLS:
         fewer = [name for name in FULL_PROFILE_SKILLS if name != skill]
-        dropped = predict_profile({**profile, "skills": fewer}, model_name)["salary"]
+        dropped = predict_profile({**profile, "skills": fewer}, model_name)["predicted"]
         assert dropped <= full + 1e-6, (model_name, skill, dropped, full)

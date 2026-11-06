@@ -90,14 +90,15 @@ def test_shared_profile_preserves_explicit_level_model_empty_skills_and_defaults
     app.run()
     assert not app.exception
     assert app.multiselect[0].value == []
-    assert app.selectbox[2].value == "Senior"
-    assert app.selectbox[3].value == "Ridge"
+    assert app.selectbox(key="advisor_level").value == "Senior"
+    assert app.selectbox(key="advisor_model").value == "Ridge"
     result = advise({**PROFILE, "region": "Đà Nẵng"}, "Ridge")
-    assert [float(m.value) for m in app.metric[:3]] == pytest.approx(
-        list(result["salary_range"].values()), abs=0.05
-    )
+    shown = [float(x) for x in app.metric[0].value.split(" – ")]
+    interval = result["salary_range"]
+    assert shown == pytest.approx([interval["p25"], interval["p75"]], abs=0.05)
+    assert f"{interval['median']:.1f} triệu" in " ".join(str(m.value) for m in app.markdown)
     assert app.warning
-    app.selectbox[2].set_value("Tự suy từ kinh nghiệm")
+    app.selectbox(key="advisor_level").set_value("Tự suy từ kinh nghiệm")
     app.number_input[0].set_value(0.0)
     app.button[0].click().run()
     assert not app.exception
@@ -105,7 +106,7 @@ def test_shared_profile_preserves_explicit_level_model_empty_skills_and_defaults
     app.number_input[0].set_value(6.0)
     app.button[0].click().run()
     assert not app.exception
-    assert app.selectbox[2].value == "Tự suy từ kinh nghiệm"
+    assert app.selectbox(key="advisor_level").value == "Tự suy từ kinh nghiệm"
     assert app.number_input[0].value == 6.0
     assert app.session_state["advisor_result"]["level"] == "Senior"
     replay = AppTest.from_file(str(APP), default_timeout=60)

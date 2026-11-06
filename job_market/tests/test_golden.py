@@ -35,21 +35,22 @@ def test_shipped_golden_template_is_unscored():
 
 
 @pytest.mark.parametrize(
-    ("salaries", "rate", "passed"),
-    [([22, 22.25, 22.5, 1000], 0.75, True), ([22, 22.25, 1000, 1000], 0.5, False)],
+    ("offsets", "rate", "passed"),
+    [([1.0, 1.01, 1.02, None], 0.75, True), ([1.0, 1.01, None, None], 0.5, False)],
 )
-def test_literal_golden_salaries_control_acceptance(tmp_path, salaries, rate, passed):
+def test_literal_golden_salaries_control_acceptance(tmp_path, offsets, rate, passed):
+    prediction = advise({**PROFILE, "skills": ["Java", "SQL"]})["salary_range"]["median"]
+    # Lương gần dự đoán thì đạt; lương 1.000 triệu được chỉ định độc lập nên phải trượt.
+    salaries = [prediction * k if k else 1000 for k in offsets]
     path = write_profiles(tmp_path, [{**PROFILE, "gross_salary": pay} for pay in salaries])
     golden = reality_check(golden_path=path)["golden"]
     assert golden["total"] == golden["scored"] == 4
     assert golden["pass_rate"] == rate
     assert golden["passed"] is passed
     assert golden["status"] == ("đạt" if passed else "không đạt")
-    prediction = advise({**PROFILE, "skills": ["Java", "SQL"]})["salary_range"]["median"]
-    # Compare the scored pay with the public user-facing prediction; the last
-    # salary is independently specified as 1,000 million, so it must fail.
+    # Compare the scored pay with the public user-facing prediction.
     assert golden["cells"][0]["prediction"] == pytest.approx(prediction)
-    assert golden["cells"][0]["relative_error"] == pytest.approx(abs(prediction - 22) / 22)
+    assert golden["cells"][0]["relative_error"] == pytest.approx(0, abs=1e-6)
     assert golden["cells"][-1]["relative_error"] == pytest.approx(1 - prediction / 1000)
     assert golden["cells"][-1]["passed"] is False
 
