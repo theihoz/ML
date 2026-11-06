@@ -4,8 +4,11 @@ Chấm theo cách các sản phẩm dự đoán lương thực tế công bố �
 - trung vị sai số % và tỉ lệ dự đoán sai không quá 20% (Glassdoor),
 - độ phủ của khoảng p10–p90 hiển thị cho người dùng (LinkedIn Salary).
 
-Mọi chỉ số so với ngưỡng bằng cận bất lợi của khoảng tin cậy bootstrap 95%, lấy mẫu lại
-theo công ty, để mô hình không qua chuẩn chỉ nhờ may mắn của tập test.
+Ngưỡng chung so bằng cận bất lợi của khoảng tin cậy bootstrap 95%, lấy mẫu lại theo công
+ty, để mô hình không qua chuẩn chỉ nhờ may mắn của tập test. Ngưỡng theo nhóm (vai trò, cấp
+bậc) so bằng giá trị điểm: với vài chục tin test, khoảng bootstrap của nhóm quá rộng để
+quyết định nhóm nào phải ẩn con số lương (điều chỉnh 06/11/2026, ghi ở #87). Khoảng tin
+cậy của nhóm vẫn được lưu để tham khảo.
 """
 
 import numpy as np
@@ -41,19 +44,27 @@ def _company_samples(companies, rounds, seed):
         yield np.concatenate([members[i] for i in chosen])
 
 
-def _judge(metric, point, ci95, limits):
-    """So cận bất lợi với ngưỡng: sai số dùng cận trên, tỉ lệ đúng dùng cận dưới, độ phủ cả hai."""
+def _judge(metric, point, ci95, limits, by_point=False):
+    """So với ngưỡng: theo cận bất lợi (sai số dùng cận trên, tỉ lệ đúng dùng cận dưới, độ
+    phủ cả hai cận) hoặc theo giá trị điểm khi ``by_point``."""
     limit = limits[metric]
+    low, high = (point, point) if by_point else ci95
     if metric == "median_error_pct":
-        passed = ci95[1] <= limit
+        passed = high <= limit
     elif metric == "within_20_pct":
-        passed = ci95[0] >= limit
+        passed = low >= limit
     else:
-        passed = limit[0] <= ci95[0] and ci95[1] <= limit[1]
-    return {"point": point, "ci95": ci95, "threshold": limit, "pass": bool(passed)}
+        passed = limit[0] <= low and high <= limit[1]
+    return {
+        "point": point,
+        "ci95": ci95,
+        "threshold": limit,
+        "judged_on": "point" if by_point else "ci95",
+        "pass": bool(passed),
+    }
 
 
-def _score(error_pct, inside, samples, limits):
+def _score(error_pct, inside, samples, limits, by_point=False):
     boot = {metric: [] for metric in METRICS}
     for index in samples:
         if len(index):
@@ -66,6 +77,7 @@ def _score(error_pct, inside, samples, limits):
             point[metric],
             [float(np.percentile(boot[metric], 2.5)), float(np.percentile(boot[metric], 97.5))],
             limits,
+            by_point,
         )
         for metric in METRICS
     }
@@ -103,7 +115,9 @@ def assess(test, predicted, band, rounds=1000, seed=42):
             remap = np.full(len(values), -1)
             remap[positions] = np.arange(len(positions))
             group_samples = [remap[index[mask[index]]] for index in samples]
-            scored = _score(error_pct[mask], inside[mask], group_samples, THRESHOLDS["group"])
+            scored = _score(
+                error_pct[mask], inside[mask], group_samples, THRESHOLDS["group"], by_point=True
+            )
             rows.append({"group": group, **scored})
         result[column] = sorted(rows, key=lambda row: -row["n"])
     result["failing"] = {

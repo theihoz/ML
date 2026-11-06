@@ -114,3 +114,16 @@ def test_levels_are_scored_like_roles():
     )
     result = _run(frame)
     assert result["failing"]["level"] == ["Manager"]
+
+
+def test_groups_are_judged_on_point_estimates_overall_on_bootstrap_bounds():
+    # Nhóm 40 tin: một nửa sai 10%, một nửa sai 18% → trung vị điểm 14% ≤ 20% (đạt),
+    # dù khoảng bootstrap rộng. Mức chung vẫn so cận bất lợi.
+    group = _postings(
+        np.r_[np.full(20, 1 / 1.10), np.full(20, 1 / 1.18)], role="Bảo mật", start=4000
+    )
+    result = _run(pd.concat([_good(4000), group], ignore_index=True))
+    security = next(row for row in result["role"] if row["group"] == "Bảo mật")
+    assert security["metrics"]["median_error_pct"]["judged_on"] == "point"
+    assert security["metrics"]["median_error_pct"]["pass"] is True
+    assert result["overall"]["metrics"]["median_error_pct"]["judged_on"] == "ci95"
