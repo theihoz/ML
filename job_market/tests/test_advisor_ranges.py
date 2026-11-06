@@ -33,7 +33,7 @@ def test_advice_quartiles_use_the_requested_models_validation_distribution(model
     )
     expected = raw * np.quantile(ratios, [0.25, 0.5, 0.75])
     result = advise(PROFILE, model_name)
-    assert list(result["salary_range"].values()) == pytest.approx(expected)
+    assert list(result["advertised_range"].values()) == pytest.approx(expected)
     assert result["low"] < result["salary"] < result["high"]
     assert result["salary"] == result["salary_range"]["median"]
 

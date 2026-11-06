@@ -8,6 +8,7 @@ import pandas as pd
 
 from ..data.dataset import load_dataset, skill_lists
 from ..data.rules import LEVELS, SKILLS, derive_level
+from .calibration import calibration_for, load_calibration
 from .estimators import CURRENT_YEAR, MODEL_LABELS, SKILL_COLUMNS, feature_frame
 from .training import load_model
 
@@ -96,6 +97,12 @@ def advise(profile, model_name=None, top_k=5, min_share=0.03):
         "median": base * band["p50"],
         "p75": base * band["p75"],
     }
+    advertised_range = salary_range.copy()
+    table = load_calibration(name)
+    calibration = calibration_for(
+        table, base_frame["level"][0], base_frame["region"][0], profile["role"]
+    )
+    salary_range = {key: value * calibration["factor"] for key, value in advertised_range.items()}
     role_rows = frame[frame["role"] == profile["role"]]
     role_skills = skill_lists(role_rows)
     owned = set(profile.get("skills", []))
@@ -112,7 +119,9 @@ def advise(profile, model_name=None, top_k=5, min_share=0.03):
         candidates.append(
             {
                 "skill": skill,
-                "uplift": (float(model.predict(changed)[0]) - base) * band["p50"],
+                "uplift": (float(model.predict(changed)[0]) - base)
+                * band["p50"]
+                * calibration["factor"],
                 "demand_share": share,
             }
         )
@@ -150,7 +159,11 @@ def advise(profile, model_name=None, top_k=5, min_share=0.03):
             {
                 "experience_years": years + extra,
                 "level": _profile_frame(future)["level"][0],
-                "salary": float(model.predict(future_features)[0]) * band["p50"],
+                "salary": float(model.predict(future_features)[0])
+                * band["p50"]
+                * calibration_for(table, future_level, base_frame["region"][0], profile["role"])[
+                    "factor"
+                ],
             }
         )
     role_salaries = role_rows["salary"]
@@ -161,6 +174,9 @@ def advise(profile, model_name=None, top_k=5, min_share=0.03):
         "low": salary_range["p25"],
         "high": salary_range["p75"],
         "salary_range": salary_range,
+        "market_range": salary_range,
+        "advertised_range": advertised_range,
+        "calibration": calibration,
         "data_sufficiency": data_sufficiency(profile, frame, base_frame["level"][0]),
         "level": base_frame["level"][0],
         "recommendations": candidates[:top_k],
