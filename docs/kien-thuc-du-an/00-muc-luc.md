@@ -8,6 +8,7 @@ Bộ tài liệu này giải thích **dự án dự đoán lương CNTT** dùng 
 | 2 | [02-thuat-ngu.md](02-thuat-ngu.md) | Các từ chuyên môn trong app, notebook và slide nghĩa là gì? |
 | 3 | [03-phuong-phap.md](03-phuong-phap.md) | Từ tin tuyển dụng thô đến lời tư vấn lương đi qua những bước nào? |
 | 4 | [04-cong-thuc.md](04-cong-thuc.md) | Mỗi con số trên app được tính bằng công thức nào, nằm ở đâu trong code? |
+| 5 | [05-giai-phap.md](05-giai-phap.md) | Dự án giải quyết từng vấn đề thế nào: ý tưởng, phương án đã cân nhắc, cách làm? |
 
 ## Đọc nhanh trong 1 phút
 
